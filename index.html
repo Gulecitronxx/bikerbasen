@@ -36,8 +36,8 @@
         .main-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         .section-title { font-size: 18px; font-weight: 700; color: #333333; margin-bottom: 1.5rem; }
         
-        .popular-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 4rem; }
-        .category-card { background: white; padding: 1.5rem; border-radius: 6px; text-align: center; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: all 0.3s; }
+        .popular-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1rem; margin-bottom: 4rem; }
+        .category-card { background: white; padding: 0.8rem; min-height: 80px; display: flex; flex-direction: column; justify-content: center; border-radius: 6px; text-align: center; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: all 0.3s; }
         .category-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-2px); }
         .category-card-title { font-weight: 600; color: #333333; font-size: 13px; }
         
@@ -169,22 +169,22 @@
                 </div>
 
                 <div class="search-buttons">
-                    <button class="btn" onclick="filterListings()">Vis <span id="bikeCount">15</span> motorcykler</button>
+                    <button class="btn" onclick="window.location.href='listings.html'">Vis <span id="bikeCount">15</span> motorcykler</button>
                     <button class="btn btn-secondary" onclick="resetFilters()">Nulstil</button>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="main-container">
-        <h2 class="section-title">Populære søgninger</h2>
-        <div class="popular-categories">
-            <div class="category-card" onclick="filterCategory('Cruiser')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🏍️</div><div class="category-card-title">Cruiser</div></div>
-            <div class="category-card" onclick="filterCategory('Sport')"><div style="font-size: 24px; margin-bottom: 0.5rem;">⚡</div><div class="category-card-title">Sport</div></div>
-            <div class="category-card" onclick="filterCategory('Adventure')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🛣️</div><div class="category-card-title">Adventure</div></div>
-            <div class="category-card" onclick="filterCategory('Naked Bike')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🔥</div><div class="category-card-title">Naked Bike</div></div>
-            <div class="category-card" onclick="filterCategory('Retro')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🕐</div><div class="category-card-title">Retro</div></div>
-            <div class="category-card" onclick="filterCategory('Touring')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🗺️</div><div class="category-card-title">Touring</div></div>
+                <div style="border-top: 1px solid #eee; margin-top: 1.5rem; padding-top: 1.5rem;">
+                    <h3 style="font-size: 13px; font-weight: 600; margin-bottom: 1rem; color: #333333;">Populære søgninger</h3>
+                    <div class="popular-categories">
+                        <div class="category-card" onclick="filterCategory('Cruiser')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🏍️</div><div class="category-card-title">Cruiser</div></div>
+                        <div class="category-card" onclick="filterCategory('Sport')"><div style="font-size: 24px; margin-bottom: 0.5rem;">⚡</div><div class="category-card-title">Sport</div></div>
+                        <div class="category-card" onclick="filterCategory('Adventure')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🛣️</div><div class="category-card-title">Adventure</div></div>
+                        <div class="category-card" onclick="filterCategory('Naked Bike')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🔥</div><div class="category-card-title">Naked Bike</div></div>
+                        <div class="category-card" onclick="filterCategory('Retro')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🕐</div><div class="category-card-title">Retro</div></div>
+                        <div class="category-card" onclick="filterCategory('Touring')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🗺️</div><div class="category-card-title">Touring</div></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
