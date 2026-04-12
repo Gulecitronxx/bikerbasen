@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BikerBasen - Danmarks største motorcykelmarkedsplads</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,9 +13,101 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", "Helvetica Neue", sans-serif;
             background: #f5f5f5;
             color: #333;
+        }
+
+        /* MODALS */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 13px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .modal-button:hover {
+            background: #e55a00;
         }
 
         /* HEADER */
@@ -38,6 +130,7 @@
             font-size: 24px;
             font-weight: 700;
             color: #ff6600;
+            cursor: pointer;
         }
 
         .sell-link {
@@ -45,6 +138,7 @@
             text-decoration: none;
             font-size: 14px;
             transition: color 0.3s;
+            cursor: pointer;
         }
 
         .sell-link:hover {
@@ -64,17 +158,43 @@
             align-items: center;
         }
 
-        .header-nav a {
+        .header-nav a,
+        .header-nav button {
             color: #0066cc;
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 6px;
             transition: color 0.3s;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
         }
 
-        .header-nav a:hover {
+        .header-nav a:hover,
+        .header-nav button:hover {
             color: #ff6600;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ff6600;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
         }
 
         /* HERO SECTION */
@@ -101,12 +221,12 @@
             font-weight: 700;
             color: #1a1a1a;
             margin-bottom: 0.5rem;
-            font-family: 'Roboto', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", sans-serif;
         }
 
         .hero-subtitle {
             font-size: 14px;
-            color: #666;
+            color: #999;
             margin-bottom: 2rem;
         }
 
@@ -193,13 +313,16 @@
             font-size: 12px;
         }
 
-        .search-footer a {
+        .search-footer button {
             color: #0066cc;
+            background: none;
+            border: none;
             text-decoration: underline;
             cursor: pointer;
+            font-size: 12px;
         }
 
-        .search-footer a:hover {
+        .search-footer button:hover {
             color: #ff6600;
         }
 
@@ -220,7 +343,119 @@
         .listings-header h2 {
             font-size: 18px;
             color: #1a1a1a;
-            font-family: 'Roboto', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", sans-serif;
+        }
+
+        .sort-select {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .listings {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .listing-card {
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            position: relative;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .listing-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+        }
+
+        .listing-image {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            position: relative;
+        }
+
+        .listing-favorite {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .listing-favorite:hover {
+            background: #ff6600;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .listing-favorite.favorited {
+            background: #ff6600;
+            color: white;
+        }
+
+        .listing-price-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: #ff6600;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .listing-content {
+            padding: 1rem;
+        }
+
+        .listing-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+            line-height: 1.3;
+        }
+
+        .listing-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ff6600;
+            margin-bottom: 0.75rem;
+        }
+
+        .listing-specs {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
         }
 
         /* POPULÆRE SØGNINGER */
@@ -235,7 +470,7 @@
             font-weight: 700;
             color: #1a1a1a;
             margin-bottom: 1.5rem;
-            font-family: 'Roboto', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", sans-serif;
         }
 
         .popular-categories {
@@ -285,99 +520,42 @@
             background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
         }
 
-        @media (max-width: 768px) {
-            .popular-categories {
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            }
-
-            .category-card {
-                height: 120px;
-                padding: 1rem;
-                font-size: 14px;
-            }
+        /* SELL SECTION */
+        .sell-section {
+            background: #fff9f5;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 2rem 0;
         }
 
-        .sort-select {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 13px;
+        .sell-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", sans-serif;
         }
 
-        .listings {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
+        .sell-section p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 1.5rem;
         }
 
-        .listing-card {
-            background: white;
-            border-radius: 4px;
-            border: 1px solid #e0e0e0;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: pointer;
-            animation: float 3s ease-in-out infinite;
-            animation-delay: var(--delay, 0s);
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-        }
-
-        .listing-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
-        }
-
-        .listing-image {
-            width: 100%;
-            height: 140px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            position: relative;
-        }
-
-        .listing-price-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
+        .sell-button {
+            display: inline-block;
+            padding: 12px 32px;
             background: #ff6600;
             color: white;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 11px;
+            text-decoration: none;
+            border-radius: 4px;
             font-weight: 600;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
         }
 
-        .listing-content {
-            padding: 1rem;
-        }
-
-        .listing-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #1a1a1a;
-            line-height: 1.3;
-        }
-
-        .listing-price {
-            font-size: 18px;
-            font-weight: 700;
-            color: #ff6600;
-            margin-bottom: 0.75rem;
-        }
-
-        .listing-specs {
-            font-size: 12px;
-            color: #999;
-            margin-bottom: 0.5rem;
-            line-height: 1.4;
+        .sell-button:hover {
+            background: #e55a00;
         }
 
         /* FOOTER */
@@ -440,6 +618,16 @@
                 flex-direction: column;
                 gap: 0.5rem;
             }
+
+            .popular-categories {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+
+            .category-card {
+                height: 120px;
+                padding: 1rem;
+                font-size: 14px;
+            }
         }
 
         @media (max-width: 600px) {
@@ -462,18 +650,115 @@
     </style>
 </head>
 <body>
+    <!-- FEEDBACK MODAL -->
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeFeedback()">✕</button>
+            <h2 class="modal-title">Giv feedback</h2>
+            <form onsubmit="submitFeedback(event)">
+                <div class="form-group">
+                    <label>Dit navn</label>
+                    <input type="text" id="feedbackName" required>
+                </div>
+                <div class="form-group">
+                    <label>Din email</label>
+                    <input type="email" id="feedbackEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Feedback</label>
+                    <textarea id="feedbackText" required></textarea>
+                </div>
+                <button type="submit" class="modal-button">Send feedback</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- KUNDESERVICE MODAL -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeCustomer()">✕</button>
+            <h2 class="modal-title">Kundeservice</h2>
+            <form onsubmit="submitCustomer(event)">
+                <div class="form-group">
+                    <label>Dit navn</label>
+                    <input type="text" id="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label>Din email</label>
+                    <input type="email" id="customerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Emne</label>
+                    <select id="customerSubject" required>
+                        <option value="">Vælg emne</option>
+                        <option value="bug">Teknisk problem</option>
+                        <option value="account">Kontoproblemer</option>
+                        <option value="payment">Betalingsproblem</option>
+                        <option value="other">Andet</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Besked</label>
+                    <textarea id="customerMessage" required></textarea>
+                </div>
+                <button type="submit" class="modal-button">Send besked</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- UDVIDET SØGNING MODAL -->
+    <div id="advancedModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAdvanced()">✕</button>
+            <h2 class="modal-title">Udvidet søgning</h2>
+            <form onsubmit="submitAdvanced(event)">
+                <div class="form-group">
+                    <label>Årgang fra</label>
+                    <input type="number" min="1900" max="2024">
+                </div>
+                <div class="form-group">
+                    <label>Årgang til</label>
+                    <input type="number" min="1900" max="2024">
+                </div>
+                <div class="form-group">
+                    <label>Km fra</label>
+                    <input type="number" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Km til</label>
+                    <input type="number" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Pris fra</label>
+                    <input type="number" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Pris til</label>
+                    <input type="number" min="0">
+                </div>
+                <button type="submit" class="modal-button">Søg</button>
+            </form>
+        </div>
+    </div>
+
     <!-- HEADER -->
     <header>
         <div class="header-left">
-            <div class="logo">BikerBasen</div>
+            <div class="logo" onclick="window.location.href='index.html'">BikerBasen</div>
             <a href="signup.html" class="sell-link">Sælg din motorcykel</a>
         </div>
         <div class="header-right">
             <div class="header-nav">
-                <a href="#feedback">Giv feedback</a>
-                <a href="login.html">Log ind</a>
-                <a href="#favorites">Favoritter ♥</a>
-                <a href="#customer">Kundeservice</a>
+                <button onclick="openFeedback()">Giv feedback</button>
+                <span id="loginLink"><a href="login.html">Log ind</a></span>
+                <button onclick="toggleFavorites()">Favoritter ♥</button>
+                <button onclick="openCustomer()">Kundeservice</button>
+                <div id="userProfile" style="display: none;">
+                    <div class="user-profile" onclick="logout()">
+                        <div class="user-avatar" id="userInitial">P</div>
+                        <span id="userName">Pascal</span>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -482,7 +767,7 @@
     <section class="hero">
         <div class="hero-content">
             <h1 class="hero-title">Danmarks største markedsplads for motorcykler</h1>
-            <p class="hero-subtitle" id="announceCount">12 annoncer i dag</p>
+            <p class="hero-subtitle" id="announceCount">12 motorcykler i dag</p>
 
             <div class="search-section">
                 <div class="search-row">
@@ -495,6 +780,7 @@
                             <option value="Naked Bike">Naked Bike</option>
                             <option value="Adventure">Adventure</option>
                             <option value="Retro">Retro</option>
+                            <option value="Touring">Touring</option>
                         </select>
                     </div>
                     <div class="search-field">
@@ -533,23 +819,16 @@
                     </div>
                     <div></div>
                     <div class="search-button">
-                        <button onclick="filterListings()">Vis <span id="bikeCount">12</span> motorcykler</button>
+                        <button onclick="filterListings()">Vis <span id="bikeCount">13</span> motorcykler</button>
                     </div>
                 </div>
 
                 <div class="search-footer">
-                    <a onclick="resetFilters()">Nulstil</a>
-                    <a href="#">Udvidet søgning</a>
+                    <button onclick="resetFilters()">Nulstil</button>
+                    <button onclick="openAdvanced()">Udvidet søgning</button>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- SÆLG SEKTION -->
-    <section style="background: #fff9f5; padding: 3rem 2rem; text-align: center; margin: 2rem 0;">
-        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 0.5rem; font-family: 'Roboto', sans-serif;">Vil du sælge din motorcykel?</h2>
-        <p style="font-size: 14px; color: #666; margin-bottom: 1.5rem;">Det tager kun 5 minutter at oprette en annonce</p>
-        <a href="signup.html" style="display: inline-block; padding: 12px 32px; background: #ff6600; color: white; text-decoration: none; border-radius: 4px; font-weight: 600; transition: background 0.3s;">Opret gratis annonce</a>
     </section>
 
     <!-- POPULÆRE SØGNINGER -->
@@ -581,6 +860,13 @@
         </div>
     </section>
 
+    <!-- SÆLG SEKTION -->
+    <section class="sell-section">
+        <h2>Vil du sælge din motorcykel?</h2>
+        <p>Det tager kun 5 minutter at oprette en annonce</p>
+        <a href="signup.html" class="sell-button">Opret gratis annonce</a>
+    </section>
+
     <!-- FOOTER -->
     <footer>
         <p>&copy; 2024 BikerBasen. Danmarks største motorcykelmarkedsplads.</p>
@@ -609,14 +895,122 @@
         ];
 
         let currentListings = [...motorcycles];
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+        // CHECK USER LOGIN ON LOAD
+        window.addEventListener('load', function() {
+            checkUserLogin();
+            displayListings(motorcycles);
+        });
+
+        function checkUserLogin() {
+            const userName = localStorage.getItem('userName');
+            if (userName) {
+                document.getElementById('loginLink').style.display = 'none';
+                document.getElementById('userProfile').style.display = 'block';
+                document.getElementById('userName').textContent = userName;
+                document.getElementById('userInitial').textContent = userName.charAt(0).toUpperCase();
+            }
+        }
+
+        function logout() {
+            if (confirm('Er du sikker på du vil logge ud?')) {
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userLoggedIn');
+                document.getElementById('loginLink').style.display = 'block';
+                document.getElementById('userProfile').style.display = 'none';
+                alert('Du er nu logget ud');
+            }
+        }
+
+        // MODAL FUNCTIONS
+        function openFeedback() {
+            document.getElementById('feedbackModal').classList.add('active');
+        }
+
+        function closeFeedback() {
+            document.getElementById('feedbackModal').classList.remove('active');
+        }
+
+        function submitFeedback(event) {
+            event.preventDefault();
+            const name = document.getElementById('feedbackName').value;
+            alert(`Tak ${name}! Din feedback er modtaget.`);
+            closeFeedback();
+            document.getElementById('feedbackModal').querySelector('form').reset();
+        }
+
+        function openCustomer() {
+            document.getElementById('customerModal').classList.add('active');
+        }
+
+        function closeCustomer() {
+            document.getElementById('customerModal').classList.remove('active');
+        }
+
+        function submitCustomer(event) {
+            event.preventDefault();
+            const name = document.getElementById('customerName').value;
+            alert(`Tak ${name}! Vi vender tilbage til dig snarest.`);
+            closeCustomer();
+            document.getElementById('customerModal').querySelector('form').reset();
+        }
+
+        function openAdvanced() {
+            document.getElementById('advancedModal').classList.add('active');
+        }
+
+        function closeAdvanced() {
+            document.getElementById('advancedModal').classList.remove('active');
+        }
+
+        function submitAdvanced(event) {
+            event.preventDefault();
+            alert('Udvidet søgning udført!');
+            closeAdvanced();
+        }
+
+        // FAVORITTER
+        function toggleFavorites() {
+            const userName = localStorage.getItem('userName');
+            if (!userName) {
+                alert('Du skal være logget ind for at gemme favoritter. Log ind eller opret en konto.');
+                window.location.href = 'login.html';
+                return;
+            }
+            alert('Du har ' + favorites.length + ' favoritter');
+        }
+
+        function addFavorite(id, event) {
+            event.stopPropagation();
+            const userName = localStorage.getItem('userName');
+            if (!userName) {
+                alert('Du skal være logget ind for at gemme favoritter.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(f => f !== id);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            displayListings(currentListings);
+        }
 
         function createListingCard(moto, index) {
+            const isFavorited = favorites.includes(index);
             const card = document.createElement('div');
             card.className = 'listing-card';
             card.style.setProperty('--delay', `${index * 0.1}s`);
             card.innerHTML = `
                 <div class="listing-image">
                     🏍️
+                    <button class="listing-favorite ${isFavorited ? 'favorited' : ''}" onclick="addFavorite(${index}, event)">
+                        ${isFavorited ? '❤' : '♡'}
+                    </button>
                     <div class="listing-price-badge">${moto.price.toLocaleString('da-DK')} kr</div>
                 </div>
                 <div class="listing-content">
@@ -692,12 +1086,6 @@
             displayListings(currentListings);
         }
 
-        function filterByCategory(category) {
-            document.getElementById('typeFilter').value = category;
-            filterListings();
-            window.scrollTo({ top: document.getElementById('listingsContainer').offsetTop - 100, behavior: 'smooth' });
-        }
-
         function sortListings() {
             const sortValue = event.target.value;
 
@@ -717,8 +1105,29 @@
             displayListings(currentListings);
         }
 
-        // Indlæs alle motorcykler ved start
-        displayListings(motorcycles);
+        function filterByCategory(category) {
+            document.getElementById('typeFilter').value = category;
+            filterListings();
+            window.scrollTo({ top: document.getElementById('listingsContainer').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        // CLOSE MODALS ON ESC KEY
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeFeedback();
+                closeCustomer();
+                closeAdvanced();
+            }
+        });
+
+        // CLOSE MODALS ON BACKDROP CLICK
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(event) {
+                if (event.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
     </script>
 </body>
 </html>
