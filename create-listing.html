@@ -396,7 +396,88 @@
             </div>
         </div>
 
-        <!-- STEP 2: CREATE LISTING FORM -->
+        <!-- STEP 1B: MANUAL SELECT -->
+        <div class="step-1b" id="step1b" style="display: none;">
+            <form onsubmit="selectMotoManually(event)" style="background: white; padding: 2rem; border-radius: 8px;">
+                <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 1.5rem; text-align: center;">Hvilken motorcykel vil du sælge?</h2>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem; align-items: center;">
+                    <input type="text" id="regNum" placeholder="Nummerplade" maxlength="7" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; flex: 1;">
+                    <span style="color: #999;">INGEN</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Type *</label>
+                        <select id="manualType" required style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
+                            <option value="">Vælg type</option>
+                            <option value="Cruiser">Cruiser</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Naked Bike">Naked Bike</option>
+                            <option value="Adventure">Adventure</option>
+                            <option value="Retro">Retro</option>
+                            <option value="Touring">Touring</option>
+                            <option value="Scooter">Scooter</option>
+                            <option value="Custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mærke *</label>
+                        <select id="manualBrand" required onchange="updateModels()" style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
+                            <option value="">Vælg mærke</option>
+                            <option value="Honda">Honda</option>
+                            <option value="Yamaha">Yamaha</option>
+                            <option value="Harley-Davidson">Harley-Davidson</option>
+                            <option value="BMW">BMW</option>
+                            <option value="Kawasaki">Kawasaki</option>
+                            <option value="Suzuki">Suzuki</option>
+                            <option value="Ducati">Ducati</option>
+                            <option value="KTM">KTM</option>
+                            <option value="Triumph">Triumph</option>
+                            <option value="Royal Enfield">Royal Enfield</option>
+                            <option value="Aprilia">Aprilia</option>
+                            <option value="Andet">Andet</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Model *</label>
+                        <select id="manualModel" required style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
+                            <option value="">Vælg model</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>År *</label>
+                        <select id="manualYear" required style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
+                            <option value="">Vælg år</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Drivmiddel *</label>
+                        <select id="manualFuel" required style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
+                            <option value="">Vælg drivmiddel</option>
+                            <option value="Benzin">Benzin</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="El">El</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Km på tæller *</label>
+                        <input type="number" id="manualKm" placeholder="F.eks. 12500" min="0" required style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: center;">
+                    <button type="button" class="btn-secondary" onclick="backToRegNum()" style="padding: 12px 32px;">Tilbage</button>
+                    <button type="submit" class="btn-primary" style="padding: 12px 32px;">Fortsæt</button>
+                </div>
+            </form>
+        </div>
         <div class="step-2" id="step2">
             <!-- HEADER -->
             <div class="form-header">
@@ -571,7 +652,75 @@
 
         // SKIP LOOKUP
         function skipLookup() {
-            selectedMoto = { brand: '', model: '', year: '', km: '', type: '' };
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step1b').style.display = 'block';
+            populateYears();
+        }
+
+        // BACK TO REG NUM
+        function backToRegNum() {
+            document.getElementById('step1').style.display = 'block';
+            document.getElementById('step1b').style.display = 'none';
+        }
+
+        // POPULATE YEARS
+        function populateYears() {
+            const yearSelect = document.getElementById('manualYear');
+            const currentYear = new Date().getFullYear();
+            for (let i = currentYear; i >= 1980; i--) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                yearSelect.appendChild(option);
+            }
+        }
+
+        // MODELS DATABASE
+        const modelsDatabase = {
+            'Honda': ['CB500', 'CB750', 'CB1000', 'Gold Wing', 'PCX', 'X-ADV'],
+            'Yamaha': ['Virago 535', 'YZF-R1', 'MT-07', 'FZ6', 'XJ6'],
+            'Harley-Davidson': ['Street 750', 'Street 500', 'Fat Bob', 'Road King'],
+            'BMW': ['F 800 GS', 'R 1200 GS', 'F 850 GS', 'S 1000 RR'],
+            'Kawasaki': ['Ninja 400', 'Ninja 650', 'Ninja ZX-10R', 'Vulcan'],
+            'Suzuki': ['GSX-R 750', 'GSX-R 1000', 'V-Strom 1000', 'GN250'],
+            'Ducati': ['Monster 659', 'Panigale', 'Multistrada', 'Monster 821'],
+            'KTM': ['390 Duke', '790 Duke', '1290 Super Duke', 'Adventure'],
+            'Triumph': ['Bonneville', 'Street Twin', 'Tiger 1200', 'Thruxton'],
+            'Royal Enfield': ['Bullet 350', 'Classic 350', 'Interceptor', 'Continental GT'],
+            'Aprilia': ['RS 125', 'RS 250', 'Tuono', 'Dorsoduro'],
+            'Andet': ['Custom', 'Uspecificeret']
+        };
+
+        // UPDATE MODELS BASED ON BRAND
+        function updateModels() {
+            const brand = document.getElementById('manualBrand').value;
+            const modelSelect = document.getElementById('manualModel');
+            modelSelect.innerHTML = '<option value="">Vælg model</option>';
+
+            if (brand && modelsDatabase[brand]) {
+                modelsDatabase[brand].forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model;
+                    option.textContent = model;
+                    modelSelect.appendChild(option);
+                });
+            }
+        }
+
+        // SELECT MOTORCYCLE MANUALLY
+        function selectMotoManually(event) {
+            event.preventDefault();
+
+            selectedMoto = {
+                brand: document.getElementById('manualBrand').value,
+                model: document.getElementById('manualModel').value,
+                year: parseInt(document.getElementById('manualYear').value),
+                km: parseInt(document.getElementById('manualKm').value),
+                type: document.getElementById('manualType').value,
+                fuel: document.getElementById('manualFuel').value
+            };
+
+            document.getElementById('step1b').style.display = 'none';
             showStep2();
         }
 
