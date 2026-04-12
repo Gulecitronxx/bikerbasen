@@ -745,7 +745,7 @@
     <header>
         <div class="header-left">
             <div class="logo" onclick="window.location.href='index.html'">BikerBasen</div>
-            <a href="signup.html" class="sell-link">Sælg din motorcykel</a>
+            <a href="create-listing.html" class="sell-link">Sælg din motorcykel</a>
         </div>
         <div class="header-right">
             <div class="header-nav">
@@ -864,7 +864,7 @@
     <section class="sell-section">
         <h2>Vil du sælge din motorcykel?</h2>
         <p>Det tager kun 5 minutter at oprette en annonce</p>
-        <a href="signup.html" class="sell-button">Opret gratis annonce</a>
+        <a href="create-listing.html" class="sell-button">Opret gratis annonce</a>
     </section>
 
     <!-- FOOTER -->
@@ -900,7 +900,9 @@
         // CHECK USER LOGIN ON LOAD
         window.addEventListener('load', function() {
             checkUserLogin();
-            displayListings(motorcycles);
+            const allListings = loadAllListings();
+            currentListings = [...allListings];
+            displayListings(allListings);
         });
 
         function checkUserLogin() {
@@ -1040,6 +1042,30 @@
             document.getElementById('announceCount').textContent = `${currentListings.length} motorcykler i dag`;
         }
 
+        function loadAllListings() {
+            // LOAD BRUGER-OPRETTEDE ANNONCER FRA LOCALSTORAGE
+            const userListings = JSON.parse(localStorage.getItem('userListings')) || [];
+            
+            // KONVERTER BRUGER-ANNONCER TIL SAMME FORMAT
+            const formattedUserListings = userListings.map(listing => ({
+                brand: listing.brand,
+                model: listing.model,
+                year: listing.year,
+                price: listing.price,
+                location: listing.location,
+                type: listing.type,
+                km: listing.km,
+                isUserListing: true,
+                contactName: listing.contactName,
+                contactEmail: listing.contactEmail,
+                contactPhone: listing.contactPhone
+            }));
+
+            // KOMBINÉR STANDARD OG BRUGER-ANNONCER
+            const allListings = [...motorcycles, ...formattedUserListings];
+            return allListings;
+        }
+
         function filterListings() {
             const type = document.getElementById('typeFilter').value;
             const brand = document.getElementById('brandInput').value.toLowerCase();
@@ -1048,7 +1074,9 @@
             const kmRange = document.getElementById('kmFilter').value;
             const priceRange = document.getElementById('priceFilter').value;
 
-            currentListings = motorcycles.filter(moto => {
+            const allListings = loadAllListings();
+
+            currentListings = allListings.filter(moto => {
                 let match = true;
 
                 if (type && moto.type !== type) match = false;
@@ -1082,7 +1110,8 @@
             document.getElementById('yearInput').value = '';
             document.getElementById('kmFilter').value = '';
             document.getElementById('priceFilter').value = '';
-            currentListings = [...motorcycles];
+            const allListings = loadAllListings();
+            currentListings = [...allListings];
             displayListings(currentListings);
         }
 
