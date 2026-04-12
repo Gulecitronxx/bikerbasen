@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annonce - BikerBasen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", "Helvetica Neue", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff6600;
+            cursor: pointer;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #0066cc;
+            font-weight: 600;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* MAIN GRID */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* GALLERY */
+        .gallery-section {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .image-main {
+            width: 100%;
+            height: 450px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 45px;
+            height: 45px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+        }
+
+        .favorite-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .image-nav {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: white;
+            overflow-x: auto;
+        }
+
+        .image-thumb {
+            width: 80px;
+            height: 80px;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .image-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-thumb.active {
+            border-color: #ff6600;
+        }
+
+        .image-thumb:hover {
+            border-color: #ffb380;
+        }
+
+        /* LEFT CONTENT */
+        .left-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* MOTO INFO */
+        .moto-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .moto-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .moto-specs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .spec {
+            text-align: center;
+        }
+
+        .spec-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .spec-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        /* DETALJER */
+        .detaljer-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #ff6600;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+        }
+
+        .detail-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        /* BESKRIVELSE */
+        .description-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .description-text {
+            line-height: 1.7;
+            color: #555;
+            white-space: pre-wrap;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* PRICE CARD */
+        .price-card {
+            background: white;
+            border: 3px solid #ff6600;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .price-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .price {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ff6600;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #ff6600;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e55a00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #ff6600;
+            border: 2px solid #ff6600;
+        }
+
+        .btn-secondary:hover {
+            background: #fff9f5;
+        }
+
+        /* SELLER CARD */
+        .seller-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .seller-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .seller-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6600 0%, #ff8f3d 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .seller-info h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .seller-info p {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .seller-contact {
+            font-size: 12px;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        .seller-contact label {
+            display: block;
+            color: #999;
+            text-transform: uppercase;
+            font-size: 10px;
+            margin-bottom: 0.25rem;
+            margin-top: 0.75rem;
+        }
+
+        .seller-contact p {
+            font-weight: 600;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .moto-specs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .image-main {
+                height: 350px;
+            }
+
+            header {
+                flex-wrap: wrap;
+            }
+
+            .moto-title {
+                font-size: 24px;
+            }
+
+            .price {
+                font-size: 28px;
+            }
+
+            .detail-row {
+                grid-template-columns: 120px 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0;
+            }
+
+            .moto-info,
+            .detaljer-section,
+            .description-section,
+            .price-card,
+            .seller-card {
+                border-radius: 0;
+            }
+
+            .moto-specs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .image-main {
+                height: 280px;
+            }
+
+            header {
+                padding: 0.75rem 1rem;
+            }
+
+            .moto-title {
+                font-size: 20px;
+            }
+
+            .price {
+                font-size: 24px;
+            }
+        }
+
+        .no-images {
+            padding: 2rem;
+            text-align: center;
+            color: #999;
+        }
+
+        .error-message {
+            background: #ffebee;
+            border: 1px solid #c62828;
+            color: #c62828;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            margin: 2rem auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <button class="back-button" onclick="window.history.back()">← Tilbage</button>
+        <div class="logo" onclick="window.location.href='index.html'">🏍️ BikerBasen</div>
+        <div style="width: 100px;"></div>
+    </header>
+
+    <!-- CONTAINER -->
+    <div class="container" id="mainContent">
+        <!-- LOADING -->
+        <div style="text-align: center; padding: 3rem; color: #999;">
+            Indlæser annonce...
+        </div>
+    </div>
+
+    <script>
+        let listing = null;
+
+        // GET LISTING ID FROM URL
+        function getListingId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        // LOAD LISTING
+        window.addEventListener('load', function() {
+            const listingId = getListingId();
+            
+            if (!listingId) {
+                showError('Annonce ikke fundet');
+                return;
+            }
+
+            // HARDCODED MOTORCYCLES
+            const motorcycles = [
+                { id: 1, brand: 'Honda', model: 'CB500', year: 2018, km: 12000, type: 'Naked Bike', price: 85000, location: 'København', condition: 'Meget god', service: 'Fuld service historia', description: 'Flot Honda CB500 fra 2018 i rigtig god tilstand. Der er kørt ca 12000 km. Motorcyklen er velholdt og serviceret. Perfekt til både hverdagsbrug og ture.', contactName: 'Jens Hansen', contactEmail: 'jens@email.dk', contactPhone: '+45 40 40 40 40', images: [], createdAt: new Date().toISOString() },
+                { id: 2, brand: 'Yamaha', model: 'Virago 535', year: 2010, km: 25000, type: 'Cruiser', price: 55000, location: 'Aarhus', condition: 'God', service: 'Delvis service historia', description: 'Klassisk cruiser fra Yamaha. Velholdt motorcykel med patina. Starter hver gang og kører bare. Perfekt cruiser til sommeren.', contactName: 'Lars Larsen', contactEmail: 'lars@email.dk', contactPhone: '+45 50 50 50 50', images: [], createdAt: new Date().toISOString() },
+                { id: 3, brand: 'BMW', model: 'F 800 GS', year: 2015, km: 22000, type: 'Adventure', price: 95000, location: 'Odense', condition: 'Meget god', service: 'Fuld service historia', description: 'Adventure motorcykel fra BMW. Fantastisk til både offroad og landevej. Alle papirer på plads. Nyere dæk og bremser.', contactName: 'Erik Hansen', contactEmail: 'erik@email.dk', contactPhone: '+45 60 60 60 60', images: [], createdAt: new Date().toISOString() }
+            ];
+
+            // CHECK HARDCODED
+            listing = motorcycles.find(m => m.id === parseInt(listingId));
+
+            // CHECK USER LISTINGS
+            if (!listing) {
+                const userListings = JSON.parse(localStorage.getItem('userListings')) || [];
+                listing = userListings.find(l => l.id === parseInt(listingId));
+            }
+
+            if (listing) {
+                displayListing();
+            } else {
+                showError('Annonce ikke fundet');
+            }
+        });
+
+        // DISPLAY LISTING
+        function displayListing() {
+            const container = document.getElementById('mainContent');
+            const imageGallery = buildGallery();
+
+            container.innerHTML = `
+                <div class="main-grid">
+                    <!-- LEFT SIDE -->
+                    <div class="left-content">
+                        <!-- GALLERY -->
+                        <div class="gallery-section">
+                            <div class="image-main" id="mainImage">
+                                ${listing.images && listing.images.length > 0 
+                                    ? `<img src="${listing.images[0].data}" alt="${listing.brand} ${listing.model}" style="max-width: 100%; max-height: 100%;">` 
+                                    : '<span style="color: #999;">📸 Ingen billeder</span>'
+                                }
+                                <button class="favorite-btn" onclick="toggleFavorite()">♡</button>
+                            </div>
+                            ${imageGallery}
+                        </div>
+
+                        <!-- MOTO INFO -->
+                        <div class="moto-info">
+                            <h1 class="moto-title">${listing.brand} ${listing.model}</h1>
+                            <div class="moto-specs">
+                                <div class="spec">
+                                    <div class="spec-label">År</div>
+                                    <div class="spec-value">${listing.year}</div>
+                                </div>
+                                <div class="spec">
+                                    <div class="spec-label">Km</div>
+                                    <div class="spec-value">${listing.km.toLocaleString('da-DK')}</div>
+                                </div>
+                                <div class="spec">
+                                    <div class="spec-label">Type</div>
+                                    <div class="spec-value">${listing.type}</div>
+                                </div>
+                                <div class="spec">
+                                    <div class="spec-label">Lokation</div>
+                                    <div class="spec-value">📍 ${listing.location}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BESKRIVELSE -->
+                        <div class="description-section">
+                            <h2 class="section-title">Beskrivelse</h2>
+                            <p class="description-text">${listing.description || 'Ingen beskrivelse'}</p>
+                        </div>
+
+                        <!-- DETALJER -->
+                        <div class="detaljer-section">
+                            <h2 class="section-title">Detaljer</h2>
+                            <div class="detail-row">
+                                <div class="detail-label">Mærke & Model</div>
+                                <div class="detail-value">${listing.brand} ${listing.model}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">År</div>
+                                <div class="detail-value">${listing.year}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Kilometer</div>
+                                <div class="detail-value">${listing.km.toLocaleString('da-DK')} km</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Type</div>
+                                <div class="detail-value">${listing.type}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Tilstand</div>
+                                <div class="detail-value">${listing.condition}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Service</div>
+                                <div class="detail-value">${listing.service}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Lokation</div>
+                                <div class="detail-value">${listing.location}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT SIDEBAR -->
+                    <div class="sidebar">
+                        <!-- PRICE CARD -->
+                        <div class="price-card">
+                            <div class="price-label">Pris</div>
+                            <div class="price">${listing.price.toLocaleString('da-DK')} kr</div>
+                            <div class="action-buttons">
+                                <a href="tel:${listing.contactPhone}" class="btn btn-primary">📞 Ring nu</a>
+                                <a href="mailto:${listing.contactEmail}" class="btn btn-secondary">✉️ Skriv til sælger</a>
+                            </div>
+                        </div>
+
+                        <!-- SELLER CARD -->
+                        <div class="seller-card">
+                            <div class="seller-header">
+                                <div class="seller-avatar">${listing.contactName.charAt(0).toUpperCase()}</div>
+                                <div class="seller-info">
+                                    <h3>${listing.contactName}</h3>
+                                    <p>📍 ${listing.location}</p>
+                                </div>
+                            </div>
+
+                            <div class="seller-contact">
+                                <label>TELEFON</label>
+                                <p>${listing.contactPhone}</p>
+
+                                <label>EMAIL</label>
+                                <p>${listing.contactEmail}</p>
+
+                                <label>OPRETTET</label>
+                                <p>${listing.createdAt ? new Date(listing.createdAt).toLocaleDateString('da-DK') : '-'}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (listing.images && listing.images.length > 0) {
+                setupImageNavigation();
+            }
+        }
+
+        // BUILD GALLERY
+        function buildGallery() {
+            if (!listing.images || listing.images.length === 0) {
+                return '';
+            }
+
+            return `
+                <div class="image-nav">
+                    ${listing.images.map((img, i) => `
+                        <div class="image-thumb ${i === 0 ? 'active' : ''}" onclick="changeImage(${i})">
+                            <img src="${img.data}" alt="Billede ${i + 1}">
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // CHANGE IMAGE
+        function changeImage(index) {
+            const mainImage = document.getElementById('mainImage');
+            mainImage.innerHTML = `
+                <img src="${listing.images[index].data}" alt="Billede ${index + 1}" style="max-width: 100%; max-height: 100%;">
+                <button class="favorite-btn" onclick="toggleFavorite()">♡</button>
+            `;
+
+            document.querySelectorAll('.image-thumb').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        // SETUP IMAGE NAVIGATION
+        function setupImageNavigation() {
+            const thumbs = document.querySelectorAll('.image-thumb');
+            if (thumbs.length > 0) {
+                thumbs[0].classList.add('active');
+            }
+        }
+
+        // TOGGLE FAVORITE
+        function toggleFavorite() {
+            if (!localStorage.getItem('userLoggedIn')) {
+                alert('Du skal være logget ind for at gemme favoritter');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const isFavorite = favorites.includes(listing.id);
+
+            if (isFavorite) {
+                favorites = favorites.filter(id => id !== listing.id);
+                alert('Fjernet fra favoritter');
+            } else {
+                favorites.push(listing.id);
+                alert('Gemt som favorit! ❤️');
+            }
+
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        // SHOW ERROR
+        function showError(message) {
+            document.getElementById('mainContent').innerHTML = `
+                <div class="error-message">
+                    <h2>😕 ${message}</h2>
+                    <p style="margin-top: 1rem; color: inherit;">
+                        <a href="index.html" style="color: #ff6600; text-decoration: none; font-weight: 600;">Tilbage til forsiden</a>
+                    </p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
