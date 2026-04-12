@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret annonce - BikerBasen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", "Helvetica Neue", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff6600;
+            cursor: pointer;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .form-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .form-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .form-header .badge {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* FORM SECTIONS */
+        .form-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .form-section h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .form-group.required label::after {
+            content: " *";
+            color: #ff6600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6600;
+            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .image-upload {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+
+        .image-upload:hover {
+            border-color: #ff6600;
+            background: #fff9f5;
+        }
+
+        .image-upload.active {
+            border-color: #ff6600;
+            background: #fff9f5;
+        }
+
+        .image-upload p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .image-upload input[type="file"] {
+            display: none;
+        }
+
+        .image-preview {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+        }
+
+        .image-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .image-remove {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid #2e7d32;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            font-size: 13px;
+            color: #1b5e20;
+        }
+
+        /* BUTTONS */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #ff6600;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e55a00;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            border: 1px solid #2e7d32;
+            color: #2e7d32;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            display: none;
+            font-size: 13px;
+        }
+
+        .error-message {
+            background: #ffebee;
+            border: 1px solid #c62828;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            display: none;
+            font-size: 13px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-section {
+                padding: 1.5rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="logo" onclick="window.location.href='index.html'">BikerBasen</div>
+    </header>
+
+    <!-- CONTAINER -->
+    <div class="container">
+        <!-- HEADER SECTION -->
+        <div class="form-header">
+            <h1>Sælg din motorcykel</h1>
+            <p>Opret en gratis annonce på BikerBasen</p>
+            <span class="badge">GRATIS ANNONCE</span>
+        </div>
+
+        <!-- ERROR/SUCCESS MESSAGES -->
+        <div id="successMessage" class="success-message">
+            ✓ Annonce oprettet! Du bliver omdirigeret...
+        </div>
+        <div id="errorMessage" class="error-message"></div>
+
+        <!-- FORM -->
+        <form id="listingForm" onsubmit="submitListing(event)">
+            
+            <!-- MOTORCYKEL INFO -->
+            <div class="form-section">
+                <h2>Motorcykeloplysninger</h2>
+                
+                <div class="form-row">
+                    <div class="form-group required">
+                        <label>Mærke</label>
+                        <input type="text" id="brand" placeholder="F.eks. Honda, Yamaha" required>
+                    </div>
+                    <div class="form-group required">
+                        <label>Model</label>
+                        <input type="text" id="model" placeholder="F.eks. CB500, Virago" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group required">
+                        <label>År</label>
+                        <input type="number" id="year" placeholder="F.eks. 2020" min="1900" max="2024" required>
+                    </div>
+                    <div class="form-group required">
+                        <label>Kørt km</label>
+                        <input type="number" id="km" placeholder="F.eks. 12500" min="0" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group required">
+                        <label>Type</label>
+                        <select id="type" required>
+                            <option value="">Vælg type</option>
+                            <option value="Cruiser">Cruiser</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Naked Bike">Naked Bike</option>
+                            <option value="Adventure">Adventure</option>
+                            <option value="Retro">Retro</option>
+                            <option value="Touring">Touring</option>
+                            <option value="Scooter">Scooter</option>
+                            <option value="Custom">Custom</option>
+                            <option value="Andet">Andet</option>
+                        </select>
+                    </div>
+                    <div class="form-group required">
+                        <label>Tilstand</label>
+                        <select id="condition" required>
+                            <option value="">Vælg tilstand</option>
+                            <option value="Som ny">Som ny</option>
+                            <option value="Meget god">Meget god</option>
+                            <option value="God">God</option>
+                            <option value="Acceptabel">Acceptabel</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRIS & LOKATION -->
+            <div class="form-section">
+                <h2>Pris og lokation</h2>
+
+                <div class="form-group required">
+                    <label>Pris (kr)</label>
+                    <input type="number" id="price" placeholder="F.eks. 85000" min="0" required>
+                </div>
+
+                <div class="form-group required">
+                    <label>By/kommune</label>
+                    <input type="text" id="location" placeholder="F.eks. København" required>
+                </div>
+            </div>
+
+            <!-- BESKRIVELSE -->
+            <div class="form-section">
+                <h2>Beskrivelse</h2>
+
+                <div class="form-group required">
+                    <label>Beskrivelse af motorcyklen</label>
+                    <textarea id="description" placeholder="Beskriv motorcykelens tilstand, særligheder, service historik osv." required></textarea>
+                </div>
+
+                <div class="info-box">
+                    💡 Tip: Jo bedre beskrivelse, jo flere interesserede køber du!
+                </div>
+            </div>
+
+            <!-- BILLEDER -->
+            <div class="form-section">
+                <h2>Billeder</h2>
+
+                <div class="image-upload" id="imageUpload" onclick="document.getElementById('imageInput').click()">
+                    <p>📸 Klik for at uploade billeder</p>
+                    <p style="font-size: 12px; color: #999;">eller træk billeder herhen</p>
+                    <input type="file" id="imageInput" multiple accept="image/*" onchange="handleImages(event)">
+                </div>
+                <div class="image-preview" id="imagePreview"></div>
+            </div>
+
+            <!-- KONTAKTINFO -->
+            <div class="form-section">
+                <h2>Din kontaktinfo</h2>
+
+                <div class="form-row">
+                    <div class="form-group required">
+                        <label>Navn</label>
+                        <input type="text" id="contactName" placeholder="Dit navn" required>
+                    </div>
+                    <div class="form-group required">
+                        <label>Email</label>
+                        <input type="email" id="contactEmail" placeholder="din@email.dk" required>
+                    </div>
+                </div>
+
+                <div class="form-group required">
+                    <label>Telefon</label>
+                    <input type="tel" id="contactPhone" placeholder="+45 12 34 56 78" required>
+                </div>
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="button-group">
+                <button type="button" class="btn-secondary" onclick="window.location.href='index.html'">Annuller</button>
+                <button type="submit" class="btn-primary">Opret annonce</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // AUTO-FILL CONTACT INFO IF LOGGED IN
+        window.addEventListener('load', function() {
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
+
+            if (!userName) {
+                alert('Du skal være logget ind for at oprette en annonce.\n\nDu bliver sendt til login siden...');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            document.getElementById('contactName').value = userName;
+            if (userEmail) {
+                document.getElementById('contactEmail').value = userEmail;
+            }
+        });
+
+        // HANDLE IMAGE UPLOAD
+        let uploadedImages = [];
+
+        function handleImages(event) {
+            const files = Array.from(event.target.files);
+            
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImages.push({
+                        name: file.name,
+                        data: e.target.result
+                    });
+                    displayImages();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function displayImages() {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+
+            uploadedImages.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'image-item';
+                item.innerHTML = `
+                    📷
+                    <button type="button" class="image-remove" onclick="removeImage(${index})">✕</button>
+                `;
+                preview.appendChild(item);
+            });
+        }
+
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            displayImages();
+        }
+
+        // SUBMIT FORM
+        function submitListing(event) {
+            event.preventDefault();
+
+            // VALIDATE FORM
+            const brand = document.getElementById('brand').value;
+            const model = document.getElementById('model').value;
+            const year = document.getElementById('year').value;
+            const km = document.getElementById('km').value;
+            const type = document.getElementById('type').value;
+            const price = document.getElementById('price').value;
+            const location = document.getElementById('location').value;
+            const description = document.getElementById('description').value;
+            const contactName = document.getElementById('contactName').value;
+            const contactEmail = document.getElementById('contactEmail').value;
+            const contactPhone = document.getElementById('contactPhone').value;
+
+            if (!brand || !model || !year || !km || !type || !price || !location || !description) {
+                showError('Udfyld venligst alle påkrævede felter');
+                return;
+            }
+
+            // CREATE LISTING OBJECT
+            const listing = {
+                id: Date.now(),
+                brand,
+                model,
+                year: parseInt(year),
+                km: parseInt(km),
+                type,
+                condition: document.getElementById('condition').value,
+                price: parseInt(price),
+                location,
+                description,
+                contactName,
+                contactEmail,
+                contactPhone,
+                images: uploadedImages,
+                createdAt: new Date().toISOString()
+            };
+
+            // SAVE TO LOCALSTORAGE
+            let userListings = JSON.parse(localStorage.getItem('userListings')) || [];
+            userListings.push(listing);
+            localStorage.setItem('userListings', JSON.stringify(userListings));
+
+            // SHOW SUCCESS MESSAGE
+            showSuccess('Annonce oprettet!');
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = '✗ ' + message;
+            errorEl.style.display = 'block';
+        }
+
+        function showSuccess(message) {
+            const successEl = document.getElementById('successMessage');
+            successEl.textContent = '✓ ' + message;
+            successEl.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
