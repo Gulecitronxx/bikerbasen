@@ -6,7 +6,7 @@
     <title>Alle motorcykler - BikerBasen</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f5; color: #333333; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #ebebeb; color: #333333; }
         
         header { background: white; padding: 1.5rem 0; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
         .header-container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
@@ -15,34 +15,34 @@
         .header-link { color: #333333; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; }
         .header-link:hover { color: #ff6600; }
         
-        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; background: white; }
         .page-title { font-size: 24px; font-weight: 700; color: #333333; margin-bottom: 2rem; }
         
-        .filters-bar { background: white; padding: 1.5rem; border-radius: 6px; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
-        .filters-bar input { padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; flex: 1; min-width: 200px; }
-        .filters-bar select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; }
-        .btn-filter { padding: 8px 16px; background: #ff6600; color: white; border: none; border-radius: 3px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        .filters-bar { background: white; padding: 2rem; border-radius: 0; margin-bottom: 2rem; box-shadow: none; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #eee; }
+        .filters-bar input { padding: 10px 14px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; flex: 1; min-width: 300px; }
+        .filters-bar select { padding: 10px 14px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; }
+        .btn-filter { padding: 10px 18px; background: #ff6600; color: white; border: none; border-radius: 3px; cursor: pointer; font-weight: 600; font-size: 13px; }
         .btn-filter:hover { background: #e55a00; }
         
-        .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-        .listing-card { background: white; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.3s; }
-        .listing-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-4px); }
+        .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .listing-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s; }
+        .listing-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.15); transform: translateY(-6px); }
         
-        .listing-image { width: 100%; height: 200px; background: #e0e0e0; position: relative; overflow: hidden; }
+        .listing-image { width: 100%; height: 280px; background: #e0e0e0; position: relative; overflow: hidden; }
         .listing-image img { width: 100%; height: 100%; object-fit: cover; }
-        .listing-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0f0f0 25%, transparent 25%, transparent 50%, #f0f0f0 50%, #f0f0f0 75%, transparent 75%, transparent); background-size: 20px 20px; color: #ccc; font-size: 40px; }
+        .listing-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0f0f0 25%, transparent 25%, transparent 50%, #f0f0f0 50%, #f0f0f0 75%, transparent 75%, transparent); background-size: 20px 20px; color: #ccc; font-size: 50px; }
         
-        .listing-badge { position: absolute; top: 10px; left: 10px; background: #ff6600; color: white; padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; }
-        .favorite-btn { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); border: none; width: 36px; height: 36px; border-radius: 4px; cursor: pointer; font-size: 18px; }
+        .listing-badge { position: absolute; top: 12px; left: 12px; background: #22c55e; color: white; padding: 6px 10px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+        .favorite-btn { position: absolute; bottom: 12px; right: 12px; background: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         
-        .listing-info { padding: 1.2rem; }
-        .listing-title { font-weight: 700; font-size: 14px; margin-bottom: 0.5rem; color: #333333; }
-        .listing-model { font-size: 12px; color: #999; margin-bottom: 0.8rem; }
-        .listing-details { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
-        .detail-item { font-size: 12px; color: #666; }
-        .detail-label { font-size: 11px; color: #999; text-transform: uppercase; }
-        .listing-price { font-weight: 700; color: #ff6600; font-size: 18px; margin-bottom: 0.8rem; }
-        .listing-location { font-size: 12px; color: #666; display: flex; align-items: center; gap: 4px; }
+        .listing-info { padding: 1.8rem; }
+        .listing-title { font-weight: 700; font-size: 16px; margin-bottom: 0.3rem; color: #333333; }
+        .listing-model { font-size: 13px; color: #666; margin-bottom: 1rem; }
+        .listing-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem; }
+        .detail-item { font-size: 13px; color: #666; font-weight: 500; }
+        .detail-label { font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 3px; }
+        .listing-price { font-weight: 700; color: #333333; font-size: 20px; margin-bottom: 1rem; }
+        .listing-location { font-size: 13px; color: #666; display: flex; align-items: center; gap: 6px; }
         
         footer { background: #333333; color: white; padding: 2rem; text-align: center; margin-top: 4rem; }
     </style>
