@@ -8,17 +8,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #ebebeb; color: #333333; }
         
-        header { background: white; padding: 1.5rem 0; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 2rem; }
-        .header.container { max-width: 800px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        header { background: white; padding: 1.5rem 0; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 3rem; }
+        .header-container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 28px; font-weight: 700; color: #ff6600; cursor: pointer; text-decoration: none; }
         .header-nav { display: flex; gap: 2rem; align-items: center; }
         .header-link { color: #333333; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; }
         .header-link:hover { color: #ff6600; }
         
         .container { max-width: 800px; margin: 0 auto; padding: 4rem 2rem 2rem 2rem; background: white; }
-        .page-title { font-size: 24px; font-weight: 700; color: #333333; margin-bottom: 2rem; }
+        .page-title { font-size: 24px; font-weight: 700; color: #333333; margin-bottom: 3rem; }
         
-        .filters-bar { background: white; padding: 2rem; border-radius: 0; margin-bottom: 2rem; box-shadow: none; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #eee; }
+        .filters-bar { background: white; padding: 1.2rem 2rem; border-radius: 0; margin-bottom: 3rem; box-shadow: none; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #eee; }
         .filters-bar input { padding: 10px 14px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; flex: 1; min-width: 300px; }
         .filters-bar select { padding: 10px 14px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; }
         .btn-filter { padding: 10px 18px; background: #ff6600; color: white; border: none; border-radius: 3px; cursor: pointer; font-weight: 600; font-size: 13px; }
@@ -32,7 +32,7 @@
         .listing-image img { width: 100%; height: 100%; object-fit: cover; }
         .listing-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0f0f0 25%, transparent 25%, transparent 50%, #f0f0f0 50%, #f0f0f0 75%, transparent 75%, transparent); background-size: 20px 20px; color: #ccc; font-size: 50px; }
         
-        .listing-badge { position: absolute; top: 12px; left: 12px; background: #22c55e; color: white; padding: 6px 10px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+        .listing-badge { position: absolute; top: 8px; right: 8px; background: #22c55e; color: white; padding: 4px 8px; border-radius: 2px; font-size: 10px; font-weight: 600; }
         .favorite-btn { position: absolute; bottom: 12px; right: 12px; background: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         
         .listing-info { padding: 1.8rem; }
@@ -90,21 +90,21 @@
 
     <script>
         const motorcycles = [
-            { id: 1, brand: 'Honda', model: 'CB500', type: 'Naked Bike', year: 2018, km: 12000, price: 85000, location: 'København' },
-            { id: 2, brand: 'Yamaha', model: 'Virago 535', type: 'Cruiser', year: 2010, km: 25000, price: 55000, location: 'Aarhus' },
-            { id: 3, brand: 'BMW', model: 'F 800 GS', type: 'Adventure', year: 2015, km: 22000, price: 95000, location: 'Odense' },
-            { id: 4, brand: 'Harley-Davidson', model: 'Street 750', type: 'Cruiser', year: 2017, km: 18000, price: 75000, location: 'Randers' },
-            { id: 5, brand: 'Kawasaki', model: 'Ninja 650', type: 'Sport', year: 2020, km: 8000, price: 65000, location: 'Aalborg' },
-            { id: 6, brand: 'Ducati', model: 'Monster 821', type: 'Naked Bike', year: 2019, km: 15000, price: 95000, location: 'København' },
-            { id: 7, brand: 'Triumph', model: 'Street Twin', type: 'Retro', year: 2016, km: 20000, price: 70000, location: 'Herning' },
-            { id: 8, brand: 'KTM', model: '790 Duke', type: 'Naked Bike', year: 2021, km: 5000, price: 85000, location: 'Vejle' },
-            { id: 9, brand: 'Royal Enfield', model: 'Interceptor 650', type: 'Retro', year: 2022, km: 3000, price: 65000, location: 'Silkeborg' },
-            { id: 10, brand: 'Suzuki', model: 'V-Strom 650', type: 'Adventure', year: 2018, km: 16000, price: 70000, location: 'Horsens' },
-            { id: 11, brand: 'Honda', model: 'CB1100', type: 'Retro', year: 2017, km: 14000, price: 90000, location: 'Svendborg' },
-            { id: 12, brand: 'Yamaha', model: 'YZF-R6', type: 'Sport', year: 2019, km: 9000, price: 75000, location: 'Viborg' },
-            { id: 13, brand: 'BMW', model: 'R 1200 GS', type: 'Adventure', year: 2016, km: 28000, price: 120000, location: 'Esbjerg' },
-            { id: 14, brand: 'Kawasaki', model: 'Vulcan 900', type: 'Cruiser', year: 2014, km: 35000, price: 62000, location: 'Kolding' },
-            { id: 15, brand: 'Aprilia', model: 'RS 125', type: 'Sport', year: 2019, km: 4200, price: 42000, location: 'Lolland' }
+            { id: 1, brand: 'Honda', model: 'CB500', type: 'Naked Bike', year: 2018, km: 12000, price: 85000, location: 'København', createdDaysAgo: 2 },
+            { id: 2, brand: 'Yamaha', model: 'Virago 535', type: 'Cruiser', year: 2010, km: 25000, price: 55000, location: 'Aarhus', createdDaysAgo: 5 },
+            { id: 3, brand: 'BMW', model: 'F 800 GS', type: 'Adventure', year: 2015, km: 22000, price: 95000, location: 'Odense', createdDaysAgo: 8 },
+            { id: 4, brand: 'Harley-Davidson', model: 'Street 750', type: 'Cruiser', year: 2017, km: 18000, price: 75000, location: 'Randers', createdDaysAgo: 1 },
+            { id: 5, brand: 'Kawasaki', model: 'Ninja 650', type: 'Sport', year: 2020, km: 8000, price: 65000, location: 'Aalborg', createdDaysAgo: 3 },
+            { id: 6, brand: 'Ducati', model: 'Monster 821', type: 'Naked Bike', year: 2019, km: 15000, price: 95000, location: 'København', createdDaysAgo: 6 },
+            { id: 7, brand: 'Triumph', model: 'Street Twin', type: 'Retro', year: 2016, km: 20000, price: 70000, location: 'Herning', createdDaysAgo: 10 },
+            { id: 8, brand: 'KTM', model: '790 Duke', type: 'Naked Bike', year: 2021, km: 5000, price: 85000, location: 'Vejle', createdDaysAgo: 0 },
+            { id: 9, brand: 'Royal Enfield', model: 'Interceptor 650', type: 'Retro', year: 2022, km: 3000, price: 65000, location: 'Silkeborg', createdDaysAgo: 4 },
+            { id: 10, brand: 'Suzuki', model: 'V-Strom 650', type: 'Adventure', year: 2018, km: 16000, price: 70000, location: 'Horsens', createdDaysAgo: 7 },
+            { id: 11, brand: 'Honda', model: 'CB1100', type: 'Retro', year: 2017, km: 14000, price: 90000, location: 'Svendborg', createdDaysAgo: 9 },
+            { id: 12, brand: 'Yamaha', model: 'YZF-R6', type: 'Sport', year: 2019, km: 9000, price: 75000, location: 'Viborg', createdDaysAgo: 2 },
+            { id: 13, brand: 'BMW', model: 'R 1200 GS', type: 'Adventure', year: 2016, km: 28000, price: 120000, location: 'Esbjerg', createdDaysAgo: 11 },
+            { id: 14, brand: 'Kawasaki', model: 'Vulcan 900', type: 'Cruiser', year: 2014, km: 35000, price: 62000, location: 'Kolding', createdDaysAgo: 1 },
+            { id: 15, brand: 'Aprilia', model: 'RS 125', type: 'Sport', year: 2019, km: 4200, price: 42000, location: 'Lolland', createdDaysAgo: 5 }
         ];
 
         let currentListings = [...motorcycles];
@@ -115,7 +115,7 @@
                 <div class="listing-card" onclick="window.location.href='listing-detail.html?id=${m.id}'">
                     <div class="listing-image">
                         <div class="listing-image-placeholder">🏍️</div>
-                        <div class="listing-badge">NY ANNONCE</div>
+                        ${m.createdDaysAgo < 7 ? '<div class="listing-badge">Ny annonce</div>' : ''}
                         <button class="favorite-btn">🤍</button>
                     </div>
                     <div class="listing-info">
