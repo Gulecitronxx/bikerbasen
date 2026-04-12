@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opret annonce - BikerBasen</title>
+    <title>Sælg din motorcykel - BikerBasen</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -29,7 +29,7 @@
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
             color: #ff6600;
             cursor: pointer;
@@ -37,9 +37,114 @@
 
         /* CONTAINER */
         .container {
-            max-width: 700px;
-            margin: 2rem auto;
+            max-width: 900px;
+            margin: 3rem auto;
             padding: 0 1rem;
+        }
+
+        /* STEP 1 - VIN LOOKUP */
+        .step-1 {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .step-1 h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .step-1 p {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .vin-input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+
+        .vin-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #0066cc 0%, #003d99 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .vin-input-wrapper {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .vin-input-wrapper input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .vin-input-wrapper input:focus {
+            outline: none;
+            border-color: #ff6600;
+            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
+        }
+
+        .vin-button {
+            padding: 12px 32px;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .vin-button:hover {
+            background: #e55a00;
+            transform: translateY(-2px);
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #999;
+            margin-top: 1rem;
+        }
+
+        .help-text a {
+            color: #ff6600;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .help-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* STEP 2 - FORM (HIDDEN INITIALLY) */
+        .step-2 {
+            display: none;
+        }
+
+        .step-2.active {
+            display: block;
         }
 
         .form-header {
@@ -50,8 +155,8 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
-        .form-header h1 {
-            font-size: 28px;
+        .form-header h2 {
+            font-size: 20px;
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
@@ -59,16 +164,45 @@
         .form-header p {
             font-size: 14px;
             color: #666;
-            margin-bottom: 1rem;
         }
 
-        .form-header .badge {
-            display: inline-block;
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
+        .moto-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .moto-summary-item {
+            text-align: center;
+        }
+
+        .moto-summary-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .moto-summary-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .change-moto {
+            margin-top: 1rem;
             font-size: 12px;
+        }
+
+        .change-moto button {
+            background: none;
+            border: none;
+            color: #ff6600;
+            cursor: pointer;
+            text-decoration: underline;
             font-weight: 600;
         }
 
@@ -81,8 +215,8 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
-        .form-section h2 {
-            font-size: 18px;
+        .form-section h3 {
+            font-size: 16px;
             font-weight: 700;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
@@ -97,8 +231,8 @@
             display: block;
             font-size: 13px;
             font-weight: 500;
-            margin-bottom: 0.5rem;
             color: #333;
+            margin-bottom: 0.5rem;
         }
 
         .form-group.required label::after {
@@ -112,7 +246,7 @@
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 6px;
             font-family: inherit;
             font-size: 13px;
             transition: all 0.3s;
@@ -137,72 +271,6 @@
             gap: 1rem;
         }
 
-        .image-upload {
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: #fafafa;
-        }
-
-        .image-upload:hover {
-            border-color: #ff6600;
-            background: #fff9f5;
-        }
-
-        .image-upload.active {
-            border-color: #ff6600;
-            background: #fff9f5;
-        }
-
-        .image-upload p {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        .image-upload input[type="file"] {
-            display: none;
-        }
-
-        .image-preview {
-            margin-top: 1rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 1rem;
-        }
-
-        .image-item {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            border-radius: 4px;
-            overflow: hidden;
-            background: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-
-        .image-remove {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: rgba(0,0,0,0.6);
-            color: white;
-            border: none;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         .info-box {
             background: #e8f5e9;
             border-left: 4px solid #2e7d32;
@@ -218,13 +286,13 @@
             display: flex;
             gap: 1rem;
             margin-top: 2rem;
+            justify-content: center;
         }
 
         button {
-            flex: 1;
-            padding: 12px;
+            padding: 12px 32px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
@@ -234,10 +302,13 @@
         .btn-primary {
             background: #ff6600;
             color: white;
+            flex: 1;
+            max-width: 300px;
         }
 
         .btn-primary:hover {
             background: #e55a00;
+            transform: translateY(-2px);
         }
 
         .btn-secondary {
@@ -259,6 +330,7 @@
             margin-top: 1rem;
             display: none;
             font-size: 13px;
+            text-align: center;
         }
 
         .error-message {
@@ -270,6 +342,7 @@
             margin-top: 1rem;
             display: none;
             font-size: 13px;
+            text-align: center;
         }
 
         /* RESPONSIVE */
@@ -278,12 +351,16 @@
                 grid-template-columns: 1fr;
             }
 
-            .form-section {
-                padding: 1.5rem;
+            .moto-summary {
+                grid-template-columns: 1fr 1fr;
             }
 
             .button-group {
                 flex-direction: column;
+            }
+
+            .btn-primary {
+                max-width: none;
             }
         }
     </style>
@@ -291,273 +368,274 @@
 <body>
     <!-- HEADER -->
     <header>
-        <div class="logo" onclick="window.location.href='index.html'">BikerBasen</div>
+        <div class="logo" onclick="window.location.href='index.html'">🏍️ BikerBasen</div>
     </header>
 
     <!-- CONTAINER -->
     <div class="container">
-        <!-- HEADER SECTION -->
-        <div class="form-header">
-            <h1>Sælg din motorcykel</h1>
-            <p>Opret en gratis annonce på BikerBasen</p>
-            <span class="badge">GRATIS ANNONCE</span>
+        <!-- STEP 1: VIN LOOKUP -->
+        <div class="step-1" id="step1">
+            <h1>Sælg din motorcykel på Danmarks største markedsplads</h1>
+            <p>Indtast din motorcykelregistreringsnummer så hjælper vi med resten</p>
+
+            <div class="vin-input-group">
+                <div class="vin-icon">REG</div>
+                <div class="vin-input-wrapper">
+                    <input 
+                        type="text" 
+                        id="registrationInput" 
+                        placeholder="Registreringsnummer" 
+                        maxlength="7"
+                    >
+                </div>
+                <button class="vin-button" onclick="lookupMotorcycle()">Find motorcykel</button>
+            </div>
+
+            <div class="help-text">
+                Glemt registreringsnummeret? <a href="#" onclick="skipLookup()">Skip og udfyld manuelt</a>
+            </div>
         </div>
 
-        <!-- ERROR/SUCCESS MESSAGES -->
-        <div id="successMessage" class="success-message">
-            ✓ Annonce oprettet! Du bliver omdirigeret...
-        </div>
-        <div id="errorMessage" class="error-message"></div>
-
-        <!-- FORM -->
-        <form id="listingForm" onsubmit="submitListing(event)">
-            
-            <!-- MOTORCYKEL INFO -->
-            <div class="form-section">
-                <h2>Motorcykeloplysninger</h2>
+        <!-- STEP 2: CREATE LISTING FORM -->
+        <div class="step-2" id="step2">
+            <!-- HEADER -->
+            <div class="form-header">
+                <h2>Opret annonce</h2>
+                <p>Næsten færdig! Udfyld de sidste detaljer</p>
                 
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label>Mærke</label>
-                        <input type="text" id="brand" placeholder="F.eks. Honda, Yamaha" required>
+                <div class="moto-summary">
+                    <div class="moto-summary-item">
+                        <div class="moto-summary-label">Mærke</div>
+                        <div class="moto-summary-value" id="summaryBrand">-</div>
                     </div>
-                    <div class="form-group required">
-                        <label>Model</label>
-                        <input type="text" id="model" placeholder="F.eks. CB500, Virago" required>
+                    <div class="moto-summary-item">
+                        <div class="moto-summary-label">Model</div>
+                        <div class="moto-summary-value" id="summaryModel">-</div>
                     </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label>År</label>
-                        <input type="number" id="year" placeholder="F.eks. 2020" min="1900" max="2024" required>
+                    <div class="moto-summary-item">
+                        <div class="moto-summary-label">År</div>
+                        <div class="moto-summary-value" id="summaryYear">-</div>
                     </div>
-                    <div class="form-group required">
-                        <label>Kørt km</label>
-                        <input type="number" id="km" placeholder="F.eks. 12500" min="0" required>
+                    <div class="moto-summary-item">
+                        <div class="moto-summary-label">Km</div>
+                        <div class="moto-summary-value" id="summaryKm">-</div>
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label>Type</label>
-                        <select id="type" required>
-                            <option value="">Vælg type</option>
-                            <option value="Cruiser">Cruiser</option>
-                            <option value="Sport">Sport</option>
-                            <option value="Naked Bike">Naked Bike</option>
-                            <option value="Adventure">Adventure</option>
-                            <option value="Retro">Retro</option>
-                            <option value="Touring">Touring</option>
-                            <option value="Scooter">Scooter</option>
-                            <option value="Custom">Custom</option>
-                            <option value="Andet">Andet</option>
-                        </select>
-                    </div>
-                    <div class="form-group required">
-                        <label>Tilstand</label>
-                        <select id="condition" required>
-                            <option value="">Vælg tilstand</option>
-                            <option value="Som ny">Som ny</option>
-                            <option value="Meget god">Meget god</option>
-                            <option value="God">God</option>
-                            <option value="Acceptabel">Acceptabel</option>
-                        </select>
-                    </div>
+                <div class="change-moto">
+                    <button onclick="changeMoto()">Skift motorcykel</button>
                 </div>
             </div>
 
-            <!-- PRIS & LOKATION -->
-            <div class="form-section">
-                <h2>Pris og lokation</h2>
+            <!-- FORM -->
+            <form id="listingForm" onsubmit="submitListing(event)">
+                <!-- PRIS & LOKATION -->
+                <div class="form-section">
+                    <h3>Pris og lokation</h3>
 
-                <div class="form-group required">
-                    <label>Pris (kr)</label>
-                    <input type="number" id="price" placeholder="F.eks. 85000" min="0" required>
-                </div>
-
-                <div class="form-group required">
-                    <label>By/kommune</label>
-                    <input type="text" id="location" placeholder="F.eks. København" required>
-                </div>
-            </div>
-
-            <!-- BESKRIVELSE -->
-            <div class="form-section">
-                <h2>Beskrivelse</h2>
-
-                <div class="form-group required">
-                    <label>Beskrivelse af motorcyklen</label>
-                    <textarea id="description" placeholder="Beskriv motorcykelens tilstand, særligheder, service historik osv." required></textarea>
-                </div>
-
-                <div class="info-box">
-                    💡 Tip: Jo bedre beskrivelse, jo flere interesserede køber du!
-                </div>
-            </div>
-
-            <!-- BILLEDER -->
-            <div class="form-section">
-                <h2>Billeder</h2>
-
-                <div class="image-upload" id="imageUpload" onclick="document.getElementById('imageInput').click()">
-                    <p>📸 Klik for at uploade billeder</p>
-                    <p style="font-size: 12px; color: #999;">eller træk billeder herhen</p>
-                    <input type="file" id="imageInput" multiple accept="image/*" onchange="handleImages(event)">
-                </div>
-                <div class="image-preview" id="imagePreview"></div>
-            </div>
-
-            <!-- KONTAKTINFO -->
-            <div class="form-section">
-                <h2>Din kontaktinfo</h2>
-
-                <div class="form-row">
                     <div class="form-group required">
-                        <label>Navn</label>
-                        <input type="text" id="contactName" placeholder="Dit navn" required>
+                        <label>Pris (kr)</label>
+                        <input type="number" id="price" placeholder="F.eks. 85000" min="0" required>
                     </div>
+
+                    <div class="form-group required">
+                        <label>By/kommune</label>
+                        <input type="text" id="location" placeholder="F.eks. København" required>
+                    </div>
+                </div>
+
+                <!-- TILSTAND -->
+                <div class="form-section">
+                    <h3>Tilstand</h3>
+
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label>Tilstand</label>
+                            <select id="condition" required>
+                                <option value="">Vælg tilstand</option>
+                                <option value="Som ny">Som ny</option>
+                                <option value="Meget god">Meget god</option>
+                                <option value="God">God</option>
+                                <option value="Acceptabel">Acceptabel</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group required">
+                            <label>Service historie</label>
+                            <select id="service" required>
+                                <option value="">Vælg service</option>
+                                <option value="Fuld service historia">Fuld service historia</option>
+                                <option value="Delvis service historia">Delvis service historia</option>
+                                <option value="Ingen service historia">Ingen service historia</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BESKRIVELSE -->
+                <div class="form-section">
+                    <h3>Beskrivelse</h3>
+
+                    <div class="form-group required">
+                        <label>Beskrivelse af motorcyklen</label>
+                        <textarea id="description" placeholder="Beskriv motorcykelens tilstand, særligheder, evt. skader osv." required></textarea>
+                    </div>
+
+                    <div class="info-box">
+                        💡 Tip: Jo bedre beskrivelse, jo flere interesserede køber du!
+                    </div>
+                </div>
+
+                <!-- KONTAKTINFO -->
+                <div class="form-section">
+                    <h3>Din kontaktinfo</h3>
+
+                    <div class="form-row">
+                        <div class="form-group required">
+                            <label>Navn</label>
+                            <input type="text" id="contactName" placeholder="Dit navn" required>
+                        </div>
+                        <div class="form-group required">
+                            <label>Telefon</label>
+                            <input type="tel" id="contactPhone" placeholder="+45 12 34 56 78" required>
+                        </div>
+                    </div>
+
                     <div class="form-group required">
                         <label>Email</label>
                         <input type="email" id="contactEmail" placeholder="din@email.dk" required>
                     </div>
                 </div>
 
-                <div class="form-group required">
-                    <label>Telefon</label>
-                    <input type="tel" id="contactPhone" placeholder="+45 12 34 56 78" required>
+                <!-- SUCCESS/ERROR -->
+                <div id="successMessage" class="success-message">
+                    ✓ Annonce oprettet! Du bliver omdirigeret...
                 </div>
-            </div>
+                <div id="errorMessage" class="error-message"></div>
 
-            <!-- BUTTONS -->
-            <div class="button-group">
-                <button type="button" class="btn-secondary" onclick="window.location.href='index.html'">Annuller</button>
-                <button type="submit" class="btn-primary">Opret annonce</button>
-            </div>
-        </form>
+                <!-- BUTTONS -->
+                <div class="button-group">
+                    <button type="button" class="btn-secondary" onclick="window.location.href='index.html'">Annuller</button>
+                    <button type="submit" class="btn-primary">Opret annonce</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
-        // AUTO-FILL CONTACT INFO IF LOGGED IN
+        // MOCK MOTORCYCLE DATABASE
+        const motorcycleDatabase = {
+            'AA12345': { brand: 'Honda', model: 'CB500', year: 2018, km: 12000, type: 'Naked Bike' },
+            'BB67890': { brand: 'Yamaha', model: 'Virago 535', year: 2010, km: 25000, type: 'Cruiser' },
+            'CC11111': { brand: 'Harley-Davidson', model: 'Street 750', year: 2017, km: 18000, type: 'Cruiser' },
+            'DD22222': { brand: 'BMW', model: 'F 800 GS', year: 2015, km: 22000, type: 'Adventure' },
+        };
+
+        let selectedMoto = null;
+
+        // CHECK LOGIN ON LOAD
         window.addEventListener('load', function() {
             const userName = localStorage.getItem('userName');
-            const userEmail = localStorage.getItem('userEmail');
-
             if (!userName) {
-                alert('Du skal være logget ind for at oprette en annonce.\n\nDu bliver sendt til login siden...');
+                alert('Du skal være logget ind for at oprette en annonce.');
                 window.location.href = 'login.html';
                 return;
             }
 
             document.getElementById('contactName').value = userName;
+            const userEmail = localStorage.getItem('userEmail');
             if (userEmail) {
                 document.getElementById('contactEmail').value = userEmail;
             }
         });
 
-        // HANDLE IMAGE UPLOAD
-        let uploadedImages = [];
-
-        function handleImages(event) {
-            const files = Array.from(event.target.files);
+        // LOOKUP MOTORCYCLE
+        function lookupMotorcycle() {
+            const regNum = document.getElementById('registrationInput').value.toUpperCase();
             
-            files.forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadedImages.push({
-                        name: file.name,
-                        data: e.target.result
-                    });
-                    displayImages();
-                };
-                reader.readAsDataURL(file);
-            });
+            if (!regNum) {
+                alert('Indtast venligst et registreringsnummer');
+                return;
+            }
+
+            const moto = motorcycleDatabase[regNum];
+            
+            if (moto) {
+                selectedMoto = moto;
+                showStep2();
+            } else {
+                alert('Motorcykel ikke fundet. Prøv at udfylde manuelt.');
+                skipLookup();
+            }
         }
 
-        function displayImages() {
-            const preview = document.getElementById('imagePreview');
-            preview.innerHTML = '';
-
-            uploadedImages.forEach((img, index) => {
-                const item = document.createElement('div');
-                item.className = 'image-item';
-                item.innerHTML = `
-                    📷
-                    <button type="button" class="image-remove" onclick="removeImage(${index})">✕</button>
-                `;
-                preview.appendChild(item);
-            });
+        // SKIP LOOKUP
+        function skipLookup() {
+            selectedMoto = { brand: '', model: '', year: '', km: '', type: '' };
+            showStep2();
         }
 
-        function removeImage(index) {
-            uploadedImages.splice(index, 1);
-            displayImages();
+        // CHANGE MOTORCYCLE
+        function changeMoto() {
+            selectedMoto = null;
+            document.getElementById('registrationInput').value = '';
+            document.getElementById('step1').style.display = 'block';
+            document.getElementById('step2').classList.remove('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // SHOW STEP 2
+        function showStep2() {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').classList.add('active');
+
+            // Update summary
+            document.getElementById('summaryBrand').textContent = selectedMoto.brand || '-';
+            document.getElementById('summaryModel').textContent = selectedMoto.model || '-';
+            document.getElementById('summaryYear').textContent = selectedMoto.year || '-';
+            document.getElementById('summaryKm').textContent = selectedMoto.km ? selectedMoto.km.toLocaleString('da-DK') : '-';
+
+            // Pre-fill form
+            if (selectedMoto.brand) {
+                // Kunne fylde mere info her
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // SUBMIT FORM
         function submitListing(event) {
             event.preventDefault();
 
-            // VALIDATE FORM
-            const brand = document.getElementById('brand').value;
-            const model = document.getElementById('model').value;
-            const year = document.getElementById('year').value;
-            const km = document.getElementById('km').value;
-            const type = document.getElementById('type').value;
-            const price = document.getElementById('price').value;
-            const location = document.getElementById('location').value;
-            const description = document.getElementById('description').value;
-            const contactName = document.getElementById('contactName').value;
-            const contactEmail = document.getElementById('contactEmail').value;
-            const contactPhone = document.getElementById('contactPhone').value;
-
-            if (!brand || !model || !year || !km || !type || !price || !location || !description) {
-                showError('Udfyld venligst alle påkrævede felter');
-                return;
-            }
-
-            // CREATE LISTING OBJECT
             const listing = {
                 id: Date.now(),
-                brand,
-                model,
-                year: parseInt(year),
-                km: parseInt(km),
-                type,
+                brand: selectedMoto.brand,
+                model: selectedMoto.model,
+                year: selectedMoto.year,
+                km: selectedMoto.km,
+                type: selectedMoto.type,
+                price: parseInt(document.getElementById('price').value),
+                location: document.getElementById('location').value,
                 condition: document.getElementById('condition').value,
-                price: parseInt(price),
-                location,
-                description,
-                contactName,
-                contactEmail,
-                contactPhone,
-                images: uploadedImages,
+                service: document.getElementById('service').value,
+                description: document.getElementById('description').value,
+                contactName: document.getElementById('contactName').value,
+                contactEmail: document.getElementById('contactEmail').value,
+                contactPhone: document.getElementById('contactPhone').value,
                 createdAt: new Date().toISOString()
             };
 
-            // SAVE TO LOCALSTORAGE
+            // Save to localStorage
             let userListings = JSON.parse(localStorage.getItem('userListings')) || [];
             userListings.push(listing);
             localStorage.setItem('userListings', JSON.stringify(userListings));
 
-            // SHOW SUCCESS MESSAGE
-            showSuccess('Annonce oprettet!');
+            // Show success
+            document.getElementById('successMessage').style.display = 'block';
 
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 2000);
-        }
-
-        function showError(message) {
-            const errorEl = document.getElementById('errorMessage');
-            errorEl.textContent = '✗ ' + message;
-            errorEl.style.display = 'block';
-        }
-
-        function showSuccess(message) {
-            const successEl = document.getElementById('successMessage');
-            successEl.textContent = '✓ ' + message;
-            successEl.style.display = 'block';
         }
     </script>
 </body>
