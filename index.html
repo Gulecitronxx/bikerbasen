@@ -852,6 +852,20 @@
     </section>
 
     <!-- LISTINGS -->
+    <section class="listings-section">
+        <div class="listings-header">
+            <h2>Populære motorcykler</h2>
+            <select class="sort-select" onchange="sortListings()">
+                <option value="newest">Nyeste først</option>
+                <option value="price-low">Billigste først</option>
+                <option value="price-high">Dyreste først</option>
+            </select>
+        </div>
+
+        <div class="listings" id="listingsContainer">
+            <!-- Motorcykler indsættes her -->
+        </div>
+    </section>
 
     <!-- FOOTER -->
     <footer>
@@ -866,7 +880,6 @@
     <script>
         // GLOBAL VARIABLES
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        let currentListings = [];
 
         // MOTORCYCLES DATABASE
         const motorcycles = [
@@ -888,7 +901,6 @@
         ];
 
         let currentListings = [...motorcycles];
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
         // CHECK USER LOGIN ON LOAD
         window.addEventListener('load', function() {
