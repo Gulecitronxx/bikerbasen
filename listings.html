@@ -65,11 +65,19 @@
         
         <div class="filters-bar">
             <input type="text" id="searchInput" placeholder="Søg på mærke, model..." onkeyup="filterListings()">
-            <select id="sortSelect" onchange="sortListings()">
-                <option value="newest">Nyeste først</option>
-                <option value="price-low">Pris: lavt til højt</option>
-                <option value="price-high">Pris: højt til lavt</option>
-            </select>
+            <div style="position: relative;">
+                <select id="sortSelect" onchange="sortListings()" style="padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px;">
+                    <option value="">Sorter: Standard</option>
+                    <option value="price-low">Pris: (laveste først)</option>
+                    <option value="price-high">Pris: (højeste først)</option>
+                    <option value="newest">Dato: (nyeste først)</option>
+                    <option value="oldest">Dato: (ældste først)</option>
+                    <option value="year-new">Modelår: (nyeste først)</option>
+                    <option value="year-old">Modelår: (ældste først)</option>
+                    <option value="km-high">Kilometerstand: (højeste først)</option>
+                    <option value="km-low">Kilometerstand: (laveste først)</option>
+                </select>
+            </div>
             <button class="btn-filter" onclick="window.location.href='index.html'">← Tilbage til søgning</button>
         </div>
 
@@ -145,6 +153,12 @@
             const sort = document.getElementById('sortSelect').value;
             if (sort === 'price-low') currentListings.sort((a, b) => a.price - b.price);
             if (sort === 'price-high') currentListings.sort((a, b) => b.price - a.price);
+            if (sort === 'newest') currentListings.sort((a, b) => b.year - a.year);
+            if (sort === 'oldest') currentListings.sort((a, b) => a.year - b.year);
+            if (sort === 'year-new') currentListings.sort((a, b) => b.year - a.year);
+            if (sort === 'year-old') currentListings.sort((a, b) => a.year - b.year);
+            if (sort === 'km-high') currentListings.sort((a, b) => b.km - a.km);
+            if (sort === 'km-low') currentListings.sort((a, b) => a.km - b.km);
             displayListings(currentListings);
         }
 
