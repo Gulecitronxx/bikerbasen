@@ -650,7 +650,26 @@
     </style>
 </head>
 <body>
-    <!-- FEEDBACK MODAL -->
+    <!-- MIN PROFIL MODAL -->
+    <div id="profileModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>Min profil</h2>
+                <button class="close-btn" onclick="closeProfile()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1rem; font-size: 16px;">Mine annoncer</h3>
+                    <div id="myListingsContainer" style="max-height: 400px; overflow-y: auto;">
+                        <p style="color: #999; text-align: center;">Indlæser...</p>
+                    </div>
+                </div>
+                <button onclick="logout()" class="btn-logout" style="width: 100%; padding: 12px; background: #ff6600; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px;">
+                    Log ud
+                </button>
+            </div>
+        </div>
+    </div>
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeFeedback()">✕</button>
@@ -754,7 +773,7 @@
                 <button onclick="toggleFavorites()">Favoritter ♥</button>
                 <button onclick="openCustomer()">Kundeservice</button>
                 <div id="userProfile" style="display: none;">
-                    <div class="user-profile" onclick="logout()">
+                    <div class="user-profile" onclick="openProfile()">
                         <div class="user-avatar" id="userInitial">P</div>
                         <span id="userName">Pascal</span>
                     </div>
@@ -928,7 +947,60 @@
                 document.getElementById('loginLink').style.display = 'block';
                 document.getElementById('userProfile').style.display = 'none';
                 alert('Du er nu logget ud');
+                window.location.reload();
             }
+        }
+
+        // OPEN PROFILE MODAL
+        function openProfile() {
+            document.getElementById('profileModal').style.display = 'flex';
+            displayMyListings();
+        }
+
+        // CLOSE PROFILE MODAL
+        function closeProfile() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+
+        // DISPLAY MY LISTINGS
+        function displayMyListings() {
+            const userListings = JSON.parse(localStorage.getItem('userListings')) || [];
+            const container = document.getElementById('myListingsContainer');
+
+            if (userListings.length === 0) {
+                container.innerHTML = '<p style="color: #999; text-align: center; padding: 2rem;">Du har ikke oprettet nogle annoncer endnu</p>';
+                return;
+            }
+
+            container.innerHTML = userListings.map((listing, index) => `
+                <div style="border: 1px solid #e0e0e0; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; cursor: pointer;" onclick="viewMyListing(${listing.id})">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div>
+                            <h4 style="margin-bottom: 0.5rem; font-weight: 600;">${listing.brand} ${listing.model}</h4>
+                            <p style="font-size: 12px; color: #999; margin-bottom: 0.5rem;">${listing.year} • ${listing.km.toLocaleString('da-DK')} km</p>
+                            <p style="font-weight: 600; color: #ff6600;">${listing.price.toLocaleString('da-DK')} kr</p>
+                        </div>
+                        <button onclick="deleteMyListing(${listing.id}, event)" style="background: #ffcccc; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #c62828; font-weight: 600;">Slet</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // DELETE MY LISTING
+        function deleteMyListing(id, event) {
+            event.stopPropagation();
+            if (confirm('Er du sikker på du vil slette denne annonce?')) {
+                let userListings = JSON.parse(localStorage.getItem('userListings')) || [];
+                userListings = userListings.filter(l => l.id !== id);
+                localStorage.setItem('userListings', JSON.stringify(userListings));
+                displayMyListings();
+                alert('Annonce slettet!');
+            }
+        }
+
+        // VIEW MY LISTING
+        function viewMyListing(id) {
+            window.location.href = `listing-detail.html?id=${id}`;
         }
 
         // MODAL FUNCTIONS
