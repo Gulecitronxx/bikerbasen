@@ -993,6 +993,16 @@
             const card = document.createElement('div');
             card.className = 'listing-card';
             card.style.setProperty('--delay', `${index * 0.1}s`);
+            card.style.cursor = 'pointer';
+            card.onclick = function() {
+                // HVIS DET ER BRUGER-OPRETTET ANNONCE MED ID
+                if (moto.id) {
+                    window.location.href = `listing-detail.html?id=${moto.id}`;
+                } else {
+                    // HARDCODED MOTORCYCLES - BRUG INDEX SOM ID
+                    window.location.href = `listing-detail.html?id=${index + 1}`;
+                }
+            };
             card.innerHTML = `
                 <div class="listing-image">
                     🏍️
