@@ -864,6 +864,26 @@
     </footer>
 
     <script>
+        // GLOBAL VARIABLES
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        let currentListings = [];
+
+        // MOTORCYCLES DATABASE
+        const motorcycles = [
+            { id: 1, brand: 'Honda', model: 'CB500', year: 2018, km: 12000, type: 'Naked Bike', price: 85000, location: 'København', condition: 'Meget god', service: 'Fuld service historia', description: 'Flot Honda CB500 fra 2018 i rigtig god tilstand.' },
+            { id: 2, brand: 'Yamaha', model: 'Virago 535', year: 2010, km: 25000, type: 'Cruiser', price: 55000, location: 'Aarhus', condition: 'God', service: 'Delvis service historia', description: 'Klassisk cruiser fra Yamaha.' },
+            { id: 3, brand: 'BMW', model: 'F 800 GS', year: 2015, km: 22000, type: 'Adventure', price: 95000, location: 'Odense', condition: 'Meget god', service: 'Fuld service historia', description: 'Adventure motorcykel fra BMW.' },
+            { id: 4, brand: 'Harley-Davidson', model: 'Street 750', year: 2017, km: 18000, type: 'Cruiser', price: 75000, location: 'Randers', condition: 'Meget god', service: 'Fuld service historia', description: 'Klassisk Harley.' },
+            { id: 5, brand: 'Kawasaki', model: 'Ninja 650', year: 2020, km: 8000, type: 'Sport', price: 65000, location: 'Aalborg', condition: 'Som ny', service: 'Fuld service historia', description: 'Næsten ny sport motorcykel.' },
+            { id: 6, brand: 'Ducati', model: 'Monster 821', year: 2019, km: 15000, type: 'Naked Bike', price: 95000, location: 'København', condition: 'Meget god', service: 'Fuld service historia', description: 'Flot Ducati Monster.' },
+            { id: 7, brand: 'Triumph', model: 'Street Twin', year: 2016, km: 20000, type: 'Retro', price: 70000, location: 'Herning', condition: 'God', service: 'Fuld service historia', description: 'Smuk retro motorcykel.' },
+            { id: 8, brand: 'KTM', model: '790 Duke', year: 2021, km: 5000, type: 'Naked Bike', price: 85000, location: 'Vejle', condition: 'Som ny', service: 'Fuld service historia', description: 'Kraftig naked bike.' },
+            { id: 9, brand: 'Royal Enfield', model: 'Interceptor 650', year: 2022, km: 3000, type: 'Retro', price: 65000, location: 'Silkeborg', condition: 'Som ny', service: 'Fuld service historia', description: 'Ny retro motorcykel.' },
+            { id: 10, brand: 'Suzuki', model: 'V-Strom 650', year: 2018, km: 16000, type: 'Adventure', price: 70000, location: 'Horsens', condition: 'Meget god', service: 'Fuld service historia', description: 'Adventure motorcykel.' },
+            { id: 11, brand: 'Honda', model: 'CB1100', year: 2017, km: 14000, type: 'Retro', price: 90000, location: 'Svendborg', condition: 'Meget god', service: 'Fuld service historia', description: 'Klassisk retro.' },
+            { id: 12, brand: 'Yamaha', model: 'YZF-R6', year: 2019, km: 9000, type: 'Sport', price: 75000, location: 'Viborg', condition: 'Meget god', service: 'Fuld service historia', description: 'Performance sport.' },
+            { id: 13, brand: 'BMW', model: 'R 1200 GS', year: 2016, km: 28000, type: 'Adventure', price: 120000, location: 'Esbjerg', condition: 'God', service: 'Fuld service historia', description: 'Stor adventure.' }
+        ];
         const motorcycles = [
             { brand: "Yamaha", model: "Virago 535", year: 2010, price: 45000, location: "København", type: "Cruiser", km: 25000 },
             { brand: "Honda", model: "CB500", year: 2018, price: 85000, location: "Aarhus", type: "Naked Bike", km: 12000 },
