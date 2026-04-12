@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MotoMarkedet - Danmarks Motorcykelmarkedsplads</title>
+    <title>BikerBasen - Danmarks største motorcykelmarkedsplads</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,190 +13,201 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            font-family: 'Roboto', sans-serif;
             background: #f5f5f5;
             color: #333;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="6" fill="%23ff6b00" opacity="0.8"/><circle cx="16" cy="16" r="10" fill="none" stroke="%23ff6b00" stroke-width="1.5" opacity="0.4"/></svg>') 16 16, auto;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
-        }
-
-        @keyframes glow-pulse {
-            0%, 100% {
-                box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 0 8px rgba(255, 107, 0, 0);
-            }
         }
 
         /* HEADER */
         header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: white;
-            padding: 2rem 1rem;
-            text-align: center;
-            border-bottom: 4px solid #ff6b00;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        header h1 {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        header p {
-            font-size: 16px;
-            color: #bbb;
-        }
-
-        /* NAVIGATION */
-        nav {
             background: white;
-            padding: 1rem;
             border-bottom: 1px solid #e0e0e0;
+            padding: 1rem 2rem;
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        nav a {
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff6600;
+        }
+
+        .sell-link {
             color: #666;
             text-decoration: none;
             font-size: 14px;
-            font-weight: 500;
             transition: color 0.3s;
         }
 
-        nav a:hover {
-            color: #ff6b00;
+        .sell-link:hover {
+            color: #ff6600;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            font-size: 13px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .header-nav a {
+            color: #0066cc;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.3s;
+        }
+
+        .header-nav a:hover {
+            color: #ff6600;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: #e8e8e8;
+            padding: 4rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+        }
+
+        .hero-content {
+            background: white;
+            border-radius: 8px;
+            padding: 3rem;
+            max-width: 900px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 2rem;
         }
 
         /* SEARCH SECTION */
         .search-section {
-            background: white;
-            padding: 2.5rem 1rem;
-            margin: 0 auto;
-            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
-        .search-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: #1a1a1a;
-        }
-
-        .search-box {
+        .search-row {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr auto;
+            grid-template-columns: repeat(4, 1fr);
             gap: 12px;
-            margin-bottom: 1rem;
         }
 
-        .search-box input,
-        .search-box select {
-            padding: 12px 14px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
+        .search-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-field label {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .search-field select,
+        .search-field input {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 13px;
             background: white;
             color: #333;
-            transition: border-color 0.3s;
+            appearance: none;
+            cursor: pointer;
         }
 
-        .search-box input:focus,
-        .search-box select:focus {
+        .search-field select {
+            background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 20px;
+            padding-right: 32px;
+        }
+
+        .search-field input:focus,
+        .search-field select:focus {
             outline: none;
-            border-color: #ff6b00;
-            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+            border-color: #ff6600;
+            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
         }
 
-        .search-box button {
-            padding: 12px 32px;
-            background: #ff6b00;
+        .search-button {
+            grid-column: 4;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .search-button button {
+            width: 100%;
+            padding: 10px 24px;
+            background: #ff6600;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             font-weight: 600;
+            font-size: 13px;
             cursor: pointer;
-            font-size: 14px;
             transition: background 0.3s;
         }
 
-        .search-box button:hover {
+        .search-button button:hover {
             background: #e55a00;
         }
 
-        @media (max-width: 1000px) {
-            .search-box {
-                grid-template-columns: 1fr 1fr;
-            }
+        .search-footer {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 12px;
         }
 
-        @media (max-width: 600px) {
-            .search-box {
-                grid-template-columns: 1fr;
-            }
-            .search-box button {
-                width: 100%;
-            }
-        }
-
-        /* FEATURED SECTION */
-        .featured-banner {
-            background: linear-gradient(135deg, #ff6b00 0%, #ff8f3d 100%);
-            color: white;
-            padding: 3rem 1rem;
-            text-align: center;
-            margin: 2rem auto;
-            border-radius: 12px;
-            max-width: 1200px;
-            box-shadow: 0 8px 24px rgba(255, 107, 0, 0.2);
-        }
-
-        .featured-banner h2 {
-            font-size: 28px;
-            margin-bottom: 0.75rem;
-            font-weight: 700;
-        }
-
-        .featured-banner p {
-            font-size: 16px;
-            margin-bottom: 1.5rem;
-            opacity: 0.95;
-        }
-
-        .featured-banner button {
-            padding: 12px 32px;
-            background: white;
-            color: #ff6b00;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
+        .search-footer a {
+            color: #0066cc;
+            text-decoration: underline;
             cursor: pointer;
-            transition: transform 0.3s;
         }
 
-        .featured-banner button:hover {
-            transform: scale(1.05);
+        .search-footer a:hover {
+            color: #ff6600;
         }
 
         /* LISTINGS */
-        .listings-container {
+        .listings-section {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
+            margin: 3rem auto;
+            padding: 0 2rem;
         }
 
         .listings-header {
@@ -203,248 +215,354 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
-            flex-wrap: wrap;
+        }
+
+        .listings-header h2 {
+            font-size: 18px;
+            color: #1a1a1a;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* POPULÆRE SØGNINGER */
+        .popular-section {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .popular-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1.5rem;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .popular-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1rem;
         }
 
-        .listings-header h3 {
-            font-size: 18px;
-            color: #1a1a1a;
+        .category-card {
+            position: relative;
+            height: 160px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 1.5rem;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .category-card:hover {
+            transform: scale(1.05);
+        }
+
+        .category-card:nth-child(2) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .category-card:nth-child(3) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .category-card:nth-child(4) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .category-card:nth-child(5) {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .category-card:nth-child(6) {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        @media (max-width: 768px) {
+            .popular-categories {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+
+            .category-card {
+                height: 120px;
+                padding: 1rem;
+                font-size: 14px;
+            }
         }
 
         .sort-select {
             padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 13px;
         }
 
         .listings {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 2rem;
         }
 
         .listing-card {
             background: white;
-            border-radius: 10px;
+            border-radius: 4px;
             border: 1px solid #e0e0e0;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" fill="%23ff6b00"/></svg>') 16 16, pointer;
+            cursor: pointer;
             animation: float 3s ease-in-out infinite;
             animation-delay: var(--delay, 0s);
         }
 
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
         .listing-card:hover {
-            transform: translateY(-20px) scale(1.02);
-            box-shadow: 0 24px 48px rgba(255, 107, 0, 0.25),
-                        0 0 0 1px rgba(255, 107, 0, 0.1);
-            animation: glow-pulse 2s infinite;
+            transform: translateY(-12px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
         }
 
         .listing-image {
             width: 100%;
-            height: 200px;
+            height: 140px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 64px;
+            font-size: 48px;
             position: relative;
-            overflow: hidden;
         }
 
-        .listing-badge {
+        .listing-price-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #ff6b00;
+            top: 8px;
+            right: 8px;
+            background: #ff6600;
             color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 11px;
             font-weight: 600;
         }
 
         .listing-content {
-            padding: 1.25rem;
+            padding: 1rem;
         }
 
         .listing-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             margin-bottom: 0.5rem;
             color: #1a1a1a;
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
         .listing-price {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
-            color: #ff6b00;
+            color: #ff6600;
             margin-bottom: 0.75rem;
         }
 
         .listing-specs {
-            display: flex;
-            gap: 1rem;
             font-size: 12px;
-            color: #666;
-            margin-bottom: 0.75rem;
-        }
-
-        .listing-location {
-            font-size: 13px;
             color: #999;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .listing-contact {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .contact-btn {
-            width: 100%;
-            padding: 10px;
-            background: #f0f0f0;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            color: #333;
-            font-weight: 500;
-            font-size: 13px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .contact-btn:hover {
-            background: #ff6b00;
-            color: white;
-            border-color: #ff6b00;
-        }
-
-        /* EMPTY STATE */
-        .no-results {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 3rem 1rem;
-            color: #999;
-        }
-
-        .no-results h3 {
-            font-size: 18px;
             margin-bottom: 0.5rem;
-            color: #666;
+            line-height: 1.4;
         }
 
         /* FOOTER */
         footer {
             background: #1a1a1a;
             color: #ccc;
-            padding: 3rem 1rem;
+            padding: 2rem;
             margin-top: 3rem;
-            border-top: 1px solid #333;
+            text-align: center;
+            font-size: 12px;
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h4 {
-            color: white;
-            font-size: 14px;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .footer-section a {
-            display: block;
-            color: #999;
+        footer a {
+            color: #0066cc;
             text-decoration: none;
-            font-size: 13px;
-            margin-bottom: 0.5rem;
             transition: color 0.3s;
         }
 
-        .footer-section a:hover {
-            color: #ff6b00;
+        footer a:hover {
+            color: #ff6600;
         }
 
-        .footer-bottom {
-            text-align: center;
-            border-top: 1px solid #333;
-            padding-top: 1.5rem;
-            font-size: 13px;
-            color: #999;
-        }
-
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            header h1 {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .hero-content {
+                padding: 2rem;
+            }
+
+            .hero-title {
                 font-size: 24px;
             }
 
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
+            .search-row {
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            nav {
-                gap: 1rem;
+            .search-button {
+                grid-column: 1 / -1;
+            }
+
+            .search-button button {
+                width: 100%;
+            }
+
+            .listings {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+
+            .search-footer {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .search-row {
+                grid-template-columns: 1fr;
+            }
+
+            .listings {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            header {
+                padding: 1rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- HEADER -->
     <header>
-        <h1>🏍️ MotoMarkedet</h1>
-        <p>Danmarks største motorcykelmarkedsplads • Find din drømmemotorcykel</p>
+        <div class="header-left">
+            <div class="logo">BikerBasen</div>
+            <a href="#" class="sell-link">Sælg din motorcykel</a>
+        </div>
+        <div class="header-right">
+            <div class="header-nav">
+                <a href="#feedback">Giv feedback</a>
+                <a href="#login">Log ind</a>
+                <a href="#favorites">Favoritter ♥</a>
+                <a href="#customer">Kundeservice</a>
+            </div>
+        </div>
     </header>
 
-    <nav>
-        <a href="#køb">Køb motorcykel</a>
-        <a href="#sælg">Sælg din motorcykel</a>
-        <a href="#guide">Køberguide</a>
-        <a href="#kontakt">Kontakt</a>
-    </nav>
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Danmarks største markedsplads for motorcykler</h1>
+            <p class="hero-subtitle" id="announceCount">12 annoncer i dag</p>
 
-    <div class="search-section">
-        <div class="search-title">🔍 Find din næste motorcykel</div>
-        <div class="search-box">
-            <input type="text" id="brandInput" placeholder="Mærke (fx Honda, Yamaha...)">
-            <input type="text" id="modelInput" placeholder="Model (fx CB500, Virago...)">
-            <input type="number" id="yearInput" placeholder="År (fx 2020)" min="1900" max="2024">
-            <select id="priceFilter">
-                <option value="">Pris - Alle</option>
-                <option value="0-50000">Under 50.000 kr</option>
-                <option value="50000-100000">50.000 - 100.000 kr</option>
-                <option value="100000-150000">100.000 - 150.000 kr</option>
-                <option value="150000-250000">150.000 - 250.000 kr</option>
-                <option value="250000+">Over 250.000 kr</option>
-            </select>
-            <button onclick="filterListings()">Søg</button>
+            <div class="search-section">
+                <div class="search-row">
+                    <div class="search-field">
+                        <label>Type</label>
+                        <select id="typeFilter">
+                            <option value="">Alle typer</option>
+                            <option value="Cruiser">Cruiser</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Naked Bike">Naked Bike</option>
+                            <option value="Adventure">Adventure</option>
+                            <option value="Retro">Retro</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>Mærke</label>
+                        <input type="text" id="brandInput" placeholder="F.eks. Honda">
+                    </div>
+                    <div class="search-field">
+                        <label>Model</label>
+                        <input type="text" id="modelInput" placeholder="F.eks. CB500">
+                    </div>
+                    <div class="search-field">
+                        <label>År</label>
+                        <input type="number" id="yearInput" placeholder="F.eks. 2020" min="1900" max="2024">
+                    </div>
+                </div>
+
+                <div class="search-row">
+                    <div class="search-field">
+                        <label>Kørt km</label>
+                        <select id="kmFilter">
+                            <option value="">Alle</option>
+                            <option value="0-5000">Under 5.000 km</option>
+                            <option value="5000-20000">5.000 - 20.000 km</option>
+                            <option value="20000+">Over 20.000 km</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>Pris</label>
+                        <select id="priceFilter">
+                            <option value="">Alle priser</option>
+                            <option value="0-50000">Under 50.000 kr</option>
+                            <option value="50000-100000">50.000 - 100.000 kr</option>
+                            <option value="100000-150000">100.000 - 150.000 kr</option>
+                            <option value="150000+">Over 150.000 kr</option>
+                        </select>
+                    </div>
+                    <div></div>
+                    <div class="search-button">
+                        <button onclick="filterListings()">Vis <span id="bikeCount">12</span> motorcykler</button>
+                    </div>
+                </div>
+
+                <div class="search-footer">
+                    <a onclick="resetFilters()">Nulstil</a>
+                    <a href="#">Udvidet søgning</a>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="featured-banner">
-        <h2>📢 Har du en motorcykel til salg?</h2>
-        <p>Opret en gratis annonce på 2 minutter. Nå tusindvis af interesserede købere fra hele landet</p>
-        <button onclick="alert('Kontakt info@motomarkedet.dk for at oprette annonce')">Sælg din motorcykel</button>
-    </div>
+    <!-- POPULÆRE SØGNINGER -->
+    <section class="popular-section">
+        <h2 class="popular-title">Populære søgninger</h2>
+        <div class="popular-categories">
+            <div class="category-card" onclick="filterByCategory('Cruiser')">Cruiser</div>
+            <div class="category-card" onclick="filterByCategory('Sport')">Sport</div>
+            <div class="category-card" onclick="filterByCategory('Adventure')">Adventure</div>
+            <div class="category-card" onclick="filterByCategory('Naked Bike')">Naked Bike</div>
+            <div class="category-card" onclick="filterByCategory('Retro')">Retro</div>
+            <div class="category-card" onclick="filterByCategory('Touring')">Touring</div>
+        </div>
+    </section>
 
-    <div class="listings-container">
+    <!-- LISTINGS -->
+    <section class="listings-section">
         <div class="listings-header">
-            <h3>Tilgængelige motorcykler</h3>
-            <select id="sortSelect" class="sort-select" onchange="sortListings()">
+            <h2>Populære motorcykler</h2>
+            <select class="sort-select" onchange="sortListings()">
                 <option value="newest">Nyeste først</option>
                 <option value="price-low">Billigste først</option>
                 <option value="price-high">Dyreste først</option>
@@ -454,51 +572,33 @@
         <div class="listings" id="listingsContainer">
             <!-- Motorcykler indsættes her -->
         </div>
-    </div>
+    </section>
 
+    <!-- FOOTER -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Om MotoMarkedet</h4>
-                <a href="#om">Om os</a>
-                <a href="#blog">Blog</a>
-                <a href="#sikkerhed">Sikkerhed</a>
-                <a href="#vilkår">Vilkår og betingelser</a>
-            </div>
-            <div class="footer-section">
-                <h4>Hjælp & Support</h4>
-                <a href="#guide">Køberguide</a>
-                <a href="#faq">Ofte stillede spørgsmål</a>
-                <a href="#kontakt">Kontakt support</a>
-                <a href="#anmeld">Anmeld annonce</a>
-            </div>
-            <div class="footer-section">
-                <h4>Kontakt</h4>
-                <a href="mailto:info@motomarkedet.dk">info@motomarkedet.dk</a>
-                <a href="tel:+4540404040">+45 40 40 40 40</a>
-                <p style="color: #666; font-size: 13px; margin-top: 0.5rem;">Mandag-fredag: 09:00 - 17:00</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 MotoMarkedet. Alt ved motorcykler på ét sted. Alle rettigheder forbeholdt.</p>
-        </div>
+        <p>&copy; 2024 BikerBasen. Danmarks største motorcykelmarkedsplads.</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="#">Om BikerBasen</a> | 
+            <a href="#">Kontakt</a> | 
+            <a href="#">Vilkår og betingelser</a>
+        </p>
     </footer>
 
     <script>
-        // Motorcykeldata
         const motorcycles = [
-            { brand: "Yamaha", model: "Virago 535", year: 2010, price: 45000, location: "København", type: "Cruiser", km: 25000, badge: "Ny annonce" },
-            { brand: "Honda", model: "CB500", year: 2018, price: 85000, location: "Aarhus", type: "Naked Bike", km: 12000, badge: "Populær" },
-            { brand: "Harley-Davidson", model: "Street 750", year: 2017, price: 120000, location: "Odense", type: "Cruiser", km: 18000, badge: "" },
-            { brand: "Kawasaki", model: "Ninja 400", year: 2020, price: 65000, location: "Aalborg", type: "Sport", km: 3500, badge: "Ny" },
-            { brand: "BMW", model: "F 800 GS", year: 2015, price: 95000, location: "Randers", type: "Adventure", km: 22000, badge: "" },
-            { brand: "Royal Enfield", model: "Bullet 350", year: 2019, price: 55000, location: "Viborg", type: "Cruiser", km: 8500, badge: "Billig" },
-            { brand: "KTM", model: "390 Duke", year: 2021, price: 58000, location: "Vejle", type: "Naked Bike", km: 2100, badge: "Ny" },
-            { brand: "Honda", model: "CB750", year: 2016, price: 78000, location: "Kolding", type: "Naked Bike", km: 15000, badge: "" },
-            { brand: "Triumph", model: "Bonneville", year: 2014, price: 105000, location: "Silkeborg", type: "Retro", km: 19000, badge: "" },
-            { brand: "Ducati", model: "Monster 659", year: 2013, price: 68000, location: "Horsens", type: "Naked Bike", km: 24000, badge: "" },
-            { brand: "Suzuki", model: "GSX-R 750", year: 2012, price: 62000, location: "Roskilde", type: "Sport", km: 28000, badge: "" },
-            { brand: "Aprilia", model: "RS 125", year: 2019, price: 42000, location: "Lolland", type: "Sport", km: 4200, badge: "Billig" },
+            { brand: "Yamaha", model: "Virago 535", year: 2010, price: 45000, location: "København", type: "Cruiser", km: 25000 },
+            { brand: "Honda", model: "CB500", year: 2018, price: 85000, location: "Aarhus", type: "Naked Bike", km: 12000 },
+            { brand: "Harley-Davidson", model: "Street 750", year: 2017, price: 120000, location: "Odense", type: "Cruiser", km: 18000 },
+            { brand: "Kawasaki", model: "Ninja 400", year: 2020, price: 65000, location: "Aalborg", type: "Sport", km: 3500 },
+            { brand: "BMW", model: "F 800 GS", year: 2015, price: 95000, location: "Randers", type: "Adventure", km: 22000 },
+            { brand: "Royal Enfield", model: "Bullet 350", year: 2019, price: 55000, location: "Viborg", type: "Cruiser", km: 8500 },
+            { brand: "KTM", model: "390 Duke", year: 2021, price: 58000, location: "Vejle", type: "Naked Bike", km: 2100 },
+            { brand: "Honda", model: "CB750", year: 2016, price: 78000, location: "Kolding", type: "Naked Bike", km: 15000 },
+            { brand: "Triumph", model: "Bonneville", year: 2014, price: 105000, location: "Silkeborg", type: "Retro", km: 19000 },
+            { brand: "Ducati", model: "Monster 659", year: 2013, price: 68000, location: "Horsens", type: "Naked Bike", km: 24000 },
+            { brand: "Suzuki", model: "GSX-R 750", year: 2012, price: 62000, location: "Roskilde", type: "Sport", km: 28000 },
+            { brand: "Aprilia", model: "RS 125", year: 2019, price: 42000, location: "Lolland", type: "Sport", km: 4200 },
+            { brand: "Honda", model: "Gold Wing", year: 2016, price: 145000, location: "Svendborg", type: "Touring", km: 35000 },
         ];
 
         let currentListings = [...motorcycles];
@@ -506,24 +606,17 @@
         function createListingCard(moto, index) {
             const card = document.createElement('div');
             card.className = 'listing-card';
-            card.style.setProperty('--delay', `${index * 0.15}s`);
-            const badgeHTML = moto.badge ? `<div class="listing-badge">${moto.badge}</div>` : '';
+            card.style.setProperty('--delay', `${index * 0.1}s`);
             card.innerHTML = `
                 <div class="listing-image">
                     🏍️
-                    ${badgeHTML}
+                    <div class="listing-price-badge">${moto.price.toLocaleString('da-DK')} kr</div>
                 </div>
                 <div class="listing-content">
                     <div class="listing-title">${moto.brand} ${moto.model}</div>
-                    <div class="listing-price">${moto.price.toLocaleString('da-DK')} kr</div>
                     <div class="listing-specs">
-                        <span>${moto.year}</span>
-                        <span>${moto.km.toLocaleString('da-DK')} km</span>
-                        <span>${moto.type}</span>
-                    </div>
-                    <div class="listing-location">📍 ${moto.location}</div>
-                    <div class="listing-contact">
-                        <button class="contact-btn" onclick="contactSeller('${moto.brand} ${moto.model}')">Kontakt sælger</button>
+                        <div>${moto.year} • ${moto.km.toLocaleString('da-DK')} km</div>
+                        <div>${moto.type} • ${moto.location}</div>
                     </div>
                 </div>
             `;
@@ -534,45 +627,45 @@
             const container = document.getElementById('listingsContainer');
             container.innerHTML = '';
 
-            if (items.length === 0) {
-                const noResults = document.createElement('div');
-                noResults.className = 'no-results';
-                noResults.innerHTML = `
-                    <h3>Ingen motorcykler fundet</h3>
-                    <p>Prøv at ændre dine søgekriterer eller gennemse alle annoncer</p>
-                `;
-                container.appendChild(noResults);
-                return;
-            }
-
             items.forEach((moto, index) => {
                 container.appendChild(createListingCard(moto, index));
             });
+
+            document.getElementById('bikeCount').textContent = items.length;
+            updateAnnounceCount();
+        }
+
+        function updateAnnounceCount() {
+            document.getElementById('announceCount').textContent = `${currentListings.length} motorcykler i dag`;
         }
 
         function filterListings() {
+            const type = document.getElementById('typeFilter').value;
             const brand = document.getElementById('brandInput').value.toLowerCase();
             const model = document.getElementById('modelInput').value.toLowerCase();
             const year = parseInt(document.getElementById('yearInput').value) || null;
+            const kmRange = document.getElementById('kmFilter').value;
             const priceRange = document.getElementById('priceFilter').value;
 
             currentListings = motorcycles.filter(moto => {
                 let match = true;
 
+                if (type && moto.type !== type) match = false;
                 if (brand && !moto.brand.toLowerCase().includes(brand)) match = false;
                 if (model && !moto.model.toLowerCase().includes(model)) match = false;
                 if (year && moto.year !== year) match = false;
 
+                if (kmRange) {
+                    if (kmRange === '0-5000' && moto.km >= 5000) match = false;
+                    if (kmRange === '5000-20000' && (moto.km < 5000 || moto.km >= 20000)) match = false;
+                    if (kmRange === '20000+' && moto.km < 20000) match = false;
+                }
+
                 if (priceRange) {
-                    const ranges = {
-                        '0-50000': [0, 50000],
-                        '50000-100000': [50000, 100000],
-                        '100000-150000': [100000, 150000],
-                        '150000-250000': [150000, 250000],
-                        '250000+': [250000, Infinity]
-                    };
-                    const [min, max] = ranges[priceRange];
-                    if (moto.price < min || moto.price > max) match = false;
+                    if (priceRange === '0-50000' && moto.price >= 50000) match = false;
+                    if (priceRange === '50000-100000' && (moto.price < 50000 || moto.price >= 100000)) match = false;
+                    if (priceRange === '100000-150000' && (moto.price < 100000 || moto.price >= 150000)) match = false;
+                    if (priceRange === '150000+' && moto.price < 150000) match = false;
                 }
 
                 return match;
@@ -581,8 +674,25 @@
             displayListings(currentListings);
         }
 
+        function resetFilters() {
+            document.getElementById('typeFilter').value = '';
+            document.getElementById('brandInput').value = '';
+            document.getElementById('modelInput').value = '';
+            document.getElementById('yearInput').value = '';
+            document.getElementById('kmFilter').value = '';
+            document.getElementById('priceFilter').value = '';
+            currentListings = [...motorcycles];
+            displayListings(currentListings);
+        }
+
+        function filterByCategory(category) {
+            document.getElementById('typeFilter').value = category;
+            filterListings();
+            window.scrollTo({ top: document.getElementById('listingsContainer').offsetTop - 100, behavior: 'smooth' });
+        }
+
         function sortListings() {
-            const sortValue = document.getElementById('sortSelect').value;
+            const sortValue = event.target.value;
 
             switch(sortValue) {
                 case 'price-low':
@@ -598,10 +708,6 @@
             }
 
             displayListings(currentListings);
-        }
-
-        function contactSeller(model) {
-            alert(`Kontakt anmodning for: ${model}\n\nDu vil blive videresendt til kontaktformular...\n\nI virkeligheden ville dette sende en email til sælger.`);
         }
 
         // Indlæs alle motorcykler ved start
