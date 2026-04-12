@@ -4,529 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BikerBasen - Danmarks største motorcykelmarkedsplads</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", "Helvetica Neue", sans-serif;
-            background: #f5f5f5;
-            color: #333333;
-        }
-
-        /* MODALS */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            max-width: 500px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 28px; font-weight: 700;
-            cursor: pointer;
-            color: #999;
-        }
-
-        .modal-close:hover {
-            color: #333333;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: 'Roboto', sans-serif;
-            font-size: 12px;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .modal-button {
-            padding: 10px 20px;
-            background: #ff6600;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-            margin-right: 10px;
-        }
-
-        .modal-button:hover {
-            background: #e55a00;
-        }
-
-        .modal-button.secondary {
-            background: #ddd;
-            color: #333333;
-        }
-
-        .modal-button.secondary:hover {
-            background: #ccc;
-        }
-
-        /* HEADER */
-        header {
-            background: white;
-            padding: 1.5rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 28px; font-weight: 700;
-            font-weight: 700;
-            color: #ff6600;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .header-nav {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .header-link {
-            text-decoration: none;
-            color: #333333;
-            font-size: 15px; font-weight: 500;
-            cursor: pointer;
-        }
-
-        .header-link:hover {
-            color: #ff6600;
-        }
-
-        /* HERO */
-        .hero {
-            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
-            padding: 3rem 2rem;
-        }
-
-        .hero-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .hero-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: #333333;
-            text-align: center;
-        }
-
-        .hero-subtitle {
-            font-size: 15px; font-weight: 500;
-            color: #666;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .search-container {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .search-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .search-field {
-            position: relative;
-        }
-
-        .search-field input,
-        .search-field select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #333333;
-        }
-
-        .search-field input:focus,
-        .search-field select:focus {
-            outline: none;
-            border-color: #ff6600;
-        }
-
-        .search-field input:disabled,
-        .search-field select:disabled {
-            background: #f5f5f5;
-            color: #999;
-            cursor: not-allowed;
-        }
-
-        .search-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            background: #ff6600;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 15px; font-weight: 500;
-        }
-
-        .btn:hover {
-            background: #e55a00;
-        }
-
-        .btn-secondary {
-            background: #eee;
-            color: #333333;
-        }
-
-        .btn-secondary:hover {
-            background: #ddd;
-        }
-
-        /* SECTIONS */
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: #333333;
-        }
-
-        .popular-categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-bottom: 3rem;
-        }
-
-        .category-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .category-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
-        }
-
-        .category-card-title {
-            font-weight: 600;
-            color: #333333;
-            font-size: 15px; font-weight: 500;
-        }
-
-        .cta-section {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 3rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .cta-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #333333;
-        }
-
-        .listings-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .listings-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #333333;
-        }
-
-        .sort-select {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #333333;
-        }
-
-        .listings {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .listing-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .listing-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: translateY(-4px);
-        }
-
-        .listing-image {
-            width: 100%;
-            height: 150px;
-            background: #e0e0e0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .favorite-btn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(255,255,255,0.9);
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .favorite-btn.active {
-            background: #ff6600;
-            color: white;
-        }
-
-        .listing-info {
-            padding: 1rem;
-        }
-
-        .listing-title {
-            font-weight: 700;
-            font-size: 15px; font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: #333333;
-        }
-
-        .listing-details {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        .listing-price {
-            font-weight: 700;
-            color: #ff6600;
-            font-size: 16px;
-        }
-
-        /* FOOTER */
-        footer {
-            background: #333333;
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            margin-top: 3rem;
-        }
-
-        /* BRAND & MODEL DROPDOWN STYLES */
-        .brand-dropdown-trigger,
-        .model-dropdown-trigger {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-            background: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 15px; font-weight: 500;
-            color: #333333;
-        }
-
-        .brand-dropdown-trigger:hover {
-            border-color: #333;
-            background: #f9f9f9;
-        }
-
-        .model-dropdown-trigger:hover {
-            border-color: #333;
-            background: #f9f9f9;
-        }
-
-        .model-dropdown-trigger.disabled {
-            background: #f5f5f5;
-            color: #999;
-            cursor: not-allowed;
-            border-color: #ddd;
-        }
-
-        #brandDropdownMenu,
-        #modelDropdownMenu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-top: 5px;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            min-width: 300px;
-        }
-
-        #brandCheckboxList label,
-        #modelCheckboxList label {
-            display: flex;
-            align-items: center;
-            padding: 8px 10px;
-            cursor: pointer;
-            font-size: 12px;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-
-        #brandCheckboxList label:hover,
-        #modelCheckboxList label:hover {
-            background: #f5f5f5;
-        }
-
-        #brandCheckboxList input[type="checkbox"],
-        #modelCheckboxList input[type="checkbox"] {
-            margin-right: 10px;
-            cursor: pointer;
-            width: 16px;
-            height: 16px;
-        }
-
-        .brand-section-title,
-        .model-section-title {
-            padding: 10px 10px 6px;
-            font-size: 11px;
-            color: #999;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-top: 6px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #fafafa; color: #333333; }
+        
+        header { background: white; padding: 1.5rem 0; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .header-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 28px; font-weight: 700; color: #ff6600; cursor: pointer; text-decoration: none; }
+        .header-nav { display: flex; gap: 2rem; align-items: center; }
+        .header-link { color: #333333; font-size: 12px; font-weight: 500; cursor: pointer; text-decoration: none; }
+        .header-link:hover { color: #ff6600; }
+        
+        .hero { background: #fafafa; padding: 4rem 2rem; }
+        .hero-container { max-width: 1200px; margin: 0 auto; }
+        .search-container { background: white; padding: 1.5rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        
+        .hero-title { font-size: 32px; font-weight: 700; color: #333333; text-align: center; margin-bottom: 0.5rem; }
+        .hero-subtitle { font-size: 12px; color: #666; text-align: center; margin-bottom: 1.5rem; }
+        
+        .search-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+        .search-field { position: relative; }
+        .search-field input, .search-field select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; color: #333333; }
+        .search-field input:focus, .search-field select:focus { outline: none; border-color: #ff6600; }
+        
+        .search-buttons { display: flex; gap: 1rem; justify-content: flex-end; }
+        .btn { padding: 8px 20px; background: #ff6600; color: white; border: none; border-radius: 3px; cursor: pointer; font-weight: 600; font-size: 12px; }
+        .btn:hover { background: #e55a00; }
+        .btn-secondary { background: #eee; color: #333333; }
+        .btn-secondary:hover { background: #ddd; }
+        
+        .main-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .section-title { font-size: 18px; font-weight: 700; color: #333333; margin-bottom: 1.5rem; }
+        
+        .popular-categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 4rem; }
+        .category-card { background: white; padding: 1.5rem; border-radius: 6px; text-align: center; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: all 0.3s; }
+        .category-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-2px); }
+        .category-card-title { font-weight: 600; color: #333333; font-size: 14px; }
+        
+        .cta-section { background: white; padding: 2rem; border-radius: 6px; text-align: center; margin-bottom: 4rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .cta-title { font-size: 18px; font-weight: 700; margin-bottom: 1rem; color: #333333; }
+        
+        .listings-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .listings-title { font-size: 18px; font-weight: 700; color: #333333; }
+        .sort-select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; color: #333333; }
+        
+        .listings { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
+        .listing-card { background: white; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.3s; }
+        .listing-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-4px); }
+        .listing-image { width: 100%; height: 150px; background: #e0e0e0; position: relative; }
+        .favorite-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.9); border: none; width: 32px; height: 32px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        .favorite-btn.active { background: #ff6600; color: white; }
+        .listing-info { padding: 1rem; }
+        .listing-title { font-weight: 700; font-size: 14px; margin-bottom: 0.5rem; color: #333333; }
+        .listing-details { font-size: 12px; color: #666; margin-bottom: 0.5rem; }
+        .listing-price { font-weight: 700; color: #ff6600; font-size: 16px; }
+        
+        footer { background: #333333; color: white; padding: 2rem; text-align: center; margin-top: 4rem; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 8px; padding: 2rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; }
+        .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
+        .modal-close:hover { color: #333333; }
+        .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 1rem; }
+        
+        /* DROPDOWN STYLES */
+        .dropdown-trigger { padding: 8px; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; background: white; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #333333; }
+        .dropdown-trigger:hover { border-color: #333; background: #f9f9f9; }
+        .dropdown-trigger.disabled { background: #f5f5f5; color: #999; cursor: not-allowed; border-color: #ddd; }
+        
+        .dropdown-menu { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; border-radius: 3px; margin-top: 5px; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 300px; display: none; }
+        .dropdown-menu.active { display: block; }
+        
+        .dropdown-search { padding: 10px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white; }
+        .dropdown-search input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; box-sizing: border-box; color: #333333; }
+        
+        .dropdown-list { max-height: 360px; overflow-y: auto; padding: 8px; }
+        .dropdown-list label { display: flex; align-items: center; padding: 8px 10px; cursor: pointer; font-size: 12px; border-radius: 3px; transition: background 0.2s; }
+        .dropdown-list label:hover { background: #f5f5f5; }
+        .dropdown-list input[type="checkbox"] { margin-right: 10px; cursor: pointer; width: 16px; height: 16px; }
+        
+        .section-title-small { padding: 10px 10px 6px; font-size: 11px; color: #999; text-transform: uppercase; font-weight: 600; margin-top: 6px; }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
     <header>
         <div class="header-container">
             <a href="index.html" class="logo">🏍️ BikerBasen</a>
             <div class="header-nav">
-                <a class="header-link" onclick="scrollToSection('sell')">Sælg din motorcykel</a>
-                <a class="header-link" onclick="openFeedbackModal()">Giv feedback</a>
+                <a class="header-link" onclick="window.location.href='create-listing.html'">Sælg din motorcykel</a>
+                <a class="header-link" onclick="openFeedback()">Giv feedback</a>
                 <span id="loginLink"><a class="header-link" onclick="window.location.href='login.html'">Log ind</a></span>
-                <a class="header-link" onclick="openFavoritesModal()" id="favoritesLink" style="display:none;">Favoritter ♥</a>
-                <a class="header-link" onclick="openCustomerModal()">Kundeservice</a>
-                <div id="userProfile" style="display:none; cursor:pointer;" onclick="openProfile()">
-                    <div style="width: 32px; height: 32px; background: #ff6600; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
-                        <span id="userInitial">U</span>
-                    </div>
-                </div>
+                <a class="header-link" onclick="openCustomer()">Kundeservice</a>
             </div>
         </div>
     </header>
 
-    <!-- HERO & SEARCH -->
     <section class="hero">
         <div class="hero-container">
-            <h1 class="hero-title">Danmarks største markedsplads for motorcykler</h1>
-            <p class="hero-subtitle" id="announceCount">15 annoncer i dag</p>
-
             <div class="search-container">
+                <h1 class="hero-title">Danmarks største markedsplads for motorcykler</h1>
+                <p class="hero-subtitle" id="announceCount">15 annoncer i dag</p>
+
                 <div class="search-row">
                     <div class="search-field">
-                        <select id="typeFilter" onchange="filterListings()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; color: #333333;">
+                        <select id="typeFilter" onchange="filterListings()" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; color: #333333;">
                             <option value="">MC - Alle typer</option>
                             <option value="Cruiser">Cruiser</option>
                             <option value="Sport">Sport</option>
@@ -537,97 +119,62 @@
                         </select>
                     </div>
 
-                    <!-- CUSTOM BRAND DROPDOWN MED CHECKBOXES -->
-                    <div class="search-field" style="position: relative;">
-                        <div class="brand-dropdown-trigger" onclick="toggleBrandDropdown()">
+                    <div class="search-field">
+                        <div class="dropdown-trigger" id="brandTrigger" onclick="toggleDropdown('brand')">
                             <span id="brandLabel">Mærke</span>
                             <span id="brandArrow">⌃</span>
                         </div>
-
-                        <!-- DROPDOWN MENU -->
-                        <div id="brandDropdownMenu" style="display: none;">
-                            <!-- SØGEFELT -->
-                            <div style="padding: 10px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white;">
-                                <input 
-                                    type="text" 
-                                    id="brandSearchInput" 
-                                    placeholder="🔍 Søg" 
-                                    onkeyup="filterBrandCheckboxes()"
-                                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; box-sizing: border-box; color: #333333;"
-                                >
+                        <div class="dropdown-menu" id="brandMenu">
+                            <div class="dropdown-search">
+                                <input type="text" id="brandSearch" placeholder="🔍 Søg" onkeyup="filterBrands()">
                             </div>
-
-                            <!-- CHECKBOXES -->
-                            <div id="brandCheckboxList" style="max-height: 360px; overflow-y: auto; padding: 8px;"></div>
+                            <div class="dropdown-list" id="brandList"></div>
                         </div>
-
-                        <!-- HIDDEN INPUT FOR VALUE -->
-                        <input type="hidden" id="brandInput">
                     </div>
 
-                    <!-- CUSTOM MODEL DROPDOWN MED CHECKBOXES -->
-                    <div class="search-field" style="position: relative;">
-                        <div class="model-dropdown-trigger disabled" id="modelDropdownTrigger" onclick="toggleModelDropdown()">
+                    <div class="search-field">
+                        <div class="dropdown-trigger disabled" id="modelTrigger" onclick="toggleDropdown('model')">
                             <span id="modelLabel">Model</span>
                             <span id="modelArrow">⌃</span>
                         </div>
-
-                        <!-- DROPDOWN MENU -->
-                        <div id="modelDropdownMenu" style="display: none;">
-                            <!-- SØGEFELT -->
-                            <div style="padding: 10px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white;">
-                                <input 
-                                    type="text" 
-                                    id="modelSearchInput" 
-                                    placeholder="🔍 Søg" 
-                                    onkeyup="filterModelCheckboxes()"
-                                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; box-sizing: border-box; color: #333333;"
-                                >
+                        <div class="dropdown-menu" id="modelMenu">
+                            <div class="dropdown-search">
+                                <input type="text" id="modelSearch" placeholder="🔍 Søg" onkeyup="filterModels()">
                             </div>
-
-                            <!-- CHECKBOXES -->
-                            <div id="modelCheckboxList" style="max-height: 360px; overflow-y: auto; padding: 8px;"></div>
+                            <div class="dropdown-list" id="modelList"></div>
                         </div>
-
-                        <!-- HIDDEN INPUT FOR VALUE -->
-                        <input type="hidden" id="modelInput">
                     </div>
-                </div>
 
-                <div class="search-row">
                     <div class="search-field">
-                        <select id="yearInput" onchange="filterListings()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; color: #333333;">
+                        <select id="yearFilter" onchange="filterListings()" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; color: #333333;">
                             <option value="">Årgang - Alle år</option>
                             <option value="2024">2024</option>
                             <option value="2023">2023</option>
                             <option value="2022">2022</option>
                             <option value="2021">2021</option>
                             <option value="2020">2020</option>
-                            <option value="2019">2019</option>
-                            <option value="2018">2018</option>
-                            <option value="2017">2017</option>
-                            <option value="2016">2016</option>
-                            <option value="2015">2015</option>
                         </select>
                     </div>
+                </div>
 
+                <div class="search-row">
                     <div class="search-field">
-                        <select id="kmFilter" onchange="filterListings()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; color: #333333;">
+                        <select id="kmFilter" onchange="filterListings()" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; color: #333333;">
                             <option value="">Kørt km - Alle</option>
                             <option value="0-5000">Under 5.000 km</option>
                             <option value="5000-20000">5.000 - 20.000 km</option>
                             <option value="20000+">Over 20.000 km</option>
                         </select>
                     </div>
-
                     <div class="search-field">
-                        <select id="priceFilter" onchange="filterListings()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; color: #333333;">
+                        <select id="priceFilter" onchange="filterListings()" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; color: #333333;">
                             <option value="">Pris - Alle priser</option>
                             <option value="0-50000">Under 50.000 kr</option>
                             <option value="50000-100000">50.000 - 100.000 kr</option>
                             <option value="100000+">Over 100.000 kr</option>
                         </select>
                     </div>
+                    <div class="search-field"></div>
                 </div>
 
                 <div class="search-buttons">
@@ -638,47 +185,26 @@
         </div>
     </section>
 
-    <!-- POPULÆRE KATEGORIER -->
     <section class="main-container">
         <h2 class="section-title">Populære søgninger</h2>
         <div class="popular-categories">
-            <div class="category-card" onclick="filterByCategory('Cruiser')">
-                <div style="font-size: 28px; font-weight: 700; margin-bottom: 0.5rem;">🏍️</div>
-                <div class="category-card-title">Cruiser</div>
-            </div>
-            <div class="category-card" onclick="filterByCategory('Sport')">
-                <div style="font-size: 28px; font-weight: 700; margin-bottom: 0.5rem;">⚡</div>
-                <div class="category-card-title">Sport</div>
-            </div>
-            <div class="category-card" onclick="filterByCategory('Adventure')">
-                <div style="font-size: 28px; font-weight: 700; margin-bottom: 0.5rem;">🛣️</div>
-                <div class="category-card-title">Adventure</div>
-            </div>
-            <div class="category-card" onclick="filterByCategory('Naked Bike')">
-                <div style="font-size: 28px; font-weight: 700; margin-bottom: 0.5rem;">🔥</div>
-                <div class="category-card-title">Naked Bike</div>
-            </div>
-            <div class="category-card" onclick="filterByCategory('Retro')">
-                <div style="font-size: 28px; font-weight: 700; margin-bottom: 0.5rem;">🕐</div>
-                <div class="category-card-title">Retro</div>
-            </div>
-            <div class="category-card" onclick="filterByCategory('Touring')">
-                <div style="font-size: 28px; font-weight: 700; margin-bottom: 0.5rem;">🗺️</div>
-                <div class="category-card-title">Touring</div>
-            </div>
+            <div class="category-card" onclick="filterCategory('Cruiser')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🏍️</div><div class="category-card-title">Cruiser</div></div>
+            <div class="category-card" onclick="filterCategory('Sport')"><div style="font-size: 24px; margin-bottom: 0.5rem;">⚡</div><div class="category-card-title">Sport</div></div>
+            <div class="category-card" onclick="filterCategory('Adventure')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🛣️</div><div class="category-card-title">Adventure</div></div>
+            <div class="category-card" onclick="filterCategory('Naked Bike')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🔥</div><div class="category-card-title">Naked Bike</div></div>
+            <div class="category-card" onclick="filterCategory('Retro')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🕐</div><div class="category-card-title">Retro</div></div>
+            <div class="category-card" onclick="filterCategory('Touring')"><div style="font-size: 24px; margin-bottom: 0.5rem;">🗺️</div><div class="category-card-title">Touring</div></div>
         </div>
     </section>
 
-    <!-- SELL CTA -->
     <section class="main-container">
         <div class="cta-section">
             <h2 class="cta-title">Vil du sælge din motorcykel?</h2>
-            <p style="color: #666; margin-bottom: 1.5rem; font-size: 15px; font-weight: 500;">Opret en gratis annonce og nå ud til 100.000+ motorcyklister</p>
+            <p style="color: #666; margin-bottom: 1.5rem; font-size: 12px;">Opret en gratis annonce og nå ud til 100.000+ motorcyklister</p>
             <button class="btn" onclick="window.location.href='create-listing.html'">Opret annonce gratis</button>
         </div>
     </section>
 
-    <!-- LISTINGS -->
     <section class="main-container">
         <div class="listings-section">
             <h2 class="listings-title">Alle annoncer</h2>
@@ -686,430 +212,254 @@
                 <option value="newest">Nyeste først</option>
                 <option value="price-low">Pris: lavt til højt</option>
                 <option value="price-high">Pris: højt til lavt</option>
-                <option value="km-low">Km: lavt til højt</option>
             </select>
         </div>
-
         <div class="listings" id="listingsContainer"></div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <p>&copy; 2024 BikerBasen - Danmarks største motorcykelmarkedsplads</p>
     </footer>
 
-    <!-- MIN PROFIL MODAL -->
-    <div id="profileModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeProfile()">✕</button>
-            <h2 class="modal-title">Min profil</h2>
-            <div style="margin-bottom: 2rem;">
-                <h3 style="margin-bottom: 1rem; font-size: 16px; color: #333333;">Mine annoncer</h3>
-                <div id="myListingsContainer" style="max-height: 400px; overflow-y: auto;">
-                    <p style="color: #999; text-align: center;">Indlæser...</p>
-                </div>
-            </div>
-            <button onclick="logout()" class="btn" style="width: 100%;">Log ud</button>
-        </div>
-    </div>
-
-    <!-- FEEDBACK MODAL -->
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeFeedback()">✕</button>
             <h2 class="modal-title">Giv os feedback</h2>
-            <form onsubmit="submitFeedback(event)">
-                <div class="form-group">
-                    <label>Din email</label>
-                    <input type="email" required>
-                </div>
-                <div class="form-group">
-                    <label>Din feedback</label>
-                    <textarea required></textarea>
-                </div>
-                <button type="submit" class="modal-button">Send feedback</button>
-            </form>
+            <p style="color: #666; font-size: 12px; margin-bottom: 1rem;">Tak for at hjælpe os med at blive bedre!</p>
         </div>
     </div>
 
-    <!-- CUSTOMER SERVICE MODAL -->
     <div id="customerModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeCustomer()">✕</button>
             <h2 class="modal-title">Kundeservice</h2>
-            <p style="color: #666; margin-bottom: 1rem; font-size: 15px; font-weight: 500;">
-                📞 <strong>Telefon:</strong> +45 12 34 56 78<br>
-                📧 <strong>Email:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1d6e686d6d726f695d7f7476786f7f7c6e7873337976">[email&#160;protected]</a><br>
-                🕐 <strong>Åbningstider:</strong> Mandag-fredag 09:00-17:00
+            <p style="color: #666; margin-bottom: 1rem; font-size: 12px;">
+                📞 +45 12 34 56 78<br>
+                📧 support@bikerbasen.dk<br>
+                🕐 Mandag-fredag 09:00-17:00
             </p>
         </div>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // MOTORCYCLES DATABASE
+    <script>
         const motorcycles = [
-            { id: 1, brand: 'Honda', model: 'CB500', type: 'Naked Bike', year: 2018, km: 12000, price: 85000, location: 'København' },
-            { id: 2, brand: 'Yamaha', model: 'Virago 535', type: 'Cruiser', year: 2010, km: 25000, price: 55000, location: 'Aarhus' },
-            { id: 3, brand: 'BMW', model: 'F 800 GS', type: 'Adventure', year: 2015, km: 22000, price: 95000, location: 'Odense' },
-            { id: 4, brand: 'Harley-Davidson', model: 'Street 750', type: 'Cruiser', year: 2017, km: 18000, price: 75000, location: 'Randers' },
-            { id: 5, brand: 'Kawasaki', model: 'Ninja 650', type: 'Sport', year: 2020, km: 8000, price: 65000, location: 'Aalborg' },
-            { id: 6, brand: 'Ducati', model: 'Monster 821', type: 'Naked Bike', year: 2019, km: 15000, price: 95000, location: 'København' },
-            { id: 7, brand: 'Triumph', model: 'Street Twin', type: 'Retro', year: 2016, km: 20000, price: 70000, location: 'Herning' },
-            { id: 8, brand: 'KTM', model: '790 Duke', type: 'Naked Bike', year: 2021, km: 5000, price: 85000, location: 'Vejle' },
-            { id: 9, brand: 'Royal Enfield', model: 'Interceptor 650', type: 'Retro', year: 2022, km: 3000, price: 65000, location: 'Silkeborg' },
-            { id: 10, brand: 'Suzuki', model: 'V-Strom 650', type: 'Adventure', year: 2018, km: 16000, price: 70000, location: 'Horsens' },
-            { id: 11, brand: 'Honda', model: 'CB1100', type: 'Retro', year: 2017, km: 14000, price: 90000, location: 'Svendborg' },
-            { id: 12, brand: 'Yamaha', model: 'YZF-R6', type: 'Sport', year: 2019, km: 9000, price: 75000, location: 'Viborg' },
-            { id: 13, brand: 'BMW', model: 'R 1200 GS', type: 'Adventure', year: 2016, km: 28000, price: 120000, location: 'Esbjerg' },
-            { id: 14, brand: 'Kawasaki', model: 'Vulcan 900', type: 'Cruiser', year: 2014, km: 35000, price: 62000, location: 'Kolding' },
-            { id: 15, brand: 'Aprilia', model: 'RS 125', type: 'Sport', year: 2019, km: 4200, price: 42000, location: 'Lolland' }
+            { id: 1, brand: 'Honda', model: 'CB500', type: 'Naked Bike', year: 2018, km: 12000, price: 85000 },
+            { id: 2, brand: 'Yamaha', model: 'Virago 535', type: 'Cruiser', year: 2010, km: 25000, price: 55000 },
+            { id: 3, brand: 'BMW', model: 'F 800 GS', type: 'Adventure', year: 2015, km: 22000, price: 95000 },
+            { id: 4, brand: 'Harley-Davidson', model: 'Street 750', type: 'Cruiser', year: 2017, km: 18000, price: 75000 },
+            { id: 5, brand: 'Kawasaki', model: 'Ninja 650', type: 'Sport', year: 2020, km: 8000, price: 65000 },
+            { id: 6, brand: 'Ducati', model: 'Monster 821', type: 'Naked Bike', year: 2019, km: 15000, price: 95000 },
+            { id: 7, brand: 'Triumph', model: 'Street Twin', type: 'Retro', year: 2016, km: 20000, price: 70000 },
+            { id: 8, brand: 'KTM', model: '790 Duke', type: 'Naked Bike', year: 2021, km: 5000, price: 85000 },
+            { id: 9, brand: 'Royal Enfield', model: 'Interceptor 650', type: 'Retro', year: 2022, km: 3000, price: 65000 },
+            { id: 10, brand: 'Suzuki', model: 'V-Strom 650', type: 'Adventure', year: 2018, km: 16000, price: 70000 },
+            { id: 11, brand: 'Honda', model: 'CB1100', type: 'Retro', year: 2017, km: 14000, price: 90000 },
+            { id: 12, brand: 'Yamaha', model: 'YZF-R6', type: 'Sport', year: 2019, km: 9000, price: 75000 },
+            { id: 13, brand: 'BMW', model: 'R 1200 GS', type: 'Adventure', year: 2016, km: 28000, price: 120000 },
+            { id: 14, brand: 'Kawasaki', model: 'Vulcan 900', type: 'Cruiser', year: 2014, km: 35000, price: 62000 },
+            { id: 15, brand: 'Aprilia', model: 'RS 125', type: 'Sport', year: 2019, km: 4200, price: 42000 }
         ];
 
-        // MODEL DATABASE - AFHÆNGIG AF MÆRKE
+        const BRANDS = ['Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'Harley-Davidson', 'BMW', 'Ducati', 'KTM', 'Triumph', 'Royal Enfield', 'Aprilia', 'MV Agusta', 'Moto Guzzi', 'Husqvarna', 'Benelli'];
+        const POPULAR_BRANDS = ['Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'Harley-Davidson', 'BMW'];
         const modelsByBrand = {
-            'Honda': ['CB500', 'CB1100', 'CB125', 'CB300', 'CB400', 'CB750', 'CBR600', 'CBR1000'],
-            'Yamaha': ['Virago 535', 'YZF-R6', 'YZF-R7', 'YZF-R125', 'MT-07', 'MT-09', 'XSR700', 'XSR900'],
-            'Kawasaki': ['Ninja 650', 'Ninja 400', 'Ninja ZX-10R', 'Vulcan 900', 'Vulcan 800', 'Z650', 'Z900', 'Versys'],
-            'Suzuki': ['V-Strom 650', 'GSX-R600', 'GSX-R1000', 'Boulevard M90', 'SV650', 'Hayabusa', 'DR650', 'DRZ400'],
-            'BMW': ['F 800 GS', 'R 1200 GS', 'R 1250 GS', 'G 310 GS', 'F 750 GS', 'F 900 XR', 'S 1000 RR', 'M 1000 RR'],
-            'Harley-Davidson': ['Street 750', 'Street 500', 'Fat Boy', 'Softail', 'Road King', 'Street Glide', 'Iron 883', 'Forty-Eight'],
-            'Ducati': ['Monster 821', 'Monster 937', 'Panigale V4', 'Multistrada', 'Scrambler', 'Diavel', 'DesertX', 'SuperSport'],
-            'KTM': ['790 Duke', '390 Duke', '1290 Super Duke', '890 Duke R', '1190 Adventure', '690 Enduro', '350 EXC', '500 EXC'],
-            'Triumph': ['Street Twin', 'Bonneville', 'Tiger 800', 'Rocket 3', 'Speed Twin', 'Thruxton', 'Scrambler', 'Trident'],
-            'Royal Enfield': ['Interceptor 650', 'Continental GT', 'Meteor 350', 'Bullet 350', 'Hunter 350', 'Classic 350', 'Himalayan', 'Super Meteor'],
-            'Aprilia': ['RS 125', 'RS 660', 'RS4 125', 'Tuono 660', 'Tuono V4', 'Shiver 900', 'Dorsoduro', 'Mana 850'],
-            'MV Agusta': ['F3', 'Brutale', 'Turismo Veloce', 'Superveloce'],
-            'Moto Guzzi': ['V7', 'V85 TT', 'V9', 'Audace', 'California', 'Eldorado'],
-            'Husqvarna': ['Vitpilen 401', 'Svartpilen 401', 'Svartpilen 701', 'Vitpilen 701', 'TC 450'],
-            'Benelli': ['TNT 600', 'TNT 1130', 'Leoncino', 'TRK 502'],
-            'SYM': ['Maxsym 400', 'Maxsym 600', 'Joyride 200', 'Mio 110', 'Orbit'],
+            'Honda': ['CB500', 'CB1100', 'CB125', 'CB300', 'CBR600'],
+            'Yamaha': ['Virago 535', 'YZF-R6', 'YZF-R7', 'MT-07', 'XSR700'],
+            'Kawasaki': ['Ninja 650', 'Ninja 400', 'Vulcan 900', 'Z650', 'Z900'],
+            'Suzuki': ['V-Strom 650', 'GSX-R600', 'SV650', 'DR650'],
+            'BMW': ['F 800 GS', 'R 1200 GS', 'R 1250 GS', 'G 310 GS'],
+            'Harley-Davidson': ['Street 750', 'Fat Boy', 'Road King', 'Street Glide'],
+            'Ducati': ['Monster 821', 'Panigale V4', 'Multistrada'],
+            'KTM': ['790 Duke', '390 Duke', '1290 Super Duke'],
+            'Triumph': ['Street Twin', 'Bonneville', 'Tiger 800'],
+            'Royal Enfield': ['Interceptor 650', 'Continental GT', 'Meteor 350'],
+            'Aprilia': ['RS 125', 'RS 660', 'Tuono 660'],
         };
 
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        let currentListings = [...motorcycles];
-
-        const BRANDS = [
-            'Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'Harley-Davidson', 'BMW', 'Ducati', 'KTM',
-            'Triumph', 'Royal Enfield', 'Aprilia', 'MV Agusta', 'Moto Guzzi', 'Husqvarna', 'Benelli',
-            'Peugeot', 'Piaggio', 'SYM', 'Hero', 'Bajaj', 'TVS', 'Mahindra', 'Jawa', 'Keeway', 'Zongshen', 'Lifan'
-        ];
-
-        const POPULAR_BRANDS = ['Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'Harley-Davidson', 'BMW'];
-        
         let selectedBrands = [];
         let selectedModels = [];
+        let currentListings = [...motorcycles];
 
-        // INITIALIZE
-        window.addEventListener('DOMContentLoaded', function() {
-            checkUserLogin();
-            loadAllListings();
-            displayListings(currentListings);
-            renderBrandCheckboxes(BRANDS);
-            updateAnnounceCount();
-        });
-
-        // ===== BRAND DROPDOWN FUNCTIONS =====
-        function toggleBrandDropdown() {
-            const menu = document.getElementById('brandDropdownMenu');
-            const arrow = document.getElementById('brandArrow');
-            
-            if (menu.style.display === 'none') {
-                menu.style.display = 'block';
-                arrow.textContent = '⌄';
-                renderBrandCheckboxes(BRANDS);
-                document.getElementById('brandSearchInput').focus();
-            } else {
-                menu.style.display = 'none';
-                arrow.textContent = '⌃';
-            }
+        function init() {
+            renderBrands();
+            displayListings(motorcycles);
+            updateCount();
         }
 
-        function renderBrandCheckboxes(brandsToShow) {
-            const list = document.getElementById('brandCheckboxList');
+        function renderBrands() {
+            const list = document.getElementById('brandList');
             let html = '';
-
-            const popularInList = brandsToShow.filter(b => POPULAR_BRANDS.includes(b));
-            if (popularInList.length > 0) {
-                html += '<div class="brand-section-title">Populære mærker</div>';
-                popularInList.forEach(brand => {
-                    html += `
-                        <label>
-                            <input type="checkbox" value="${brand}" onchange="selectBrand(this)" ${selectedBrands.includes(brand) ? 'checked' : ''}>
-                            <span>${brand}</span>
-                        </label>
-                    `;
-                });
+            const popular = BRANDS.filter(b => POPULAR_BRANDS.includes(b));
+            if (popular.length > 0) {
+                html += '<div class="section-title-small">Populære mærker</div>';
+                popular.forEach(b => html += `<label><input type="checkbox" value="${b}" onchange="selectBrand('${b}', this.checked)"><span>${b}</span></label>`);
             }
-
-            const otherBrands = brandsToShow.filter(b => !POPULAR_BRANDS.includes(b));
-            if (otherBrands.length > 0) {
-                html += '<div class="brand-section-title">Alle mærker</div>';
-                otherBrands.forEach(brand => {
-                    html += `
-                        <label>
-                            <input type="checkbox" value="${brand}" onchange="selectBrand(this)" ${selectedBrands.includes(brand) ? 'checked' : ''}>
-                            <span>${brand}</span>
-                        </label>
-                    `;
-                });
+            const other = BRANDS.filter(b => !POPULAR_BRANDS.includes(b));
+            if (other.length > 0) {
+                html += '<div class="section-title-small">Alle mærker</div>';
+                other.forEach(b => html += `<label><input type="checkbox" value="${b}" onchange="selectBrand('${b}', this.checked)"><span>${b}</span></label>`);
             }
-
-            list.innerHTML = html || '<div style="padding: 10px; text-align: center; color: #999; font-size: 12px;">Ingen mærker fundet</div>';
+            list.innerHTML = html;
         }
 
-        function selectBrand(checkbox) {
-            const brand = checkbox.value;
-            
-            if (checkbox.checked) {
-                if (!selectedBrands.includes(brand)) {
-                    selectedBrands.push(brand);
-                }
+        function toggleDropdown(type) {
+            const menu = document.getElementById(type === 'brand' ? 'brandMenu' : 'modelMenu');
+            menu.classList.toggle('active');
+            if (menu.classList.contains('active') && type === 'brand') {
+                document.getElementById('brandSearch').focus();
+            } else if (menu.classList.contains('active') && type === 'model' && selectedBrands.length > 0) {
+                document.getElementById('modelSearch').focus();
+            }
+        }
+
+        function selectBrand(brand, checked) {
+            if (checked) {
+                if (!selectedBrands.includes(brand)) selectedBrands.push(brand);
             } else {
                 selectedBrands = selectedBrands.filter(b => b !== brand);
             }
-            
             updateBrandLabel();
-            resetModelSelection();
+            resetModels();
             filterListings();
         }
 
         function updateBrandLabel() {
             const label = document.getElementById('brandLabel');
-            const brandInput = document.getElementById('brandInput');
-            
             if (selectedBrands.length === 0) {
                 label.textContent = 'Mærke';
-                brandInput.value = '';
             } else if (selectedBrands.length === 1) {
                 label.textContent = selectedBrands[0];
-                brandInput.value = selectedBrands[0];
             } else {
                 label.textContent = `${selectedBrands.length} valgt`;
-                brandInput.value = selectedBrands.join(',');
             }
         }
 
-        function filterBrandCheckboxes() {
-            const search = document.getElementById('brandSearchInput').value.toLowerCase();
-            const filtered = BRANDS.filter(brand => brand.toLowerCase().includes(search));
-            renderBrandCheckboxes(filtered);
+        function filterBrands() {
+            const search = document.getElementById('brandSearch').value.toLowerCase();
+            const filtered = BRANDS.filter(b => b.toLowerCase().includes(search));
+            let html = '';
+            const popular = filtered.filter(b => POPULAR_BRANDS.includes(b));
+            if (popular.length > 0) {
+                html += '<div class="section-title-small">Populære mærker</div>';
+                popular.forEach(b => html += `<label><input type="checkbox" value="${b}" onchange="selectBrand('${b}', this.checked)" ${selectedBrands.includes(b) ? 'checked' : ''}><span>${b}</span></label>`);
+            }
+            const other = filtered.filter(b => !POPULAR_BRANDS.includes(b));
+            if (other.length > 0) {
+                html += '<div class="section-title-small">Alle mærker</div>';
+                other.forEach(b => html += `<label><input type="checkbox" value="${b}" onchange="selectBrand('${b}', this.checked)" ${selectedBrands.includes(b) ? 'checked' : ''}><span>${b}</span></label>`);
+            }
+            document.getElementById('brandList').innerHTML = html || '<div style="text-align: center; color: #999; padding: 1rem;">Ingen fundet</div>';
         }
 
-        // ===== MODEL DROPDOWN FUNCTIONS =====
-        function toggleModelDropdown() {
+        function resetModels() {
+            selectedModels = [];
+            document.getElementById('modelLabel').textContent = 'Model';
+            const trigger = document.getElementById('modelTrigger');
             if (selectedBrands.length === 0) {
-                alert('Vælg først et mærke!');
-                return;
-            }
-
-            const menu = document.getElementById('modelDropdownMenu');
-            const arrow = document.getElementById('modelArrow');
-            
-            if (menu.style.display === 'none') {
-                menu.style.display = 'block';
-                arrow.textContent = '⌄';
-                renderModelCheckboxes(getAvailableModels());
-                document.getElementById('modelSearchInput').focus();
+                trigger.classList.add('disabled');
+                document.getElementById('modelMenu').classList.remove('active');
             } else {
-                menu.style.display = 'none';
-                arrow.textContent = '⌃';
+                trigger.classList.remove('disabled');
+                renderModels();
             }
         }
 
-        function getAvailableModels() {
+        function renderModels() {
             let allModels = [];
             selectedBrands.forEach(brand => {
-                if (modelsByBrand[brand]) {
-                    allModels = [...allModels, ...modelsByBrand[brand]];
-                }
+                if (modelsByBrand[brand]) allModels = [...allModels, ...modelsByBrand[brand]];
             });
-            return [...new Set(allModels)].sort();
+            allModels = [...new Set(allModels)].sort();
+            const html = allModels.map(m => `<label><input type="checkbox" value="${m}" onchange="selectModel('${m}', this.checked)" ${selectedModels.includes(m) ? 'checked' : ''}><span>${m}</span></label>`).join('');
+            document.getElementById('modelList').innerHTML = html || '<div style="text-align: center; color: #999; padding: 1rem;">Ingen modeller</div>';
         }
 
-        function renderModelCheckboxes(modelsToShow) {
-            const list = document.getElementById('modelCheckboxList');
-            let html = '';
-
-            if (modelsToShow.length === 0) {
-                list.innerHTML = '<div style="padding: 10px; text-align: center; color: #999; font-size: 12px;">Ingen modeller fundet</div>';
-                return;
-            }
-
-            html += '<div class="model-section-title">Tilgængelige modeller</div>';
-            modelsToShow.forEach(model => {
-                html += `
-                    <label>
-                        <input type="checkbox" value="${model}" onchange="selectModel(this)" ${selectedModels.includes(model) ? 'checked' : ''}>
-                        <span>${model}</span>
-                    </label>
-                `;
-            });
-
-            list.innerHTML = html;
-        }
-
-        function selectModel(checkbox) {
-            const model = checkbox.value;
-            
-            if (checkbox.checked) {
-                if (!selectedModels.includes(model)) {
-                    selectedModels.push(model);
-                }
+        function selectModel(model, checked) {
+            if (checked) {
+                if (!selectedModels.includes(model)) selectedModels.push(model);
             } else {
                 selectedModels = selectedModels.filter(m => m !== model);
             }
-            
-            updateModelLabel();
+            const label = document.getElementById('modelLabel');
+            if (selectedModels.length === 0) {
+                label.textContent = 'Model';
+            } else if (selectedModels.length === 1) {
+                label.textContent = selectedModels[0];
+            } else {
+                label.textContent = `${selectedModels.length} valgt`;
+            }
             filterListings();
         }
 
-        function updateModelLabel() {
-            const label = document.getElementById('modelLabel');
-            const modelInput = document.getElementById('modelInput');
-            
-            if (selectedModels.length === 0) {
-                label.textContent = 'Model';
-                modelInput.value = '';
-            } else if (selectedModels.length === 1) {
-                label.textContent = selectedModels[0];
-                modelInput.value = selectedModels[0];
-            } else {
-                label.textContent = `${selectedModels.length} valgt`;
-                modelInput.value = selectedModels.join(',');
-            }
-        }
-
-        function filterModelCheckboxes() {
-            const search = document.getElementById('modelSearchInput').value.toLowerCase();
-            const available = getAvailableModels();
-            const filtered = available.filter(model => model.toLowerCase().includes(search));
-            renderModelCheckboxes(filtered);
-        }
-
-        function resetModelSelection() {
-            selectedModels = [];
-            document.getElementById('modelLabel').textContent = 'Model';
-            document.getElementById('modelInput').value = '';
-            
-            const trigger = document.getElementById('modelDropdownTrigger');
-            if (selectedBrands.length === 0) {
-                trigger.classList.add('disabled');
-                document.getElementById('modelDropdownMenu').style.display = 'none';
-                document.getElementById('modelArrow').textContent = '⌃';
-            } else {
-                trigger.classList.remove('disabled');
-            }
-        }
-
-        // Luk dropdowns ved klik udenfor
-        document.addEventListener('click', function(e) {
-            const brandDropdown = document.getElementById('brandDropdownMenu');
-            const brandTrigger = document.querySelector('.brand-dropdown-trigger');
-            const modelDropdown = document.getElementById('modelDropdownMenu');
-            const modelTrigger = document.querySelector('.model-dropdown-trigger');
-            
-            if (brandDropdown && brandTrigger && brandDropdown.style.display === 'block') {
-                if (!brandDropdown.contains(e.target) && !brandTrigger.contains(e.target)) {
-                    brandDropdown.style.display = 'none';
-                    document.getElementById('brandArrow').textContent = '⌃';
-                }
-            }
-
-            if (modelDropdown && modelTrigger && modelDropdown.style.display === 'block') {
-                if (!modelDropdown.contains(e.target) && !modelTrigger.contains(e.target)) {
-                    modelDropdown.style.display = 'none';
-                    document.getElementById('modelArrow').textContent = '⌃';
-                }
-            }
-        });
-
-        // LISTINGS FUNCTIONS
-        function loadAllListings() {
-            const userListings = JSON.parse(localStorage.getItem('userListings')) || [];
-            currentListings = [...motorcycles, ...userListings];
-            updateAnnounceCount();
-            return currentListings;
-        }
-
-        function displayListings(items) {
-            const container = document.getElementById('listingsContainer');
-            container.innerHTML = items.map(moto => `
-                <div class="listing-card" onclick="window.location.href='listing-detail.html?id=${moto.id}'">
-                    <div class="listing-image">
-                        <button class="favorite-btn ${favorites.includes(moto.id) ? 'active' : ''}" onclick="addFavorite(${moto.id}, event)">
-                            ${favorites.includes(moto.id) ? '❤️' : '🤍'}
-                        </button>
-                    </div>
-                    <div class="listing-info">
-                        <div class="listing-title">${moto.brand} ${moto.model}</div>
-                        <div class="listing-details">${moto.year} • ${moto.km.toLocaleString('da-DK')} km</div>
-                        <div class="listing-price">${moto.price.toLocaleString('da-DK')} kr</div>
-                    </div>
-                </div>
-            `).join('');
-            
-            document.getElementById('bikeCount').textContent = items.length;
+        function filterModels() {
+            const search = document.getElementById('modelSearch').value.toLowerCase();
+            let allModels = [];
+            selectedBrands.forEach(brand => {
+                if (modelsByBrand[brand]) allModels = [...allModels, ...modelsByBrand[brand]];
+            });
+            allModels = [...new Set(allModels)].sort();
+            const filtered = allModels.filter(m => m.toLowerCase().includes(search));
+            const html = filtered.map(m => `<label><input type="checkbox" value="${m}" onchange="selectModel('${m}', this.checked)" ${selectedModels.includes(m) ? 'checked' : ''}><span>${m}</span></label>`).join('');
+            document.getElementById('modelList').innerHTML = html || '<div style="text-align: center; color: #999; padding: 1rem;">Ingen fundet</div>';
         }
 
         function filterListings() {
-            const allListings = loadAllListings();
-            const year = document.getElementById('yearInput').value;
             const type = document.getElementById('typeFilter').value;
-            const kmRange = document.getElementById('kmFilter').value;
-            const priceRange = document.getElementById('priceFilter').value;
+            const year = document.getElementById('yearFilter').value;
+            const km = document.getElementById('kmFilter').value;
+            const price = document.getElementById('priceFilter').value;
 
-            currentListings = allListings.filter(moto => {
+            currentListings = motorcycles.filter(m => {
                 let match = true;
-
-                if (selectedBrands.length > 0 && !selectedBrands.includes(moto.brand)) match = false;
-                if (selectedModels.length > 0 && !selectedModels.includes(moto.model)) match = false;
-                if (year && moto.year !== parseInt(year)) match = false;
-                if (type && moto.type !== type) match = false;
-
-                if (kmRange) {
-                    if (kmRange === '0-5000' && moto.km >= 5000) match = false;
-                    if (kmRange === '5000-20000' && (moto.km < 5000 || moto.km >= 20000)) match = false;
-                    if (kmRange === '20000+' && moto.km < 20000) match = false;
-                }
-
-                if (priceRange) {
-                    if (priceRange === '0-50000' && moto.price >= 50000) match = false;
-                    if (priceRange === '50000-100000' && (moto.price < 50000 || moto.price >= 100000)) match = false;
-                    if (priceRange === '100000+' && moto.price < 100000) match = false;
-                }
-
+                if (selectedBrands.length > 0 && !selectedBrands.includes(m.brand)) match = false;
+                if (selectedModels.length > 0 && !selectedModels.includes(m.model)) match = false;
+                if (type && m.type !== type) match = false;
+                if (year && m.year !== parseInt(year)) match = false;
+                if (km === '0-5000' && m.km >= 5000) match = false;
+                if (km === '5000-20000' && (m.km < 5000 || m.km >= 20000)) match = false;
+                if (km === '20000+' && m.km < 20000) match = false;
+                if (price === '0-50000' && m.price >= 50000) match = false;
+                if (price === '50000-100000' && (m.price < 50000 || m.price >= 100000)) match = false;
+                if (price === '100000+' && m.price < 100000) match = false;
                 return match;
             });
-
             displayListings(currentListings);
         }
 
-        function filterByCategory(category) {
+        function displayListings(items) {
+            document.getElementById('listingsContainer').innerHTML = items.map(m => `
+                <div class="listing-card" onclick="window.location.href='listing-detail.html?id=${m.id}'">
+                    <div class="listing-image"><button class="favorite-btn">🤍</button></div>
+                    <div class="listing-info">
+                        <div class="listing-title">${m.brand} ${m.model}</div>
+                        <div class="listing-details">${m.year} • ${m.km.toLocaleString('da-DK')} km</div>
+                        <div class="listing-price">${m.price.toLocaleString('da-DK')} kr</div>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('bikeCount').textContent = items.length;
+            updateCount();
+        }
+
+        function updateCount() {
+            document.getElementById('announceCount').textContent = currentListings.length.toLocaleString('da-DK') + ' annoncer i dag';
+        }
+
+        function filterCategory(type) {
             selectedBrands = [];
             selectedModels = [];
-            document.getElementById('typeFilter').value = category;
-            document.getElementById('brandSearchInput').value = '';
-            document.getElementById('brandInput').value = '';
-            document.getElementById('modelSearchInput').value = '';
-            document.getElementById('modelInput').value = '';
-            updateBrandLabel();
-            updateModelLabel();
-            resetModelSelection();
-            renderBrandCheckboxes(BRANDS);
+            document.getElementById('typeFilter').value = type;
+            document.getElementById('brandSearch').value = '';
+            document.getElementById('modelSearch').value = '';
+            renderBrands();
+            resetModels();
             filterListings();
         }
 
         function sortListings() {
-            const sortValue = document.querySelector('.sort-select').value;
-            
-            if (sortValue === 'price-low') {
-                currentListings.sort((a, b) => a.price - b.price);
-            } else if (sortValue === 'price-high') {
-                currentListings.sort((a, b) => b.price - a.price);
-            } else if (sortValue === 'km-low') {
-                currentListings.sort((a, b) => a.km - b.km);
-            }
-            
+            const sort = document.querySelector('.sort-select').value;
+            if (sort === 'price-low') currentListings.sort((a, b) => a.price - b.price);
+            if (sort === 'price-high') currentListings.sort((a, b) => b.price - a.price);
             displayListings(currentListings);
         }
 
@@ -1117,118 +467,36 @@
             selectedBrands = [];
             selectedModels = [];
             document.getElementById('typeFilter').value = '';
-            document.getElementById('yearInput').value = '';
+            document.getElementById('yearFilter').value = '';
             document.getElementById('kmFilter').value = '';
             document.getElementById('priceFilter').value = '';
-            document.getElementById('brandSearchInput').value = '';
-            document.getElementById('brandInput').value = '';
-            document.getElementById('modelSearchInput').value = '';
-            document.getElementById('modelInput').value = '';
-            updateBrandLabel();
-            updateModelLabel();
-            resetModelSelection();
-            renderBrandCheckboxes(BRANDS);
-            currentListings = loadAllListings();
-            displayListings(currentListings);
+            document.getElementById('brandSearch').value = '';
+            document.getElementById('modelSearch').value = '';
+            renderBrands();
+            resetModels();
+            currentListings = [...motorcycles];
+            displayListings(motorcycles);
         }
 
-        function updateAnnounceCount() {
-            document.getElementById('announceCount').textContent = currentListings.length.toLocaleString('da-DK') + ' annoncer i dag';
-        }
+        function openFeedback() { document.getElementById('feedbackModal').classList.add('active'); }
+        function closeFeedback() { document.getElementById('feedbackModal').classList.remove('active'); }
+        function openCustomer() { document.getElementById('customerModal').classList.add('active'); }
+        function closeCustomer() { document.getElementById('customerModal').classList.remove('active'); }
 
-        function addFavorite(id, event) {
-            event.stopPropagation();
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(f => f !== id);
-            } else {
-                favorites.push(id);
+        document.addEventListener('click', (e) => {
+            const brandMenu = document.getElementById('brandMenu');
+            const brandTrigger = document.getElementById('brandTrigger');
+            if (brandMenu && brandTrigger && !brandMenu.contains(e.target) && !brandTrigger.contains(e.target)) {
+                brandMenu.classList.remove('active');
             }
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            displayListings(currentListings);
-        }
-
-        // USER & LOGIN FUNCTIONS
-        function checkUserLogin() {
-            const loggedIn = localStorage.getItem('userLoggedIn');
-            if (loggedIn === 'true') {
-                document.getElementById('loginLink').style.display = 'none';
-                document.getElementById('userProfile').style.display = 'flex';
-                document.getElementById('favoritesLink').style.display = 'block';
-                document.getElementById('userInitial').textContent = (localStorage.getItem('userName') || 'U')[0].toUpperCase();
+            const modelMenu = document.getElementById('modelMenu');
+            const modelTrigger = document.getElementById('modelTrigger');
+            if (modelMenu && modelTrigger && !modelMenu.contains(e.target) && !modelTrigger.contains(e.target)) {
+                modelMenu.classList.remove('active');
             }
-        }
+        });
 
-        function openProfile() {
-            document.getElementById('profileModal').classList.add('active');
-            displayMyListings();
-        }
-
-        function closeProfile() {
-            document.getElementById('profileModal').classList.remove('active');
-        }
-
-        function displayMyListings() {
-            const userListings = JSON.parse(localStorage.getItem('userListings')) || [];
-            const container = document.getElementById('myListingsContainer');
-
-            if (userListings.length === 0) {
-                container.innerHTML = '<p style="color: #999; text-align: center; padding: 1.5rem;">Du har ikke oprettet nogle annoncer endnu</p>';
-                return;
-            }
-
-            container.innerHTML = userListings.map(listing => `
-                <div style="border: 1px solid #e0e0e0; padding: 1rem; border-radius: 6px; margin-bottom: 1rem; cursor: pointer;" onclick="window.location.href='listing-detail.html?id=${listing.id}'">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div>
-                            <h4 style="margin-bottom: 0.5rem; font-weight: 600; color: #333333;">${listing.brand} ${listing.model}</h4>
-                            <p style="font-size: 12px; color: #999; margin-bottom: 0.5rem;">${listing.year} • ${listing.km.toLocaleString('da-DK')} km</p>
-                            <p style="font-weight: 600; color: #ff6600;">${listing.price.toLocaleString('da-DK')} kr</p>
-                        </div>
-                        <button onclick="deleteMyListing(${listing.id}, event)" style="background: #ffcccc; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #c62828; font-weight: 600;">Slet</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function deleteMyListing(id, event) {
-            event.stopPropagation();
-            if (confirm('Slet denne annonce?')) {
-                let userListings = JSON.parse(localStorage.getItem('userListings')) || [];
-                userListings = userListings.filter(l => l.id !== id);
-                localStorage.setItem('userListings', JSON.stringify(userListings));
-                loadAllListings();
-                displayListings(currentListings);
-                displayMyListings();
-            }
-        }
-
-        function logout() {
-            if (confirm('Log ud?')) {
-                localStorage.removeItem('userLoggedIn');
-                localStorage.removeItem('userName');
-                localStorage.removeItem('userEmail');
-                location.reload();
-            }
-        }
-
-        // MODALS
-        function openFeedbackModal() {
-            document.getElementById('feedbackModal').classList.add('active');
-        }
-
-        function closeFeedback() {
-            document.getElementById('feedbackModal').classList.remove('active');
-        }
-
-        function submitFeedback(event) {
-            event.preventDefault();
-            alert('Tak for din feedback!');
-            closeFeedback();
-        }
-
-        function openCustomerModal() {
-            document.getElementById('customerModal').classList.add('active');
-        }
-
-        function closeCustomer() {
-            document.getElementById('customerMod
+        init();
+    </script>
+</body>
+</html>
