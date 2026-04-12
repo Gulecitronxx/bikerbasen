@@ -884,21 +884,6 @@
             { id: 12, brand: 'Yamaha', model: 'YZF-R6', year: 2019, km: 9000, type: 'Sport', price: 75000, location: 'Viborg', condition: 'Meget god', service: 'Fuld service historia', description: 'Performance sport.' },
             { id: 13, brand: 'BMW', model: 'R 1200 GS', year: 2016, km: 28000, type: 'Adventure', price: 120000, location: 'Esbjerg', condition: 'God', service: 'Fuld service historia', description: 'Stor adventure.' }
         ];
-        const motorcycles = [
-            { brand: "Yamaha", model: "Virago 535", year: 2010, price: 45000, location: "København", type: "Cruiser", km: 25000 },
-            { brand: "Honda", model: "CB500", year: 2018, price: 85000, location: "Aarhus", type: "Naked Bike", km: 12000 },
-            { brand: "Harley-Davidson", model: "Street 750", year: 2017, price: 120000, location: "Odense", type: "Cruiser", km: 18000 },
-            { brand: "Kawasaki", model: "Ninja 400", year: 2020, price: 65000, location: "Aalborg", type: "Sport", km: 3500 },
-            { brand: "BMW", model: "F 800 GS", year: 2015, price: 95000, location: "Randers", type: "Adventure", km: 22000 },
-            { brand: "Royal Enfield", model: "Bullet 350", year: 2019, price: 55000, location: "Viborg", type: "Cruiser", km: 8500 },
-            { brand: "KTM", model: "390 Duke", year: 2021, price: 58000, location: "Vejle", type: "Naked Bike", km: 2100 },
-            { brand: "Honda", model: "CB750", year: 2016, price: 78000, location: "Kolding", type: "Naked Bike", km: 15000 },
-            { brand: "Triumph", model: "Bonneville", year: 2014, price: 105000, location: "Silkeborg", type: "Retro", km: 19000 },
-            { brand: "Ducati", model: "Monster 659", year: 2013, price: 68000, location: "Horsens", type: "Naked Bike", km: 24000 },
-            { brand: "Suzuki", model: "GSX-R 750", year: 2012, price: 62000, location: "Roskilde", type: "Sport", km: 28000 },
-            { brand: "Aprilia", model: "RS 125", year: 2019, price: 42000, location: "Lolland", type: "Sport", km: 4200 },
-            { brand: "Honda", model: "Gold Wing", year: 2016, price: 145000, location: "Svendborg", type: "Touring", km: 35000 },
-        ];
 
         let currentListings = [...motorcycles];
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
