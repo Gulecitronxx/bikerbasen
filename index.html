@@ -39,7 +39,7 @@
         .modal-content {
             background: white;
             border-radius: 8px;
-            padding: 2rem;
+            padding: 1.5rem;
             max-width: 500px;
             width: 90%;
             max-height: 90vh;
@@ -75,7 +75,7 @@
 
         .form-group label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             margin-bottom: 0.5rem;
         }
@@ -83,11 +83,11 @@
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-family: 'Roboto', sans-serif;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .form-group textarea {
@@ -188,7 +188,7 @@
 
         .search-container {
             background: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
@@ -207,10 +207,10 @@
         .search-field input,
         .search-field select {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 12px;
             color: #333333;
         }
 
@@ -261,7 +261,7 @@
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         .section-title {
@@ -301,7 +301,7 @@
 
         .cta-section {
             background: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 8px;
             text-align: center;
             margin-bottom: 3rem;
@@ -332,7 +332,7 @@
             padding: 8px 12px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 12px;
             color: #333333;
         }
 
@@ -410,7 +410,7 @@
         footer {
             background: #333333;
             color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
             margin-top: 3rem;
         }
@@ -418,7 +418,7 @@
         /* BRAND & MODEL DROPDOWN STYLES */
         .brand-dropdown-trigger,
         .model-dropdown-trigger {
-            padding: 10px;
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
             cursor: pointer;
@@ -468,7 +468,7 @@
             align-items: center;
             padding: 8px 10px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             border-radius: 4px;
             transition: background 0.2s;
         }
@@ -526,7 +526,7 @@
             <div class="search-container">
                 <div class="search-row">
                     <div class="search-field">
-                        <select id="typeFilter" onchange="filterListings()" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; color: #333333;">
+                        <select id="typeFilter" onchange="filterListings()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; color: #333333;">
                             <option value="">MC - Alle typer</option>
                             <option value="Cruiser">Cruiser</option>
                             <option value="Sport">Sport</option>
@@ -547,13 +547,13 @@
                         <!-- DROPDOWN MENU -->
                         <div id="brandDropdownMenu" style="display: none;">
                             <!-- SØGEFELT -->
-                            <div style="padding: 12px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white;">
+                            <div style="padding: 10px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white;">
                                 <input 
                                     type="text" 
                                     id="brandSearchInput" 
                                     placeholder="🔍 Søg" 
                                     onkeyup="filterBrandCheckboxes()"
-                                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box; color: #333333;"
+                                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; box-sizing: border-box; color: #333333;"
                                 >
                             </div>
 
@@ -575,13 +575,13 @@
                         <!-- DROPDOWN MENU -->
                         <div id="modelDropdownMenu" style="display: none;">
                             <!-- SØGEFELT -->
-                            <div style="padding: 12px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white;">
+                            <div style="padding: 10px; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white;">
                                 <input 
                                     type="text" 
                                     id="modelSearchInput" 
                                     placeholder="🔍 Søg" 
                                     onkeyup="filterModelCheckboxes()"
-                                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box; color: #333333;"
+                                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; box-sizing: border-box; color: #333333;"
                                 >
                             </div>
 
@@ -596,7 +596,7 @@
 
                 <div class="search-row">
                     <div class="search-field">
-                        <select id="yearInput" onchange="filterListings()" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; color: #333333;">
+                        <select id="yearInput" onchange="filterListings()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; color: #333333;">
                             <option value="">Årgang - Alle år</option>
                             <option value="2024">2024</option>
                             <option value="2023">2023</option>
@@ -612,7 +612,7 @@
                     </div>
 
                     <div class="search-field">
-                        <select id="kmFilter" onchange="filterListings()" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; color: #333333;">
+                        <select id="kmFilter" onchange="filterListings()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; color: #333333;">
                             <option value="">Kørt km - Alle</option>
                             <option value="0-5000">Under 5.000 km</option>
                             <option value="5000-20000">5.000 - 20.000 km</option>
@@ -621,7 +621,7 @@
                     </div>
 
                     <div class="search-field">
-                        <select id="priceFilter" onchange="filterListings()" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; color: #333333;">
+                        <select id="priceFilter" onchange="filterListings()" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; color: #333333;">
                             <option value="">Pris - Alle priser</option>
                             <option value="0-50000">Under 50.000 kr</option>
                             <option value="50000-100000">50.000 - 100.000 kr</option>
@@ -739,13 +739,13 @@
             <h2 class="modal-title">Kundeservice</h2>
             <p style="color: #666; margin-bottom: 1rem; font-size: 14px;">
                 📞 <strong>Telefon:</strong> +45 12 34 56 78<br>
-                📧 <strong>Email:</strong> support@bikerbasen.dk<br>
+                📧 <strong>Email:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1d6e686d6d726f695d7f7476786f7f7c6e7873337976">[email&#160;protected]</a><br>
                 🕐 <strong>Åbningstider:</strong> Mandag-fredag 09:00-17:00
             </p>
         </div>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // MOTORCYCLES DATABASE
         const motorcycles = [
             { id: 1, brand: 'Honda', model: 'CB500', type: 'Naked Bike', year: 2018, km: 12000, price: 85000, location: 'København' },
@@ -854,7 +854,7 @@
                 });
             }
 
-            list.innerHTML = html || '<div style="padding: 12px; text-align: center; color: #999; font-size: 12px;">Ingen mærker fundet</div>';
+            list.innerHTML = html || '<div style="padding: 10px; text-align: center; color: #999; font-size: 12px;">Ingen mærker fundet</div>';
         }
 
         function selectBrand(checkbox) {
@@ -931,7 +931,7 @@
             let html = '';
 
             if (modelsToShow.length === 0) {
-                list.innerHTML = '<div style="padding: 12px; text-align: center; color: #999; font-size: 12px;">Ingen modeller fundet</div>';
+                list.innerHTML = '<div style="padding: 10px; text-align: center; color: #999; font-size: 12px;">Ingen modeller fundet</div>';
                 return;
             }
 
@@ -1172,7 +1172,7 @@
             const container = document.getElementById('myListingsContainer');
 
             if (userListings.length === 0) {
-                container.innerHTML = '<p style="color: #999; text-align: center; padding: 2rem;">Du har ikke oprettet nogle annoncer endnu</p>';
+                container.innerHTML = '<p style="color: #999; text-align: center; padding: 1.5rem;">Du har ikke oprettet nogle annoncer endnu</p>';
                 return;
             }
 
@@ -1231,14 +1231,4 @@
         }
 
         function closeCustomer() {
-            document.getElementById('customerModal').classList.remove('active');
-        }
-
-        function scrollToSection(id) {
-            if (id === 'sell') {
-                window.location.href = 'create-listing.html';
-            }
-        }
-    </script>
-</body>
-</html>
+            document.getElementById('customerMod
