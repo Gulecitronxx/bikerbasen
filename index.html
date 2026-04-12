@@ -650,6 +650,46 @@
     </style>
 </head>
 <body>
+    <!-- ADMIN PANEL MODAL -->
+    <div id="adminModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2>🔐 Admin Panel</h2>
+                <button class="close-btn" onclick="closeAdmin()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Opret ny annonce hurtigt</h3>
+                    <form onsubmit="quickAddListing(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <input type="text" id="adminBrand" placeholder="Mærke (f.eks. Honda)" required style="padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                        <input type="text" id="adminModel" placeholder="Model (f.eks. CB500)" required style="padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <input type="number" id="adminYear" placeholder="År (f.eks. 2020)" required style="padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                            <input type="number" id="adminKm" placeholder="Km (f.eks. 15000)" required style="padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <select id="adminType" required style="padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                                <option value="">Vælg type</option>
+                                <option value="Cruiser">Cruiser</option>
+                                <option value="Sport">Sport</option>
+                                <option value="Naked Bike">Naked Bike</option>
+                                <option value="Adventure">Adventure</option>
+                                <option value="Retro">Retro</option>
+                                <option value="Touring">Touring</option>
+                            </select>
+                            <input type="number" id="adminPrice" placeholder="Pris (f.eks. 85000)" required style="padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                        </div>
+                        <input type="text" id="adminLocation" placeholder="Lokation (f.eks. København)" required style="padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                        <textarea id="adminDescription" placeholder="Beskrivelse" required style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; min-height: 80px;"></textarea>
+                        <button type="submit" style="padding: 12px; background: #ff6600; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                            ✅ Opret annonce
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- MIN PROFIL MODAL -->
     <div id="profileModal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 600px;">
@@ -663,6 +703,11 @@
                     <div id="myListingsContainer" style="max-height: 400px; overflow-y: auto;">
                         <p style="color: #999; text-align: center;">Indlæser...</p>
                     </div>
+                </div>
+                <div id="adminButtonContainer" style="display: none; margin-bottom: 1rem;">
+                    <button onclick="openAdmin()" style="width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px; margin-bottom: 1rem;">
+                        🔐 Admin Panel - Opret annonce hurtigt
+                    </button>
                 </div>
                 <button onclick="logout()" class="btn-logout" style="width: 100%; padding: 12px; background: #ff6600; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px;">
                     Log ud
@@ -962,7 +1007,57 @@
             document.getElementById('profileModal').style.display = 'none';
         }
 
-        // DISPLAY MY LISTINGS
+        // CHECK IF ADMIN
+        function isAdmin() {
+            return localStorage.getItem('isAdmin') === 'true';
+        }
+
+        // OPEN ADMIN PANEL
+        function openAdmin() {
+            if (isAdmin()) {
+                document.getElementById('adminModal').style.display = 'flex';
+            } else {
+                alert('Kun admin kan åbne dette panel');
+            }
+        }
+
+        // CLOSE ADMIN PANEL
+        function closeAdmin() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        // QUICK ADD LISTING (ADMIN)
+        function quickAddListing(event) {
+            event.preventDefault();
+
+            const listing = {
+                id: Date.now(),
+                brand: document.getElementById('adminBrand').value,
+                model: document.getElementById('adminModel').value,
+                year: parseInt(document.getElementById('adminYear').value),
+                km: parseInt(document.getElementById('adminKm').value),
+                type: document.getElementById('adminType').value,
+                price: parseInt(document.getElementById('adminPrice').value),
+                location: document.getElementById('adminLocation').value,
+                condition: 'Meget god',
+                service: 'Fuld service historia',
+                description: document.getElementById('adminDescription').value,
+                contactName: 'Admin',
+                contactEmail: localStorage.getItem('userEmail'),
+                contactPhone: '+45 00 00 00 00',
+                images: [],
+                createdAt: new Date().toISOString()
+            };
+
+            // Save to localStorage
+            let userListings = JSON.parse(localStorage.getItem('userListings')) || [];
+            userListings.push(listing);
+            localStorage.setItem('userListings', JSON.stringify(userListings));
+
+            alert('✅ Annonce oprettet!');
+            closeAdmin();
+            location.reload();
+        }
         function displayMyListings() {
             const userListings = JSON.parse(localStorage.getItem('userListings')) || [];
             const container = document.getElementById('myListingsContainer');
