@@ -494,15 +494,30 @@
                             <option value="">Vælg mærke</option>
                             <option value="Honda">Honda</option>
                             <option value="Yamaha">Yamaha</option>
-                            <option value="Harley-Davidson">Harley-Davidson</option>
-                            <option value="BMW">BMW</option>
                             <option value="Kawasaki">Kawasaki</option>
                             <option value="Suzuki">Suzuki</option>
+                            <option value="Harley-Davidson">Harley-Davidson</option>
+                            <option value="BMW">BMW</option>
                             <option value="Ducati">Ducati</option>
                             <option value="KTM">KTM</option>
                             <option value="Triumph">Triumph</option>
                             <option value="Royal Enfield">Royal Enfield</option>
                             <option value="Aprilia">Aprilia</option>
+                            <option value="MV Agusta">MV Agusta</option>
+                            <option value="Moto Guzzi">Moto Guzzi</option>
+                            <option value="Husqvarna">Husqvarna</option>
+                            <option value="Benelli">Benelli</option>
+                            <option value="Peugeot">Peugeot</option>
+                            <option value="Piaggio">Piaggio</option>
+                            <option value="SYM">SYM</option>
+                            <option value="Hero">Hero</option>
+                            <option value="Bajaj">Bajaj</option>
+                            <option value="TVS">TVS</option>
+                            <option value="Mahindra">Mahindra</option>
+                            <option value="Jawa">Jawa</option>
+                            <option value="Keeway">Keeway</option>
+                            <option value="Zongshen">Zongshen</option>
+                            <option value="Lifan">Lifan</option>
                             <option value="Andet">Andet</option>
                         </select>
                     </div>
@@ -816,20 +831,36 @@
             }
         }
 
-        // MODELS DATABASE
+        // KOMPLET MOTORCYKEL DATABASE MED ALLE MÆRKER OG MODELLER
         const modelsDatabase = {
-            'Honda': ['CB500', 'CB750', 'CB1000', 'Gold Wing', 'PCX', 'X-ADV'],
-            'Yamaha': ['Virago 535', 'YZF-R1', 'MT-07', 'FZ6', 'XJ6'],
-            'Harley-Davidson': ['Street 750', 'Street 500', 'Fat Bob', 'Road King'],
-            'BMW': ['F 800 GS', 'R 1200 GS', 'F 850 GS', 'S 1000 RR'],
-            'Kawasaki': ['Ninja 400', 'Ninja 650', 'Ninja ZX-10R', 'Vulcan'],
-            'Suzuki': ['GSX-R 750', 'GSX-R 1000', 'V-Strom 1000', 'GN250'],
-            'Ducati': ['Monster 659', 'Panigale', 'Multistrada', 'Monster 821'],
-            'KTM': ['390 Duke', '790 Duke', '1290 Super Duke', 'Adventure'],
-            'Triumph': ['Bonneville', 'Street Twin', 'Tiger 1200', 'Thruxton'],
-            'Royal Enfield': ['Bullet 350', 'Classic 350', 'Interceptor', 'Continental GT'],
-            'Aprilia': ['RS 125', 'RS 250', 'Tuono', 'Dorsoduro'],
-            'Andet': ['Custom', 'Uspecificeret']
+            'Honda': ['CB125R', 'CB250R', 'CB300R', 'CB500', 'CB500F', 'CB500X', 'CB650R', 'CB750', 'CB900', 'CB1000', 'CB1100', 'CBF600', 'CBR125', 'CBR250', 'CBR600RR', 'CBR1000RR', 'CRF250', 'CRF450', 'CRF1000L', 'CRF1100L', 'Gold Wing', 'NC700', 'NC750X', 'NX500', 'PCX', 'Rebel', 'Shadow', 'Transalp', 'VFR800', 'VFR1200', 'X-ADV', 'XL125', 'XL700V'],
+            'Yamaha': ['YZF-R125', 'YZF-R3', 'YZF-R6', 'YZF-R1', 'MT-03', 'MT-07', 'MT-09', 'MT-10', 'MT-125', 'MT-250', 'FZ1', 'FZ6', 'FZ8', 'FZS600', 'FZ-07', 'XJ6', 'XJR1200', 'XJR1300', 'Virago 535', 'Virago 750', 'Virago 1100', 'XV1900', 'XV1700', 'V-Max', 'TDM900', 'Tenere 700', 'XT600', 'XT660', 'XTZ750', 'TTR250', 'WR250', 'WR450', 'Tricity', 'Nmax', 'Aerox', 'T-Max'],
+            'Kawasaki': ['Ninja 125', 'Ninja 250', 'Ninja 300', 'Ninja 400', 'Ninja 500', 'Ninja 650', 'Ninja 750', 'Ninja 800', 'Ninja ZX-6R', 'Ninja ZX-9R', 'Ninja ZX-10R', 'Ninja ZX-12R', 'Ninja ZX-14R', 'Vulcan 500', 'Vulcan 800', 'Vulcan 900', 'Vulcan 1600', 'Vulcan 1700', 'Vulcan 1900', 'Vulcan 2000', 'Z125', 'Z250', 'Z400', 'Z650', 'Z750', 'Z800', 'Z900', 'Z1000', 'Z1100', 'Z1200', 'Z1300', 'ZZR', 'ZX10', 'Versys 250', 'Versys 650', 'Versys 1000', 'KLR250', 'KLR650', 'KLX250', 'KLX300', 'KX250'],
+            'Harley-Davidson': ['Street 500', 'Street 750', 'Street 1200', 'Street Glide', 'Road Glide', 'Road King', 'Fat Boy', 'Fat Boy Lo', 'Slim', 'Slim S', 'Softail', 'Heritage Classic', 'Deluxe', 'Low Rider', 'Wide Glide', 'Street Bob', 'Breakout', 'CVO', 'Dyna', 'Switchback', 'Sportster 883', 'Sportster 1200', 'Iron 883', 'Forty-Eight', 'Superlow', 'XR1200', 'Pan America'],
+            'BMW': ['F 650 GS', 'F 700 GS', 'F 750 GS', 'F 800 GS', 'F 800 R', 'F 800 ST', 'F 850 GS', 'F 900 XR', 'F 900 R', 'G 310 R', 'G 310 GS', 'R 45', 'R 50', 'R 75', 'R 80', 'R 90', 'R 100', 'R 1100 GS', 'R 1150 GS', 'R 1200 GS', 'R 1250 GS', 'R 1200 RT', 'R 1200 R', 'R 1250 R', 'R 1250 RS', 'S 1000 RR', 'S 1000 R', 'S 1000 XR', 'C 600 Sport', 'C 650 GT', 'HP2', 'K 1600'],
+            'Suzuki': ['GSX-R 125', 'GSX-R 250', 'GSX-R 600', 'GSX-R 750', 'GSX-R 1000', 'GSX-S 125', 'GSX-S 750', 'GSX-S 1000', 'GSX-S F', 'SV 650', 'SV 1000', 'Bandit 600', 'Bandit 1200', 'Bandit 1250', 'Intruder 125', 'Intruder 250', 'Intruder 750', 'Intruder 1400', 'Boulevard', 'V-Strom 125', 'V-Strom 250', 'V-Strom 650', 'V-Strom 1000', 'DL1050', 'Hayabusa', 'Katana', 'GN 125', 'GN 250', 'GN 400', 'GN 600', 'GN 700', 'TS 125', 'TS 250'],
+            'Ducati': ['Panigale V2', 'Panigale V4', 'Panigale 125', 'Panigale 250', 'Panigale 899', 'Panigale 959', 'Panigale 1199', 'Panigale 1299', 'Monster 125', 'Monster 250', 'Monster 659', 'Monster 696', 'Monster 797', 'Monster 821', 'Monster 937', 'Monster 1200', 'Multistrada 125', 'Multistrada 950', 'Multistrada V4', 'Supersport', 'Streetfighter', 'Hypermotard 125', 'Hypermotard 950', 'Diavel', 'XDiavel', 'Scrambler 125', 'Scrambler 803'],
+            'KTM': ['125 Duke', '200 Duke', '250 Duke', '390 Duke', '490 Duke', '790 Duke', '890 Duke', 'RC 125', 'RC 200', 'RC 390', 'RC 790', 'RC 890', 'Superduke', 'Super Duke 1290', '250 EXC', '350 EXC', '450 EXC', '500 EXC', '600 EXC', '690 Enduro', '690 Supermoto', '690 SMC', '1290 Super Adventure', '1290 Adventure', 'XC-W', 'Freeride', 'SXC'],
+            'Triumph': ['Bonneville T100', 'Bonneville T120', 'Bonneville T120 Black', 'Bonneville Bobber', 'Bonneville Speed Twin', 'Street Twin', 'Street Twin Cup', 'Street Scrambler', 'Street Cup', 'Thruxton', 'Thruxton R', 'Thruxton RS', 'Daytona 125', 'Daytona 250', 'Daytona 675', 'Daytona 765', 'Speed Triple', 'Tiger 250', 'Tiger 750', 'Tiger 800', 'Tiger 900', 'Tiger 1200'],
+            'Royal Enfield': ['Bullet 350', 'Bullet 500', 'Classic 350', 'Classic 500', 'Interceptor 650', 'Continental GT 650', 'Himalayan', 'Hunter', 'Meteor 350', 'Super Meteor 650', 'Scram 411', 'Cruiser'],
+            'Aprilia': ['RS 50', 'RS 125', 'RS 250', 'RS 660', 'RSV4', 'RSV4 RR', 'Tuono 125', 'Tuono 250', 'Tuono 660', 'Tuono V4', 'Tuono V4 1100', 'Dorsoduro 125', 'Dorsoduro 250', 'Dorsoduro 750', 'Shiver 750', 'Mana', 'Atlantic', 'Scarabeo'],
+            'MV Agusta': ['F3 675', 'F3 800', 'Brutale 125', 'Brutale 250', 'Brutale 675', 'Brutale 800', 'Brutale 1090', 'Dragster 125', 'Dragster 800', 'RVS', 'Senna', 'Turismo Veloce', 'Turismo Veloce Lusso'],
+            'Moto Guzzi': ['V7', 'V7 II', 'V7 III', 'V7 Special', 'V7 Stone', 'V7 Racer', 'V9', 'V9 Bobber', 'V9 Roamer', 'V85 TT', 'Audace', 'California', 'California Stone', 'Griso', 'Breva', 'Stelvio', 'Bellagio'],
+            'Husqvarna': ['Svartpilen 125', 'Svartpilen 250', 'Svartpilen 401', 'Svartpilen 701', 'Vitpilen 125', 'Vitpilen 250', 'Vitpilen 401', 'Vitpilen 701', '401 Street', '701 Enduro', '701 Supermoto', 'Norden 901'],
+            'Benelli': ['TNT 125', 'TNT 300', 'TNT 600', 'TNT 600i', 'TNT 899', 'Leoncino 125', 'Leoncino 250', 'Leoncino 500', 'Imperiale 125', 'Imperiale 250', 'Imperiale 400', 'TRK 251', 'TRK 502'],
+            'KTM': [],
+            'Peugeot': ['Speedfight 125', 'Speedfight 200', 'Tweet', 'Django 125', 'Satelis'],
+            'Piaggio': ['MP3 125', 'MP3 300', 'Beverly 125', 'Beverly 300', 'X10 350', 'Liberty', 'Vespa'],
+            'SYM': ['NH T 125', 'Jet 125', 'Orbit', 'HD 125', 'Wolf Rx 125'],
+            'Hero': ['Splendor', 'HF Deluxe', 'Passion', 'Xtreme', 'Glamour'],
+            'Bajaj': ['Pulsar 125', 'Pulsar 150', 'Pulsar 180', 'Pulsar 200', 'Pulsar 250', 'Pulsar 350', 'Dominar 400', 'Avenger'],
+            'TVS': ['Apache 150', 'Apache 160', 'Apache 180', 'Apache 200', 'Star City', 'Max', 'Raider'],
+            'Mahindra': ['Centuro', 'Gusto', 'Rodeo'],
+            'Jawa': ['Jawa 42', 'Jawa Classic', 'Perak'],
+            'Keeway': ['RK 125', 'RK 150', 'V 302 C', 'Blackster', 'Superlight'],
+            'Zongshen': ['CB125', 'CB150', 'ZS125', 'ZS150'],
+            'Lifan': ['LF125', 'LF150', 'LF200', 'LF250'],
+            'Andet': ['Custom', 'Uspecificeret', 'Brugt motorcykel', 'Scooter', 'Knallert']
         };
 
         // UPDATE MODELS BASED ON BRAND
