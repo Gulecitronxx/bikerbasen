@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sælg din motorcykel - BikerBasen</title>
+    <title>Annonce - BikerBasen</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -26,6 +26,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .logo {
@@ -35,961 +38,673 @@
             cursor: pointer;
         }
 
+        .back-button {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #0066cc;
+            font-weight: 600;
+        }
+
         /* CONTAINER */
         .container {
-            max-width: 900px;
-            margin: 3rem auto;
+            max-width: 1100px;
+            margin: 2rem auto;
             padding: 0 1rem;
         }
 
-        /* STEP 1 - VIN LOOKUP */
-        .step-1 {
-            background: white;
-            padding: 3rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            text-align: center;
-        }
-
-        .step-1 h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: #1a1a1a;
-        }
-
-        .step-1 p {
-            font-size: 15px;
-            color: #666;
+        /* MAIN GRID */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
             margin-bottom: 2rem;
         }
 
-        .vin-input-group {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            justify-content: center;
-        }
-
-        .vin-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #0066cc 0%, #003d99 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .vin-input-wrapper {
-            flex: 1;
-            max-width: 400px;
-        }
-
-        .vin-input-wrapper input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
-        }
-
-        .vin-input-wrapper input:focus {
-            outline: none;
-            border-color: #ff6600;
-            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
-        }
-
-        .vin-button {
-            padding: 12px 32px;
-            background: #ff6600;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .vin-button:hover {
-            background: #e55a00;
-            transform: translateY(-2px);
-        }
-
-        .help-text {
-            font-size: 12px;
-            color: #999;
-            margin-top: 1rem;
-        }
-
-        .help-text a {
-            color: #ff6600;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .help-text a:hover {
-            text-decoration: underline;
-        }
-
-        /* STEP 2 - FORM (HIDDEN INITIALLY) */
-        .step-2 {
-            display: none;
-        }
-
-        .step-2.active {
-            display: block;
-        }
-
-        .form-header {
+        /* GALLERY */
+        .gallery-section {
             background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .form-header h2 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-header p {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .moto-summary {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .moto-summary-item {
-            text-align: center;
-        }
-
-        .moto-summary-label {
-            font-size: 11px;
-            color: #999;
-            text-transform: uppercase;
-            margin-bottom: 0.25rem;
-        }
-
-        .moto-summary-value {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-
-        .change-moto {
-            margin-top: 1rem;
-            font-size: 12px;
-        }
-
-        .change-moto button {
-            background: none;
-            border: none;
-            color: #ff6600;
-            cursor: pointer;
-            text-decoration: underline;
-            font-weight: 600;
-        }
-
-        /* FORM SECTIONS */
-        .form-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .form-section h3 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-group.required label::after {
-            content: " *";
-            color: #ff6600;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #ff6600;
-            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .info-box {
-            background: #e8f5e9;
-            border-left: 4px solid #2e7d32;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
-            font-size: 13px;
-            color: #1b5e20;
-        }
-
-        /* IMAGE UPLOAD */
-        .image-upload {
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: #fafafa;
-        }
-
-        .image-upload:hover {
-            border-color: #ff6600;
-            background: #fff9f5;
-        }
-
-        .image-preview {
-            display: none;
-        }
-
-        .image-preview.active {
-            display: grid;
-        }
-
-        .image-item {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1;
             border-radius: 8px;
             overflow: hidden;
-            background: #e0e0e0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .image-main {
+            width: 100%;
+            height: 450px;
+            background: #f0f0f0;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 32px;
-            border: 1px solid #ddd;
+            position: relative;
+            overflow: hidden;
         }
 
-        .image-item img {
+        .image-main img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .image-remove {
+        .favorite-btn {
             position: absolute;
-            top: 4px;
-            right: 4px;
-            background: rgba(255, 107, 0, 0.9);
-            color: white;
+            top: 1rem;
+            right: 1rem;
+            width: 45px;
+            height: 45px;
+            background: white;
             border: none;
-            width: 28px;
-            height: 28px;
             border-radius: 50%;
+            font-size: 24px;
             cursor: pointer;
-            font-size: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             transition: all 0.3s;
         }
 
-        .image-remove:hover {
-            background: #ff6600;
+        .favorite-btn:hover {
             transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        /* BUTTONS */
-        .button-group {
+        .image-nav {
             display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: white;
+            overflow-x: auto;
         }
 
-        button {
-            padding: 12px 32px;
+        .image-thumb {
+            width: 80px;
+            height: 80px;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .image-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-thumb.active {
+            border-color: #ff6600;
+        }
+
+        .image-thumb:hover {
+            border-color: #ffb380;
+        }
+
+        /* LEFT CONTENT */
+        .left-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* MOTO INFO */
+        .moto-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .moto-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .moto-specs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .spec {
+            text-align: center;
+        }
+
+        .spec-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .spec-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        /* DETALJER */
+        .detaljer-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #ff6600;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+        }
+
+        .detail-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        /* BESKRIVELSE */
+        .description-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .description-text {
+            line-height: 1.7;
+            color: #555;
+            white-space: pre-wrap;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* PRICE CARD */
+        .price-card {
+            background: white;
+            border: 3px solid #ff6600;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .price-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .price {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ff6600;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 14px;
             border: none;
             border-radius: 6px;
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
             transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
 
         .btn-primary {
             background: #ff6600;
             color: white;
-            flex: 1;
-            max-width: 300px;
         }
 
         .btn-primary:hover {
             background: #e55a00;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
         }
 
         .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
-            border: 1px solid #ddd;
+            background: white;
+            color: #ff6600;
+            border: 2px solid #ff6600;
         }
 
         .btn-secondary:hover {
-            background: #e0e0e0;
+            background: #fff9f5;
         }
 
-        .success-message {
-            background: #e8f5e9;
-            border: 1px solid #2e7d32;
-            color: #2e7d32;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-top: 1rem;
-            display: none;
-            font-size: 13px;
+        /* SELLER CARD */
+        .seller-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .seller-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .seller-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6600 0%, #ff8f3d 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .seller-info h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .seller-info p {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .seller-contact {
+            font-size: 12px;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        .seller-contact label {
+            display: block;
+            color: #999;
+            text-transform: uppercase;
+            font-size: 10px;
+            margin-bottom: 0.25rem;
+            margin-top: 0.75rem;
+        }
+
+        .seller-contact p {
+            font-weight: 600;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .moto-specs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .image-main {
+                height: 350px;
+            }
+
+            header {
+                flex-wrap: wrap;
+            }
+
+            .moto-title {
+                font-size: 24px;
+            }
+
+            .price {
+                font-size: 28px;
+            }
+
+            .detail-row {
+                grid-template-columns: 120px 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0;
+            }
+
+            .moto-info,
+            .detaljer-section,
+            .description-section,
+            .price-card,
+            .seller-card {
+                border-radius: 0;
+            }
+
+            .moto-specs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .image-main {
+                height: 280px;
+            }
+
+            header {
+                padding: 0.75rem 1rem;
+            }
+
+            .moto-title {
+                font-size: 20px;
+            }
+
+            .price {
+                font-size: 24px;
+            }
+        }
+
+        .no-images {
+            padding: 2rem;
             text-align: center;
+            color: #999;
         }
 
         .error-message {
             background: #ffebee;
             border: 1px solid #c62828;
             color: #c62828;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-top: 1rem;
-            display: none;
-            font-size: 13px;
+            padding: 2rem;
+            border-radius: 8px;
             text-align: center;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .moto-summary {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .btn-primary {
-                max-width: none;
-            }
+            margin: 2rem auto;
         }
     </style>
 </head>
 <body>
     <!-- HEADER -->
     <header>
+        <button class="back-button" onclick="window.history.back()">← Tilbage</button>
         <div class="logo" onclick="window.location.href='index.html'">🏍️ BikerBasen</div>
+        <div style="width: 100px;"></div>
     </header>
 
     <!-- CONTAINER -->
-    <div class="container">
-        <!-- STEP 1: VIN LOOKUP -->
-        <div class="step-1" id="step1">
-            <h1>Sælg din motorcykel på Danmarks største markedsplads</h1>
-            <p>Indtast din motorcykelregistreringsnummer så hjælper vi med resten</p>
-
-            <div class="vin-input-group">
-                <div class="vin-icon">REG</div>
-                <div class="vin-input-wrapper">
-                    <input 
-                        type="text" 
-                        id="registrationInput" 
-                        placeholder="Registreringsnummer" 
-                        maxlength="7"
-                    >
-                </div>
-                <button class="vin-button" onclick="lookupMotorcycle()">Find motorcykel</button>
-            </div>
-
-            <div class="help-text">
-                Glemt registreringsnummeret? <a href="#" onclick="skipLookup()">Skip og udfyld manuelt</a>
-            </div>
-        </div>
-
-        <!-- STEP 1B: MANUAL SELECT -->
-        <div class="step-1b" id="step1b" style="display: none;">
-            <form onsubmit="selectMotoManually(event)" style="background: white; padding: 2rem; border-radius: 8px;">
-                <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 1.5rem; text-align: center;">Hvilken motorcykel vil du sælge?</h2>
-                
-                <div style="display: flex; gap: 1rem; margin-bottom: 2rem; align-items: center;">
-                    <input type="text" id="regNum" placeholder="Nummerplade" maxlength="7" style="padding: 10px; border: 1px solid #ddd; border-radius: 6px; flex: 1;">
-                    <span style="color: #999;">INGEN</span>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Type *</label>
-                        <select id="manualType" required style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
-                            <option value="">Vælg type</option>
-                            <option value="Cruiser">Cruiser</option>
-                            <option value="Sport">Sport</option>
-                            <option value="Naked Bike">Naked Bike</option>
-                            <option value="Adventure">Adventure</option>
-                            <option value="Retro">Retro</option>
-                            <option value="Touring">Touring</option>
-                            <option value="Scooter">Scooter</option>
-                            <option value="Custom">Custom</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Mærke *</label>
-                        <select id="manualBrand" required onchange="updateModels()" style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
-                            <option value="">Vælg mærke</option>
-                            <option value="Honda">Honda</option>
-                            <option value="Yamaha">Yamaha</option>
-                            <option value="Kawasaki">Kawasaki</option>
-                            <option value="Suzuki">Suzuki</option>
-                            <option value="Harley-Davidson">Harley-Davidson</option>
-                            <option value="BMW">BMW</option>
-                            <option value="Ducati">Ducati</option>
-                            <option value="KTM">KTM</option>
-                            <option value="Triumph">Triumph</option>
-                            <option value="Royal Enfield">Royal Enfield</option>
-                            <option value="Aprilia">Aprilia</option>
-                            <option value="MV Agusta">MV Agusta</option>
-                            <option value="Moto Guzzi">Moto Guzzi</option>
-                            <option value="Husqvarna">Husqvarna</option>
-                            <option value="Benelli">Benelli</option>
-                            <option value="Peugeot">Peugeot</option>
-                            <option value="Piaggio">Piaggio</option>
-                            <option value="SYM">SYM</option>
-                            <option value="Hero">Hero</option>
-                            <option value="Bajaj">Bajaj</option>
-                            <option value="TVS">TVS</option>
-                            <option value="Mahindra">Mahindra</option>
-                            <option value="Jawa">Jawa</option>
-                            <option value="Keeway">Keeway</option>
-                            <option value="Zongshen">Zongshen</option>
-                            <option value="Lifan">Lifan</option>
-                            <option value="Andet">Andet</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Model *</label>
-                        <select id="manualModel" required onchange="handleModelChange()" style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
-                            <option value="">Vælg model</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="customModelGroup" style="display: none;">
-                        <label>Anden model *</label>
-                        <input type="text" id="customModel" placeholder="Skriv model navn" style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
-                    </div>
-                    <div class="form-group">
-                        <label>År *</label>
-                        <select id="manualYear" required style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
-                            <option value="">Vælg år</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Drivmiddel *</label>
-                        <select id="manualFuel" required style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
-                            <option value="">Vælg drivmiddel</option>
-                            <option value="Benzin">Benzin</option>
-                            <option value="Diesel">Diesel</option>
-                            <option value="El">El</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Km på tæller *</label>
-                        <input type="number" id="manualKm" placeholder="F.eks. 12500" min="0" required style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: center;">
-                    <button type="button" class="btn-secondary" onclick="backToRegNum()" style="padding: 12px 32px;">Tilbage</button>
-                    <button type="submit" class="btn-primary" style="padding: 12px 32px;">Fortsæt</button>
-                </div>
-            </form>
-        </div>
-        <div class="step-2" id="step2">
-            <!-- HEADER -->
-            <div class="form-header">
-                <h2>Opret annonce</h2>
-                <p>Næsten færdig! Udfyld de sidste detaljer</p>
-                
-                <div class="moto-summary">
-                    <div class="moto-summary-item">
-                        <div class="moto-summary-label">Mærke</div>
-                        <div class="moto-summary-value" id="summaryBrand">-</div>
-                    </div>
-                    <div class="moto-summary-item">
-                        <div class="moto-summary-label">Model</div>
-                        <div class="moto-summary-value" id="summaryModel">-</div>
-                    </div>
-                    <div class="moto-summary-item">
-                        <div class="moto-summary-label">År</div>
-                        <div class="moto-summary-value" id="summaryYear">-</div>
-                    </div>
-                    <div class="moto-summary-item">
-                        <div class="moto-summary-label">Km</div>
-                        <div class="moto-summary-value" id="summaryKm">-</div>
-                    </div>
-                </div>
-
-                <div class="change-moto">
-                    <button onclick="changeMoto()">Skift motorcykel</button>
-                </div>
-            </div>
-
-            <!-- FORM -->
-            <form id="listingForm" onsubmit="submitListing(event)">
-                <!-- PRIS & LOKATION -->
-                <div class="form-section">
-                    <h3>Pris og lokation</h3>
-
-                    <div class="form-group required">
-                        <label>Pris (kr)</label>
-                        <input type="number" id="price" placeholder="F.eks. 85000" min="0" required>
-                    </div>
-
-                    <div class="form-group required">
-                        <label>By/kommune</label>
-                        <input type="text" id="location" placeholder="F.eks. København" required>
-                    </div>
-                </div>
-
-                <!-- TILSTAND -->
-                <div class="form-section">
-                    <h3>Tilstand</h3>
-
-                    <div class="form-row">
-                        <div class="form-group required">
-                            <label>Tilstand</label>
-                            <select id="condition" required>
-                                <option value="">Vælg tilstand</option>
-                                <option value="Som ny">Som ny</option>
-                                <option value="Meget god">Meget god</option>
-                                <option value="God">God</option>
-                                <option value="Acceptabel">Acceptabel</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group required">
-                            <label>Service historie</label>
-                            <select id="service" required>
-                                <option value="">Vælg service</option>
-                                <option value="Fuld service historia">Fuld service historia</option>
-                                <option value="Delvis service historia">Delvis service historia</option>
-                                <option value="Ingen service historia">Ingen service historia</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BESKRIVELSE -->
-                <div class="form-section">
-                    <h3>Beskrivelse</h3>
-
-                    <div class="form-group required">
-                        <label>Beskrivelse af motorcyklen</label>
-                        <textarea id="description" placeholder="Beskriv motorcykelens tilstand, særligheder, evt. skader osv." required></textarea>
-                    </div>
-
-                    <div class="info-box">
-                        💡 Tip: Jo bedre beskrivelse, jo flere interesserede køber du!
-                    </div>
-                </div>
-
-                <!-- BILLEDER -->
-                <div class="form-section">
-                    <h3>Billeder af motorcyklen</h3>
-
-                    <div class="image-upload" id="imageUpload" onclick="document.getElementById('imageInput').click()">
-                        <div style="font-size: 32px; margin-bottom: 0.5rem;">📸</div>
-                        <p style="font-weight: 600; margin-bottom: 0.25rem;">Klik for at uploade billeder</p>
-                        <p style="font-size: 12px; color: #999;">eller træk billeder herhen</p>
-                        <input type="file" id="imageInput" multiple accept="image/*" onchange="handleImageUpload(event)" style="display: none;">
-                    </div>
-
-                    <div class="image-preview" id="imagePreview" style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem;"></div>
-
-                    <div class="info-box" style="margin-top: 1.5rem;">
-                        💡 Tip: Upload 5-8 billeder fra forskellige vinkler for bedre salg!
-                    </div>
-                </div>
-
-                <!-- KONTAKTINFO -->
-                <div class="form-section">
-                    <h3>Din kontaktinfo</h3>
-
-                    <div class="form-row">
-                        <div class="form-group required">
-                            <label>Navn</label>
-                            <input type="text" id="contactName" placeholder="Dit navn" required>
-                        </div>
-                        <div class="form-group required">
-                            <label>Telefon</label>
-                            <input type="tel" id="contactPhone" placeholder="+45 12 34 56 78" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group required">
-                        <label>Email</label>
-                        <input type="email" id="contactEmail" placeholder="din@email.dk" required>
-                    </div>
-                </div>
-
-                <!-- SUCCESS/ERROR -->
-                <div id="successMessage" class="success-message">
-                    ✓ Annonce oprettet! Du bliver omdirigeret...
-                </div>
-                <div id="errorMessage" class="error-message"></div>
-
-                <!-- BUTTONS -->
-                <div class="button-group">
-                    <button type="button" class="btn-secondary" onclick="window.location.href='index.html'">Annuller</button>
-                    <button type="submit" class="btn-primary">Opret annonce</button>
-                </div>
-            </form>
+    <div class="container" id="mainContent">
+        <!-- LOADING -->
+        <div style="text-align: center; padding: 3rem; color: #999;">
+            Indlæser annonce...
         </div>
     </div>
 
     <script>
-        // MOCK MOTORCYCLE DATABASE
-        const motorcycleDatabase = {
-            'AA12345': { brand: 'Honda', model: 'CB500', year: 2018, km: 12000, type: 'Naked Bike' },
-            'BB67890': { brand: 'Yamaha', model: 'Virago 535', year: 2010, km: 25000, type: 'Cruiser' },
-            'CC11111': { brand: 'Harley-Davidson', model: 'Street 750', year: 2017, km: 18000, type: 'Cruiser' },
-            'DD22222': { brand: 'BMW', model: 'F 800 GS', year: 2015, km: 22000, type: 'Adventure' },
-        };
+        let listing = null;
 
-        let uploadedImages = [];
-
-        // HANDLE IMAGE UPLOAD
-        function handleImageUpload(event) {
-            const files = Array.from(event.target.files);
-            
-            files.forEach((file) => {
-                // CHECK FILE SIZE (max 5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    alert(`${file.name} er for stor (max 5MB)`);
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadedImages.push({
-                        name: file.name,
-                        data: e.target.result // Base64
-                    });
-                    displayImages();
-                };
-                reader.readAsDataURL(file);
-            });
+        // GET LISTING ID FROM URL
+        function getListingId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
         }
 
-        // DISPLAY IMAGE PREVIEW
-        function displayImages() {
-            const preview = document.getElementById('imagePreview');
+        // LOAD LISTING
+        window.addEventListener('load', function() {
+            const listingId = getListingId();
             
-            if (uploadedImages.length === 0) {
-                preview.classList.remove('active');
+            if (!listingId) {
+                showError('Annonce ikke fundet');
                 return;
             }
 
-            preview.classList.add('active');
-            preview.innerHTML = '';
+            // HARDCODED MOTORCYCLES
+            const motorcycles = [
+                { id: 1, brand: 'Honda', model: 'CB500', year: 2018, km: 12000, type: 'Naked Bike', price: 85000, location: 'København', condition: 'Meget god', service: 'Fuld service historia', description: 'Flot Honda CB500 fra 2018 i rigtig god tilstand. Der er kørt ca 12000 km. Motorcyklen er velholdt og serviceret. Perfekt til både hverdagsbrug og ture.', contactName: 'Jens Hansen', contactEmail: 'jens@email.dk', contactPhone: '+45 40 40 40 40', images: [], createdAt: new Date().toISOString() },
+                { id: 2, brand: 'Yamaha', model: 'Virago 535', year: 2010, km: 25000, type: 'Cruiser', price: 55000, location: 'Aarhus', condition: 'God', service: 'Delvis service historia', description: 'Klassisk cruiser fra Yamaha. Velholdt motorcykel med patina. Starter hver gang og kører bare. Perfekt cruiser til sommeren.', contactName: 'Lars Larsen', contactEmail: 'lars@email.dk', contactPhone: '+45 50 50 50 50', images: [], createdAt: new Date().toISOString() },
+                { id: 3, brand: 'BMW', model: 'F 800 GS', year: 2015, km: 22000, type: 'Adventure', price: 95000, location: 'Odense', condition: 'Meget god', service: 'Fuld service historia', description: 'Adventure motorcykel fra BMW. Fantastisk til både offroad og landevej. Alle papirer på plads. Nyere dæk og bremser.', contactName: 'Erik Hansen', contactEmail: 'erik@email.dk', contactPhone: '+45 60 60 60 60', images: [], createdAt: new Date().toISOString() }
+            ];
 
-            uploadedImages.forEach((img, index) => {
-                const item = document.createElement('div');
-                item.className = 'image-item';
-                item.innerHTML = `
-                    <img src="${img.data}" alt="Billede ${index + 1}">
-                    <button type="button" class="image-remove" onclick="removeImage(${index})">✕</button>
-                `;
-                preview.appendChild(item);
+            // CHECK HARDCODED
+            listing = motorcycles.find(m => m.id === parseInt(listingId));
+
+            // CHECK USER LISTINGS
+            if (!listing) {
+                const userListings = JSON.parse(localStorage.getItem('userListings')) || [];
+                listing = userListings.find(l => l.id === parseInt(listingId));
+            }
+
+            if (listing) {
+                displayListing();
+            } else {
+                showError('Annonce ikke fundet');
+            }
+        });
+
+        // DISPLAY LISTING
+        function displayListing() {
+            const container = document.getElementById('mainContent');
+            const imageGallery = buildGallery();
+
+            container.innerHTML = `
+                <div class="main-grid">
+                    <!-- LEFT SIDE -->
+                    <div class="left-content">
+                        <!-- GALLERY -->
+                        <div class="gallery-section">
+                            <div class="image-main" id="mainImage">
+                                ${listing.images && listing.images.length > 0 
+                                    ? `<img src="${listing.images[0].data}" alt="${listing.brand} ${listing.model}" style="max-width: 100%; max-height: 100%;">` 
+                                    : '<span style="color: #999;">📸 Ingen billeder</span>'
+                                }
+                                <button class="favorite-btn" onclick="toggleFavorite()">♡</button>
+                            </div>
+                            ${imageGallery}
+                        </div>
+
+                        <!-- MOTO INFO -->
+                        <div class="moto-info">
+                            <h1 class="moto-title">${listing.brand} ${listing.model}</h1>
+                            <div class="moto-specs">
+                                <div class="spec">
+                                    <div class="spec-label">År</div>
+                                    <div class="spec-value">${listing.year}</div>
+                                </div>
+                                <div class="spec">
+                                    <div class="spec-label">Km</div>
+                                    <div class="spec-value">${listing.km.toLocaleString('da-DK')}</div>
+                                </div>
+                                <div class="spec">
+                                    <div class="spec-label">Type</div>
+                                    <div class="spec-value">${listing.type}</div>
+                                </div>
+                                <div class="spec">
+                                    <div class="spec-label">Lokation</div>
+                                    <div class="spec-value">📍 ${listing.location}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BESKRIVELSE -->
+                        <div class="description-section">
+                            <h2 class="section-title">Beskrivelse</h2>
+                            <p class="description-text">${listing.description || 'Ingen beskrivelse'}</p>
+                        </div>
+
+                        <!-- DETALJER -->
+                        <div class="detaljer-section">
+                            <h2 class="section-title">Detaljer</h2>
+                            <div class="detail-row">
+                                <div class="detail-label">Mærke & Model</div>
+                                <div class="detail-value">${listing.brand} ${listing.model}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">År</div>
+                                <div class="detail-value">${listing.year}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Kilometer</div>
+                                <div class="detail-value">${listing.km.toLocaleString('da-DK')} km</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Type</div>
+                                <div class="detail-value">${listing.type}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Tilstand</div>
+                                <div class="detail-value">${listing.condition}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Service</div>
+                                <div class="detail-value">${listing.service}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Lokation</div>
+                                <div class="detail-value">${listing.location}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT SIDEBAR -->
+                    <div class="sidebar">
+                        <!-- PRICE CARD -->
+                        <div class="price-card">
+                            <div class="price-label">Pris</div>
+                            <div class="price">${listing.price.toLocaleString('da-DK')} kr</div>
+                            <div class="action-buttons">
+                                <a href="tel:${listing.contactPhone}" class="btn btn-primary">📞 Ring nu</a>
+                                <a href="mailto:${listing.contactEmail}" class="btn btn-secondary">✉️ Skriv til sælger</a>
+                            </div>
+                        </div>
+
+                        <!-- SELLER CARD -->
+                        <div class="seller-card">
+                            <div class="seller-header">
+                                <div class="seller-avatar">${listing.contactName.charAt(0).toUpperCase()}</div>
+                                <div class="seller-info">
+                                    <h3>${listing.contactName}</h3>
+                                    <p>📍 ${listing.location}</p>
+                                </div>
+                            </div>
+
+                            <div class="seller-contact">
+                                <label>TELEFON</label>
+                                <p>${listing.contactPhone}</p>
+
+                                <label>EMAIL</label>
+                                <p>${listing.contactEmail}</p>
+
+                                <label>OPRETTET</label>
+                                <p>${listing.createdAt ? new Date(listing.createdAt).toLocaleDateString('da-DK') : '-'}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (listing.images && listing.images.length > 0) {
+                setupImageNavigation();
+            }
+        }
+
+        // BUILD GALLERY
+        function buildGallery() {
+            if (!listing.images || listing.images.length === 0) {
+                return '';
+            }
+
+            return `
+                <div class="image-nav">
+                    ${listing.images.map((img, i) => `
+                        <div class="image-thumb ${i === 0 ? 'active' : ''}" onclick="changeImage(${i})">
+                            <img src="${img.data}" alt="Billede ${i + 1}">
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // CHANGE IMAGE
+        function changeImage(index) {
+            const mainImage = document.getElementById('mainImage');
+            mainImage.innerHTML = `
+                <img src="${listing.images[index].data}" alt="Billede ${index + 1}" style="max-width: 100%; max-height: 100%;">
+                <button class="favorite-btn" onclick="toggleFavorite()">♡</button>
+            `;
+
+            document.querySelectorAll('.image-thumb').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
             });
         }
 
-        // REMOVE IMAGE
-        function removeImage(index) {
-            uploadedImages.splice(index, 1);
-            displayImages();
+        // SETUP IMAGE NAVIGATION
+        function setupImageNavigation() {
+            const thumbs = document.querySelectorAll('.image-thumb');
+            if (thumbs.length > 0) {
+                thumbs[0].classList.add('active');
+            }
         }
 
-        // CHECK LOGIN ON LOAD
-        window.addEventListener('load', function() {
-            const userName = localStorage.getItem('userName');
-            if (!userName) {
-                alert('Du skal være logget ind for at oprette en annonce.');
+        // TOGGLE FAVORITE
+        function toggleFavorite() {
+            if (!localStorage.getItem('userLoggedIn')) {
+                alert('Du skal være logget ind for at gemme favoritter');
                 window.location.href = 'login.html';
                 return;
             }
 
-            document.getElementById('contactName').value = userName;
-            const userEmail = localStorage.getItem('userEmail');
-            if (userEmail) {
-                document.getElementById('contactEmail').value = userEmail;
-            }
-        });
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const isFavorite = favorites.includes(listing.id);
 
-        // LOOKUP MOTORCYCLE
-        function lookupMotorcycle() {
-            const regNum = document.getElementById('registrationInput').value.toUpperCase();
-            
-            if (!regNum) {
-                alert('Indtast venligst et registreringsnummer');
-                return;
-            }
-
-            const moto = motorcycleDatabase[regNum];
-            
-            if (moto) {
-                selectedMoto = moto;
-                showStep2();
+            if (isFavorite) {
+                favorites = favorites.filter(id => id !== listing.id);
+                alert('Fjernet fra favoritter');
             } else {
-                alert('Motorcykel ikke fundet. Prøv at udfylde manuelt.');
-                skipLookup();
-            }
-        }
-
-        // SKIP LOOKUP
-        function skipLookup() {
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step1b').style.display = 'block';
-            populateYears();
-        }
-
-        // BACK TO REG NUM
-        function backToRegNum() {
-            document.getElementById('step1').style.display = 'block';
-            document.getElementById('step1b').style.display = 'none';
-        }
-
-        // POPULATE YEARS
-        function populateYears() {
-            const yearSelect = document.getElementById('manualYear');
-            const currentYear = new Date().getFullYear();
-            for (let i = currentYear; i >= 1980; i--) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-                yearSelect.appendChild(option);
-            }
-        }
-
-        // KOMPLET MOTORCYKEL DATABASE MED ALLE MÆRKER OG MODELLER
-        const modelsDatabase = {
-            'Honda': ['CB125R', 'CB250R', 'CB300R', 'CB500', 'CB500F', 'CB500X', 'CB650R', 'CB750', 'CB900', 'CB1000', 'CB1100', 'CBF600', 'CBR125', 'CBR250', 'CBR600RR', 'CBR1000RR', 'CRF250', 'CRF450', 'CRF1000L', 'CRF1100L', 'Gold Wing', 'NC700', 'NC750X', 'NX500', 'PCX', 'Rebel', 'Shadow', 'Transalp', 'VFR800', 'VFR1200', 'X-ADV', 'XL125', 'XL700V'],
-            'Yamaha': ['YZF-R125', 'YZF-R3', 'YZF-R6', 'YZF-R1', 'MT-03', 'MT-07', 'MT-09', 'MT-10', 'MT-125', 'MT-250', 'FZ1', 'FZ6', 'FZ8', 'FZS600', 'FZ-07', 'XJ6', 'XJR1200', 'XJR1300', 'Virago 535', 'Virago 750', 'Virago 1100', 'XV1900', 'XV1700', 'V-Max', 'TDM900', 'Tenere 700', 'XT600', 'XT660', 'XTZ750', 'TTR250', 'WR250', 'WR450', 'Tricity', 'Nmax', 'Aerox', 'T-Max'],
-            'Kawasaki': ['Ninja 125', 'Ninja 250', 'Ninja 300', 'Ninja 400', 'Ninja 500', 'Ninja 650', 'Ninja 750', 'Ninja 800', 'Ninja ZX-6R', 'Ninja ZX-9R', 'Ninja ZX-10R', 'Ninja ZX-12R', 'Ninja ZX-14R', 'Vulcan 500', 'Vulcan 800', 'Vulcan 900', 'Vulcan 1600', 'Vulcan 1700', 'Vulcan 1900', 'Vulcan 2000', 'Z125', 'Z250', 'Z400', 'Z650', 'Z750', 'Z800', 'Z900', 'Z1000', 'Z1100', 'Z1200', 'Z1300', 'ZZR', 'ZX10', 'Versys 250', 'Versys 650', 'Versys 1000', 'KLR250', 'KLR650', 'KLX250', 'KLX300', 'KX250'],
-            'Harley-Davidson': ['Street 500', 'Street 750', 'Street 1200', 'Street Glide', 'Road Glide', 'Road King', 'Fat Boy', 'Fat Boy Lo', 'Slim', 'Slim S', 'Softail', 'Heritage Classic', 'Deluxe', 'Low Rider', 'Wide Glide', 'Street Bob', 'Breakout', 'CVO', 'Dyna', 'Switchback', 'Sportster 883', 'Sportster 1200', 'Iron 883', 'Forty-Eight', 'Superlow', 'XR1200', 'Pan America'],
-            'BMW': ['F 650 GS', 'F 700 GS', 'F 750 GS', 'F 800 GS', 'F 800 R', 'F 800 ST', 'F 850 GS', 'F 900 XR', 'F 900 R', 'G 310 R', 'G 310 GS', 'R 45', 'R 50', 'R 75', 'R 80', 'R 90', 'R 100', 'R 1100 GS', 'R 1150 GS', 'R 1200 GS', 'R 1250 GS', 'R 1200 RT', 'R 1200 R', 'R 1250 R', 'R 1250 RS', 'S 1000 RR', 'S 1000 R', 'S 1000 XR', 'C 600 Sport', 'C 650 GT', 'HP2', 'K 1600'],
-            'Suzuki': ['GSX-R 125', 'GSX-R 250', 'GSX-R 600', 'GSX-R 750', 'GSX-R 1000', 'GSX-S 125', 'GSX-S 750', 'GSX-S 1000', 'GSX-S F', 'SV 650', 'SV 1000', 'Bandit 600', 'Bandit 1200', 'Bandit 1250', 'Intruder 125', 'Intruder 250', 'Intruder 750', 'Intruder 1400', 'Boulevard', 'V-Strom 125', 'V-Strom 250', 'V-Strom 650', 'V-Strom 1000', 'DL1050', 'Hayabusa', 'Katana', 'GN 125', 'GN 250', 'GN 400', 'GN 600', 'GN 700', 'TS 125', 'TS 250'],
-            'Ducati': ['Panigale V2', 'Panigale V4', 'Panigale 125', 'Panigale 250', 'Panigale 899', 'Panigale 959', 'Panigale 1199', 'Panigale 1299', 'Monster 125', 'Monster 250', 'Monster 659', 'Monster 696', 'Monster 797', 'Monster 821', 'Monster 937', 'Monster 1200', 'Multistrada 125', 'Multistrada 950', 'Multistrada V4', 'Supersport', 'Streetfighter', 'Hypermotard 125', 'Hypermotard 950', 'Diavel', 'XDiavel', 'Scrambler 125', 'Scrambler 803'],
-            'KTM': ['125 Duke', '200 Duke', '250 Duke', '390 Duke', '490 Duke', '790 Duke', '890 Duke', 'RC 125', 'RC 200', 'RC 390', 'RC 790', 'RC 890', 'Superduke', 'Super Duke 1290', '250 EXC', '350 EXC', '450 EXC', '500 EXC', '600 EXC', '690 Enduro', '690 Supermoto', '690 SMC', '1290 Super Adventure', '1290 Adventure', 'XC-W', 'Freeride', 'SXC'],
-            'Triumph': ['Bonneville T100', 'Bonneville T120', 'Bonneville T120 Black', 'Bonneville Bobber', 'Bonneville Speed Twin', 'Street Twin', 'Street Twin Cup', 'Street Scrambler', 'Street Cup', 'Thruxton', 'Thruxton R', 'Thruxton RS', 'Daytona 125', 'Daytona 250', 'Daytona 675', 'Daytona 765', 'Speed Triple', 'Tiger 250', 'Tiger 750', 'Tiger 800', 'Tiger 900', 'Tiger 1200'],
-            'Royal Enfield': ['Bullet 350', 'Bullet 500', 'Classic 350', 'Classic 500', 'Interceptor 650', 'Continental GT 650', 'Himalayan', 'Hunter', 'Meteor 350', 'Super Meteor 650', 'Scram 411', 'Cruiser'],
-            'Aprilia': ['RS 50', 'RS 125', 'RS 250', 'RS 660', 'RSV4', 'RSV4 RR', 'Tuono 125', 'Tuono 250', 'Tuono 660', 'Tuono V4', 'Tuono V4 1100', 'Dorsoduro 125', 'Dorsoduro 250', 'Dorsoduro 750', 'Shiver 750', 'Mana', 'Atlantic', 'Scarabeo'],
-            'MV Agusta': ['F3 675', 'F3 800', 'Brutale 125', 'Brutale 250', 'Brutale 675', 'Brutale 800', 'Brutale 1090', 'Dragster 125', 'Dragster 800', 'RVS', 'Senna', 'Turismo Veloce', 'Turismo Veloce Lusso'],
-            'Moto Guzzi': ['V7', 'V7 II', 'V7 III', 'V7 Special', 'V7 Stone', 'V7 Racer', 'V9', 'V9 Bobber', 'V9 Roamer', 'V85 TT', 'Audace', 'California', 'California Stone', 'Griso', 'Breva', 'Stelvio', 'Bellagio'],
-            'Husqvarna': ['Svartpilen 125', 'Svartpilen 250', 'Svartpilen 401', 'Svartpilen 701', 'Vitpilen 125', 'Vitpilen 250', 'Vitpilen 401', 'Vitpilen 701', '401 Street', '701 Enduro', '701 Supermoto', 'Norden 901'],
-            'Benelli': ['TNT 125', 'TNT 300', 'TNT 600', 'TNT 600i', 'TNT 899', 'Leoncino 125', 'Leoncino 250', 'Leoncino 500', 'Imperiale 125', 'Imperiale 250', 'Imperiale 400', 'TRK 251', 'TRK 502'],
-            'KTM': [],
-            'Peugeot': ['Speedfight 125', 'Speedfight 200', 'Tweet', 'Django 125', 'Satelis'],
-            'Piaggio': ['MP3 125', 'MP3 300', 'Beverly 125', 'Beverly 300', 'X10 350', 'Liberty', 'Vespa'],
-            'SYM': ['NH T 125', 'Jet 125', 'Orbit', 'HD 125', 'Wolf Rx 125'],
-            'Hero': ['Splendor', 'HF Deluxe', 'Passion', 'Xtreme', 'Glamour'],
-            'Bajaj': ['Pulsar 125', 'Pulsar 150', 'Pulsar 180', 'Pulsar 200', 'Pulsar 250', 'Pulsar 350', 'Dominar 400', 'Avenger'],
-            'TVS': ['Apache 150', 'Apache 160', 'Apache 180', 'Apache 200', 'Star City', 'Max', 'Raider'],
-            'Mahindra': ['Centuro', 'Gusto', 'Rodeo'],
-            'Jawa': ['Jawa 42', 'Jawa Classic', 'Perak'],
-            'Keeway': ['RK 125', 'RK 150', 'V 302 C', 'Blackster', 'Superlight'],
-            'Zongshen': ['CB125', 'CB150', 'ZS125', 'ZS150'],
-            'Lifan': ['LF125', 'LF150', 'LF200', 'LF250'],
-            'Andet': ['Custom', 'Uspecificeret', 'Brugt motorcykel', 'Scooter', 'Knallert']
-        };
-
-        // UPDATE MODELS BASED ON BRAND
-        function updateModels() {
-            const brand = document.getElementById('manualBrand').value;
-            const modelSelect = document.getElementById('manualModel');
-            modelSelect.innerHTML = '<option value="">Vælg model</option>';
-
-            if (brand && modelsDatabase[brand]) {
-                modelsDatabase[brand].forEach(model => {
-                    const option = document.createElement('option');
-                    option.value = model;
-                    option.textContent = model;
-                    modelSelect.appendChild(option);
-                });
-
-                // TILFØJ "ANDEN" OPTION
-                const customOption = document.createElement('option');
-                customOption.value = 'CUSTOM';
-                customOption.textContent = 'Anden (skriv selv)';
-                modelSelect.appendChild(customOption);
-            }
-        }
-
-        // HANDLE MODEL CHANGE
-        function handleModelChange() {
-            const modelValue = document.getElementById('manualModel').value;
-            const customModelGroup = document.getElementById('customModelGroup');
-
-            if (modelValue === 'CUSTOM') {
-                customModelGroup.style.display = 'block';
-                document.getElementById('customModel').required = true;
-            } else {
-                customModelGroup.style.display = 'none';
-                document.getElementById('customModel').required = false;
-                document.getElementById('customModel').value = '';
-            }
-        }
-
-        // SELECT MOTORCYCLE MANUALLY
-        function selectMotoManually(event) {
-            event.preventDefault();
-
-            let model = document.getElementById('manualModel').value;
-            
-            // HVIS BRUGEREN SKREV CUSTOM MODEL
-            if (model === 'CUSTOM') {
-                model = document.getElementById('customModel').value;
-                if (!model) {
-                    alert('Skriv venligst modelnavnet');
-                    return;
-                }
+                favorites.push(listing.id);
+                alert('Gemt som favorit! ❤️');
             }
 
-            selectedMoto = {
-                brand: document.getElementById('manualBrand').value,
-                model: model,
-                year: parseInt(document.getElementById('manualYear').value),
-                km: parseInt(document.getElementById('manualKm').value),
-                type: document.getElementById('manualType').value,
-                fuel: document.getElementById('manualFuel').value
-            };
-
-            document.getElementById('step1b').style.display = 'none';
-            showStep2();
+            localStorage.setItem('favorites', JSON.stringify(favorites));
         }
 
-        // CHANGE MOTORCYCLE
-        function changeMoto() {
-            selectedMoto = null;
-            document.getElementById('registrationInput').value = '';
-            document.getElementById('step1').style.display = 'block';
-            document.getElementById('step2').classList.remove('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // SHOW STEP 2
-        function showStep2() {
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').classList.add('active');
-
-            // Update summary
-            document.getElementById('summaryBrand').textContent = selectedMoto.brand || '-';
-            document.getElementById('summaryModel').textContent = selectedMoto.model || '-';
-            document.getElementById('summaryYear').textContent = selectedMoto.year || '-';
-            document.getElementById('summaryKm').textContent = selectedMoto.km ? selectedMoto.km.toLocaleString('da-DK') : '-';
-
-            // Pre-fill form
-            if (selectedMoto.brand) {
-                // Kunne fylde mere info her
-            }
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // SUBMIT FORM
-        function submitListing(event) {
-            event.preventDefault();
-
-            const listing = {
-                id: Date.now(),
-                brand: selectedMoto.brand,
-                model: selectedMoto.model,
-                year: selectedMoto.year,
-                km: selectedMoto.km,
-                type: selectedMoto.type,
-                price: parseInt(document.getElementById('price').value),
-                location: document.getElementById('location').value,
-                condition: document.getElementById('condition').value,
-                service: document.getElementById('service').value,
-                description: document.getElementById('description').value,
-                contactName: document.getElementById('contactName').value,
-                contactEmail: document.getElementById('contactEmail').value,
-                contactPhone: document.getElementById('contactPhone').value,
-                images: uploadedImages, // BILLEDER GEMMES HER
-                createdAt: new Date().toISOString()
-            };
-
-            // Save to localStorage
-            let userListings = JSON.parse(localStorage.getItem('userListings')) || [];
-            userListings.push(listing);
-            localStorage.setItem('userListings', JSON.stringify(userListings));
-
-            // Show success
-            document.getElementById('successMessage').style.display = 'block';
-
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
+        // SHOW ERROR
+        function showError(message) {
+            document.getElementById('mainContent').innerHTML = `
+                <div class="error-message">
+                    <h2>😕 ${message}</h2>
+                    <p style="margin-top: 1rem; color: inherit;">
+                        <a href="index.html" style="color: #ff6600; text-decoration: none; font-weight: 600;">Tilbage til forsiden</a>
+                    </p>
+                </div>
+            `;
         }
     </script>
 </body>
