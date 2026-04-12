@@ -511,9 +511,13 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Model *</label>
-                        <select id="manualModel" required style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
+                        <select id="manualModel" required onchange="handleModelChange()" style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
                             <option value="">Vælg model</option>
                         </select>
+                    </div>
+                    <div class="form-group" id="customModelGroup" style="display: none;">
+                        <label>Anden model *</label>
+                        <input type="text" id="customModel" placeholder="Skriv model navn" style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 100%;">
                     </div>
                     <div class="form-group">
                         <label>År *</label>
@@ -841,6 +845,27 @@
                     option.textContent = model;
                     modelSelect.appendChild(option);
                 });
+
+                // TILFØJ "ANDEN" OPTION
+                const customOption = document.createElement('option');
+                customOption.value = 'CUSTOM';
+                customOption.textContent = 'Anden (skriv selv)';
+                modelSelect.appendChild(customOption);
+            }
+        }
+
+        // HANDLE MODEL CHANGE
+        function handleModelChange() {
+            const modelValue = document.getElementById('manualModel').value;
+            const customModelGroup = document.getElementById('customModelGroup');
+
+            if (modelValue === 'CUSTOM') {
+                customModelGroup.style.display = 'block';
+                document.getElementById('customModel').required = true;
+            } else {
+                customModelGroup.style.display = 'none';
+                document.getElementById('customModel').required = false;
+                document.getElementById('customModel').value = '';
             }
         }
 
@@ -848,9 +873,20 @@
         function selectMotoManually(event) {
             event.preventDefault();
 
+            let model = document.getElementById('manualModel').value;
+            
+            // HVIS BRUGEREN SKREV CUSTOM MODEL
+            if (model === 'CUSTOM') {
+                model = document.getElementById('customModel').value;
+                if (!model) {
+                    alert('Skriv venligst modelnavnet');
+                    return;
+                }
+            }
+
             selectedMoto = {
                 brand: document.getElementById('manualBrand').value,
-                model: document.getElementById('manualModel').value,
+                model: model,
                 year: parseInt(document.getElementById('manualYear').value),
                 km: parseInt(document.getElementById('manualKm').value),
                 type: document.getElementById('manualType').value,
