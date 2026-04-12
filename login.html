@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log ind - BikerBasen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,68 +13,150 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", "Helvetica Neue", sans-serif;
+            background: white;
+            color: #333;
             min-height: 100vh;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+
+        /* LEFT SIDE - ILLUSTRATION */
+        .left-side {
+            background: linear-gradient(135deg, #f5f5f5 0%, #efefef 100%);
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-side::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 102, 0, 0.05);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .left-content {
+            position: relative;
+            z-index: 1;
+            max-width: 400px;
+        }
+
+        .logo-left {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ff6600;
+            margin-bottom: 3rem;
+        }
+
+        .left-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .left-text {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #ff6600 0%, #ff8f3d 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
             display: flex;
             flex-direction: column;
         }
 
-        /* HEADER */
-        header {
+        .feature-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-desc {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* RIGHT SIDE - FORM */
+        .right-side {
             background: white;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 1.5rem 2rem;
-        }
-
-        .header-content {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ff6600;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .logo:hover {
-            opacity: 0.8;
-        }
-
-        /* MAIN CONTENT */
-        .login-container {
-            flex: 1;
+            padding: 4rem 2rem;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            padding: 2rem;
+            align-items: center;
         }
 
-        .login-box {
-            background: white;
-            border-radius: 8px;
-            padding: 2.5rem;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        .form-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 380px;
         }
 
-        .login-title {
+        .form-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-icon {
+            font-size: 48px;
+            margin-bottom: 1rem;
+        }
+
+        .form-title {
             font-size: 24px;
             font-weight: 700;
             color: #1a1a1a;
             margin-bottom: 0.5rem;
-            text-align: center;
         }
 
-        .login-subtitle {
-            font-size: 14px;
+        .form-subtitle {
+            font-size: 13px;
             color: #999;
-            text-align: center;
-            margin-bottom: 2rem;
+        }
+
+        form {
+            margin-top: 2rem;
         }
 
         .form-group {
@@ -93,9 +175,9 @@
             width: 100%;
             padding: 12px 14px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
-            font-family: 'Roboto', sans-serif;
+            font-family: inherit;
             transition: all 0.3s;
         }
 
@@ -105,63 +187,55 @@
             box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
         }
 
-        .checkbox-group {
+        .remember-forgot {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 0.5rem;
             margin-bottom: 1.5rem;
             font-size: 13px;
         }
 
-        .checkbox-group input[type="checkbox"] {
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper input {
             width: 18px;
             height: 18px;
             cursor: pointer;
             accent-color: #ff6600;
         }
 
-        .checkbox-group label {
-            cursor: pointer;
-            margin: 0;
-            color: #666;
-        }
-
         .forgot-password {
-            text-align: right;
-            margin-bottom: 1.5rem;
-        }
-
-        .forgot-password a {
-            font-size: 13px;
             color: #0066cc;
             text-decoration: none;
             transition: color 0.3s;
+            cursor: pointer;
         }
 
-        .forgot-password a:hover {
+        .forgot-password:hover {
             color: #ff6600;
         }
 
         .login-button {
             width: 100%;
             padding: 12px;
-            background: #ff6600;
+            background: #1a1a1a;
             color: white;
             border: none;
-            border-radius: 4px;
-            font-size: 14px;
+            border-radius: 6px;
             font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
-            transition: background 0.3s;
-            font-family: 'Roboto', sans-serif;
+            transition: all 0.3s;
         }
 
         .login-button:hover {
-            background: #e55a00;
-        }
-
-        .login-button:active {
-            transform: scale(0.98);
+            background: #333;
+            transform: translateY(-2px);
         }
 
         .divider {
@@ -188,24 +262,6 @@
             position: relative;
         }
 
-        .signup-section {
-            text-align: center;
-            font-size: 13px;
-            color: #666;
-        }
-
-        .signup-section a {
-            color: #ff6600;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        .signup-section a:hover {
-            color: #e55a00;
-        }
-
-        /* SOCIAL LOGIN */
         .social-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -217,10 +273,11 @@
             padding: 10px;
             border: 1px solid #ddd;
             background: white;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 12px;
             cursor: pointer;
             transition: all 0.3s;
+            font-weight: 500;
         }
 
         .social-button:hover {
@@ -228,90 +285,148 @@
             background: #fff9f5;
         }
 
+        .signup-text {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            margin-top: 1.5rem;
+        }
+
+        .signup-text a {
+            color: #ff6600;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-text a:hover {
+            text-decoration: underline;
+        }
+
         /* RESPONSIVE */
+        @media (max-width: 1000px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .left-side {
+                display: none;
+            }
+
+            .right-side {
+                min-height: 100vh;
+            }
+        }
+
         @media (max-width: 600px) {
-            header {
-                padding: 1rem;
+            .left-side,
+            .right-side {
+                padding: 2rem 1rem;
             }
 
-            .login-box {
-                padding: 1.5rem;
-                border-radius: 8px;
-            }
-
-            .login-title {
+            .form-title {
                 font-size: 20px;
-            }
-
-            .login-container {
-                padding: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
-    <header>
-        <div class="header-content">
-            <a href="index.html" class="logo">BikerBasen</a>
+    <div class="container">
+        <!-- LEFT SIDE -->
+        <div class="left-side">
+            <div class="left-content">
+                <div class="logo-left">🏍️ BikerBasen</div>
+                
+                <h1 class="left-title">Log ind for en bedre oplevelse</h1>
+                
+                <p class="left-text">
+                    Gem favoritter, få besked når nye motorcykler matcher dine søgninger og sælg din motorcykel.
+                </p>
+
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">❤️</div>
+                        <div class="feature-text">
+                            <div class="feature-title">Gem favoritter</div>
+                            <div class="feature-desc">Gem motorcykler du elsker</div>
+                        </div>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">🔔</div>
+                        <div class="feature-text">
+                            <div class="feature-title">Varsler</div>
+                            <div class="feature-desc">Få besked om nye annoncer</div>
+                        </div>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-icon">📢</div>
+                        <div class="feature-text">
+                            <div class="feature-title">Sælg gratis</div>
+                            <div class="feature-desc">Opret annonce på 5 minutter</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </header>
 
-    <!-- LOGIN CONTAINER -->
-    <div class="login-container">
-        <div class="login-box">
-            <h1 class="login-title">Log ind</h1>
-            <p class="login-subtitle">eller opret en gratis konto</p>
-
-            <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        placeholder="din@email.dk" 
-                        required
-                    >
+        <!-- RIGHT SIDE -->
+        <div class="right-side">
+            <div class="form-container">
+                <div class="form-header">
+                    <div class="form-icon">🔐</div>
+                    <h1 class="form-title">Log ind</h1>
+                    <p class="form-subtitle">Fortsæt til BikerBasen</p>
                 </div>
 
-                <div class="form-group">
-                    <label for="password">Adgangskode</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        placeholder="Mindst 6 karakterer" 
-                        required
-                    >
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="email">E-mailadresse</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            placeholder="Tast din e-mailadresse" 
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Adgangskode</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            placeholder="Tast din adgangskode" 
+                            required
+                        >
+                    </div>
+
+                    <div class="remember-forgot">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="remember">
+                            <span>Husk mig</span>
+                        </label>
+                        <a href="#" class="forgot-password">Glemt adgangskode?</a>
+                    </div>
+
+                    <button type="submit" class="login-button">Fortsæt</button>
+                </form>
+
+                <div class="divider">
+                    <span>eller</span>
                 </div>
 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="remember">
-                    <label for="remember">Husk mig</label>
+                <div class="social-buttons">
+                    <button class="social-button" type="button" onclick="loginWith('Google')">
+                        🔵 Google
+                    </button>
+                    <button class="social-button" type="button" onclick="loginWith('Facebook')">
+                        👤 Facebook
+                    </button>
                 </div>
 
-                <div class="forgot-password">
-                    <a href="#forgot">Glemt adgangskode?</a>
+                <div class="signup-text">
+                    Er du ikke registreret endnu? <a href="signup.html">Opret en konto</a>
                 </div>
-
-                <button type="submit" class="login-button">Log ind</button>
-            </form>
-
-            <div class="divider">
-                <span>eller</span>
-            </div>
-
-            <div class="social-buttons">
-                <button class="social-button" onclick="loginWith('Google')">
-                    🔵 Google
-                </button>
-                <button class="social-button" onclick="loginWith('Facebook')">
-                    👤 Facebook
-                </button>
-            </div>
-
-            <div class="signup-section">
-                Har du ikke en konto? 
-                <a href="signup.html">Opret her</a>
             </div>
         </div>
     </div>
@@ -325,22 +440,31 @@
             const remember = document.getElementById('remember').checked;
 
             if (email && password) {
-                // Simuler login
                 localStorage.setItem('userEmail', email);
+                localStorage.setItem('userName', email.split('@')[0]);
+                localStorage.setItem('userLoggedIn', 'true');
+                
                 if (remember) {
                     localStorage.setItem('rememberMe', 'true');
                 }
                 
-                alert(`Velkommen tilbage, ${email}!`);
+                alert(`Velkommen tilbage! 🏍️`);
                 window.location.href = 'index.html';
             }
         }
 
         function loginWith(provider) {
-            alert(`Log ind med ${provider} ville blive implementeret her`);
+            const email = prompt(`Login med ${provider}\n\nAngiv din email:`);
+            if (email) {
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('userName', email.split('@')[0]);
+                localStorage.setItem('userLoggedIn', 'true');
+                alert(`Logget ind med ${provider}! 🎉`);
+                window.location.href = 'index.html';
+            }
         }
 
-        // Pre-fill email hvis brugeren blev husket
+        // PRE-FILL IF REMEMBERED
         window.addEventListener('load', function() {
             if (localStorage.getItem('rememberMe') === 'true') {
                 const savedEmail = localStorage.getItem('userEmail');
