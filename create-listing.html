@@ -21,18 +21,51 @@
         /* HEADER */
         header {
             background: white;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 1rem 2rem;
+            padding: 1rem 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .header-container {
+            max-width: 100%;
+            margin: 0;
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 700;
             color: #ff6600;
             cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+            letter-spacing: -0.5px;
+        }
+
+        .logo:hover {
+            opacity: 0.9;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .header-link {
+            color: #333333;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .header-link:hover {
+            color: #ff6600;
         }
 
         /* CONTAINER */
@@ -435,7 +468,12 @@
 <body>
     <!-- HEADER -->
     <header>
-        <div class="logo" onclick="window.location.href='index.html'">🏍️ BikerBasen</div>
+        <div class="header-container">
+            <a href="index.html" class="logo">🏍️ BikerBasen</a>
+            <div class="header-nav">
+                <a class="header-link" onclick="window.location.href='index.html'">Tilbage</a>
+            </div>
+        </div>
     </header>
 
     <!-- CONTAINER -->
