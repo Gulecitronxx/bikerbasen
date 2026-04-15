@@ -23301,11 +23301,8 @@ FcZBH508Z/ZKeP8A+T//2Q==" style="width: 100%; height: 60px; object-fit: cover; b
         }
 
         function filterCategory(type) {
-            selectedBrands = [];
-            selectedModels = [];
-            document.getElementById('typeFilter').value = type;
-            renderBrands();
-            filterListings();
+            // Navigér til listings.html med type parameter
+            window.location.href = 'listings.html?type=' + encodeURIComponent(type);
         }
 
         function sortListings() {
