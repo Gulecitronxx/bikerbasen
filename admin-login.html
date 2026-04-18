@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - BikerBasen</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-box {
+            background: white;
+            border-radius: 10px;
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        .logo {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff6600;
+            margin-bottom: 0.25rem;
+        }
+        .admin-badge {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            background: #1a1a1a;
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin: 0 auto 2rem auto;
+            display: block;
+            width: fit-content;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .form-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+        .form-subtitle {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4a4a4a;
+            margin-bottom: 0.5rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6600;
+            box-shadow: 0 0 0 3px rgba(255,102,0,0.1);
+        }
+        .error-msg {
+            display: none;
+            background: #fff0f0;
+            border: 1px solid #ffcccc;
+            color: #cc0000;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 1rem;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .login-btn:hover { background: #333; }
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 13px;
+            color: #999;
+        }
+        .back-link a {
+            color: #ff6600;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .lock-icon {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="lock-icon">🔒</div>
+        <div class="logo">🏍️ BikerBasen</div>
+        <div class="admin-badge">Admin Panel</div>
+
+        <div class="form-title">Admin Login</div>
+        <p class="form-subtitle">Kun for administratorer</p>
+
+        <div class="error-msg" id="errorMsg">Forkert brugernavn eller adgangskode</div>
+
+        <div class="form-group">
+            <label>Brugernavn</label>
+            <input type="text" id="username" placeholder="Admin brugernavn" />
+        </div>
+        <div class="form-group">
+            <label>Adgangskode</label>
+            <input type="password" id="password" placeholder="Admin adgangskode" onkeydown="if(event.key==='Enter') login()" />
+        </div>
+
+        <button class="login-btn" onclick="login()">Log ind som Admin</button>
+
+        <div class="back-link">
+            <a href="index.html">← Tilbage til BikerBasen</a>
+        </div>
+    </div>
+
+    <script>
+        // ADMIN CREDENTIALS - skift disse!
+        const ADMIN_USER = 'admin';
+        const ADMIN_PASS = 'bikerbasen2024';
+
+        function login() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                localStorage.setItem('adminLoggedIn', 'true');
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        }
+
+        // Hvis allerede logget ind
+        if (localStorage.getItem('adminLoggedIn') === 'true') {
+            window.location.href = 'admin-dashboard.html';
+        }
+    </script>
+</body>
+</html>
