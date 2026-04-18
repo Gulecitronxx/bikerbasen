@@ -810,10 +810,8 @@
             }
         }
     </script>
-
-        
-
-                function updateHeader() {
+    <script>
+        function updateHeader() {
             const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
             const rawName = localStorage.getItem('userName') || 'Profil';
             const name = rawName.split(' ')[0].charAt(0).toUpperCase() + rawName.split(' ')[0].slice(1).toLowerCase();
