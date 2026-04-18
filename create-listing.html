@@ -471,6 +471,40 @@
                 max-width: none;
             }
         }
+
+        /* USER DROPDOWN */
+        .user-dropdown { position: relative; display: inline-block; }
+        .user-btn {
+            display: flex; align-items: center; gap: 7px;
+            background: none; border: none; cursor: pointer;
+            font-size: 13px; font-weight: 600; color: #333;
+            padding: 4px 8px; border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .user-btn:hover { background: #f5f5f5; }
+        .user-btn .user-avatar {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: #ff6600; color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; flex-shrink: 0;
+        }
+        .user-menu {
+            display: none; position: absolute; top: calc(100% + 8px); right: 0;
+            background: white; border-radius: 8px; min-width: 180px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 999;
+            border: 1px solid #f0f0f0; overflow: hidden;
+        }
+        .user-menu.open { display: block; animation: fadeDown 0.15s ease; }
+        @keyframes fadeDown { from { opacity:0; transform: translateY(-6px); } to { opacity:1; transform: translateY(0); } }
+        .user-menu a, .user-menu button {
+            display: block; width: 100%; text-align: left;
+            padding: 11px 16px; font-size: 13px; font-weight: 500;
+            color: #333; text-decoration: none; background: none; border: none;
+            cursor: pointer; transition: background 0.15s;
+        }
+        .user-menu a:hover, .user-menu button:hover { background: #f8f8f8; }
+        .user-menu .menu-divider { height: 1px; background: #f0f0f0; margin: 4px 0; }
+        .user-menu .logout-item { color: #ff6600; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -1040,24 +1074,48 @@
         }
     </script>
 
-        function updateHeader() {
+        
+
+                function updateHeader() {
             const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
-            const name = localStorage.getItem('userName') || 'Profil';
+            const rawName = localStorage.getItem('userName') || 'Profil';
+            const name = rawName.split(' ')[0].charAt(0).toUpperCase() + rawName.split(' ')[0].slice(1).toLowerCase();
             const el = document.getElementById('headerAuth');
             if (!el) return;
             if (loggedIn) {
-                el.innerHTML = `<a class="header-link" href="favoritter.html">❤️ Favoritter</a><a class="header-link" onclick="logoutUser()" style="color:#ff6600;">Log ud (${name})</a>`;
+                el.innerHTML = `
+                    <a class="header-link" href="favoritter.html">❤️ Favoritter</a>
+                    <div class="user-dropdown" id="userDropdown">
+                        <button class="user-btn" onclick="toggleUserMenu(event)">
+                            <div class="user-avatar">${name.charAt(0)}</div>
+                            ${name}
+                        </button>
+                        <div class="user-menu" id="userMenu">
+                            <a href="mine-annoncer.html">🏍️ Mine annoncer</a>
+                            <a href="#">🔔 Mine søgeagenter</a>
+                            <a href="#">👤 Min profil</a>
+                            <div class="menu-divider"></div>
+                            <button class="logout-item" onclick="logoutUser()">Log ud</button>
+                        </div>
+                    </div>`;
             } else {
                 el.innerHTML = `<a class="header-link" href="login.html">Log ind</a>`;
             }
         }
+        function toggleUserMenu(event) {
+            event.stopPropagation();
+            document.getElementById('userMenu').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const m = document.getElementById('userMenu');
+            if (m) m.classList.remove('open');
+        });
         function logoutUser() {
             localStorage.removeItem('userLoggedIn');
             localStorage.removeItem('userName');
             localStorage.removeItem('userEmail');
             window.location.href = 'index.html';
         }
-
         updateHeader();
     </script>
 </body>
