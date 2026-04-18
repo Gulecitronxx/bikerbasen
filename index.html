@@ -23447,14 +23447,36 @@ FcZBH508Z/ZKeP8A+T//2Q==" style="width: 100%; height: 60px; object-fit: cover; b
             const rawName = localStorage.getItem('userName') || 'Profil';
             const name = rawName.split(' ')[0].charAt(0).toUpperCase() + rawName.split(' ')[0].slice(1).toLowerCase();
             const el = document.getElementById('headerAuth');
+            if (!el) return;
             if (loggedIn) {
                 el.innerHTML = `
                     <a class="header-link" href="favoritter.html">❤️ Favoritter</a>
-                    <a class="header-link" onclick="logout()" style="color:#ff6600;">Log ud (${name})</a>
-                `;
+                    <div class="user-dropdown" id="userDropdown">
+                        <button class="user-btn" onclick="toggleUserMenu(event)">
+                            <div class="user-avatar">${name.charAt(0)}</div>
+                            ${name}
+                        </button>
+                        <div class="user-menu" id="userMenu">
+                            <a href="mine-annoncer.html">🏍️ Mine annoncer</a>
+                            <a href="#">🔔 Mine søgeagenter</a>
+                            <a href="#">👤 Min profil</a>
+                            <div class="menu-divider"></div>
+                            <button class="logout-item" onclick="logoutUser()">Log ud</button>
+                        </div>
+                    </div>`;
             } else {
-                el.innerHTML = `<a class="header-link" onclick="window.location.href='login.html'">Log ind</a>`;
+                el.innerHTML = `<a class="header-link" href="login.html">Log ind</a>`;
             }
+        }
+        function toggleUserMenu(event) {
+            event.stopPropagation();
+            document.getElementById('userMenu').classList.toggle('open');
+        }
+        function logoutUser() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            window.location.href = 'index.html';
         }
 
         function openFeedback() { document.getElementById('feedbackModal').classList.add('active'); }        function closeFeedback() { document.getElementById('feedbackModal').classList.remove('active'); }
@@ -23464,6 +23486,8 @@ FcZBH508Z/ZKeP8A+T//2Q==" style="width: 100%; height: 60px; object-fit: cover; b
         document.addEventListener('click', (e) => {
             if (!e.target.closest('#brandMenu') && !e.target.closest('[onclick*="brand"]')) document.getElementById('brandMenu').classList.remove('active');
             if (!e.target.closest('#modelMenu') && !e.target.closest('[onclick*="model"]')) document.getElementById('modelMenu').classList.remove('active');
+            const m = document.getElementById('userMenu');
+            if (m && !e.target.closest('#userDropdown')) m.classList.remove('open');
         });
 
         init();
