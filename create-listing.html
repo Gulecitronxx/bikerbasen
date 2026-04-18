@@ -480,6 +480,7 @@
             <a href="index.html" class="logo">🏍️ BikerBasen</a>
             <div class="header-nav">
                 <a class="header-link" onclick="window.location.href='index.html'">Tilbage</a>
+                <span id="headerAuth"></span>
             </div>
         </div>
     </header>
@@ -735,55 +736,6 @@
                     <div class="form-group required">
                         <label>Email</label>
                         <input type="email" id="contactEmail" placeholder="din@email.dk" required>
-                    </div>
-                </div>
-
-                <!-- FORHANDLER SEKTION -->
-                <div class="form-section">
-                    <h3>Er du forhandler?</h3>
-                    <p style="font-size:13px; color:#999; margin-bottom:1rem;">Forhandlere kan tilføje firmalogo og info — det vises på annoncen ligesom hos store MC-sider.</p>
-
-                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem;">
-                        <input type="checkbox" id="isDealer" onchange="toggleDealerSection()" style="width:18px; height:18px; accent-color:#ff6600; cursor:pointer;">
-                        <label for="isDealer" style="font-size:14px; font-weight:600; cursor:pointer;">Ja, jeg er forhandler</label>
-                    </div>
-
-                    <div id="dealerSection" style="display:none; border:1px solid #f0f0f0; border-radius:8px; padding:1.25rem; background:#fafafa;">
-
-                        <!-- LOGO UPLOAD -->
-                        <div class="form-group" style="margin-bottom:1.25rem;">
-                            <label>Firmalogo</label>
-                            <div id="logoUploadArea" onclick="document.getElementById('logoInput').click()" style="border:2px dashed #ddd; border-radius:8px; padding:1.5rem; text-align:center; cursor:pointer; transition:border-color 0.2s; background:white;">
-                                <div id="logoPreviewWrap">
-                                    <div style="font-size:28px; margin-bottom:6px;">🖼️</div>
-                                    <div style="font-size:13px; font-weight:600; color:#555;">Klik for at uploade logo</div>
-                                    <div style="font-size:11px; color:#aaa; margin-top:4px;">PNG, JPG — maks 2MB</div>
-                                </div>
-                                <img id="logoPreviewImg" style="display:none; max-height:80px; max-width:200px; object-fit:contain; margin:0 auto;">
-                                <input type="file" id="logoInput" accept="image/*" style="display:none;" onchange="previewLogo(event)">
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Firmanavn *</label>
-                                <input type="text" id="dealerName" placeholder="F.eks. Jensen MC ApS">
-                            </div>
-                            <div class="form-group">
-                                <label>CVR-nummer</label>
-                                <input type="text" id="dealerCVR" placeholder="F.eks. DK12345678">
-                            </div>
-                        </div>
-
-                        <div class="form-group" style="margin-bottom:1rem;">
-                            <label>Adresse</label>
-                            <input type="text" id="dealerAddress" placeholder="F.eks. Motorcykelvej 12, 2100 København">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Hjemmeside</label>
-                            <input type="url" id="dealerWebsite" placeholder="https://www.jensenmcaps.dk">
-                        </div>
                     </div>
                 </div>
 
@@ -1051,35 +1003,9 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // DEALER FUNKTIONER
-        let dealerLogoBase64 = null;
-
-        function toggleDealerSection() {
-            const checked = document.getElementById('isDealer').checked;
-            document.getElementById('dealerSection').style.display = checked ? 'block' : 'none';
-        }
-
-        function previewLogo(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (file.size > 2 * 1024 * 1024) { alert('Logo må maks være 2MB'); return; }
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                dealerLogoBase64 = e.target.result;
-                document.getElementById('logoPreviewWrap').style.display = 'none';
-                const img = document.getElementById('logoPreviewImg');
-                img.src = dealerLogoBase64;
-                img.style.display = 'block';
-                document.getElementById('logoUploadArea').style.borderColor = '#ff6600';
-            };
-            reader.readAsDataURL(file);
-        }
-
         // SUBMIT FORM
         function submitListing(event) {
             event.preventDefault();
-
-            const isDealer = document.getElementById('isDealer').checked;
 
             const listing = {
                 id: Date.now(),
@@ -1096,13 +1022,7 @@
                 contactName: document.getElementById('contactName').value,
                 contactEmail: document.getElementById('contactEmail').value,
                 contactPhone: document.getElementById('contactPhone').value,
-                images: uploadedImages,
-                isDealer: isDealer,
-                dealerName: isDealer ? document.getElementById('dealerName').value : null,
-                dealerCVR: isDealer ? document.getElementById('dealerCVR').value : null,
-                dealerAddress: isDealer ? document.getElementById('dealerAddress').value : null,
-                dealerWebsite: isDealer ? document.getElementById('dealerWebsite').value : null,
-                dealerLogo: isDealer ? dealerLogoBase64 : null,
+                images: uploadedImages, // BILLEDER GEMMES HER
                 createdAt: new Date().toISOString()
             };
 
@@ -1118,6 +1038,27 @@
                 window.location.href = 'index.html';
             }, 2000);
         }
+    </script>
+
+        function updateHeader() {
+            const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const name = localStorage.getItem('userName') || 'Profil';
+            const el = document.getElementById('headerAuth');
+            if (!el) return;
+            if (loggedIn) {
+                el.innerHTML = `<a class="header-link" href="favoritter.html">❤️ Favoritter</a><a class="header-link" onclick="logoutUser()" style="color:#ff6600;">Log ud (${name})</a>`;
+            } else {
+                el.innerHTML = `<a class="header-link" href="login.html">Log ind</a>`;
+            }
+        }
+        function logoutUser() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            window.location.href = 'index.html';
+        }
+
+        updateHeader();
     </script>
 </body>
 </html>
