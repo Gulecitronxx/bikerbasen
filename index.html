@@ -84,7 +84,7 @@
         .listings { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
         .listing-card { background: white; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.3s; }
         .listing-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-4px); }
-        .listing-image { width: 100%; height: 150px; background: linear-gradient(135deg, #e0e0e0, #f0f0f0); position: relative; display: flex; align-items: center; justify-content: center; font-size: 48px; }
+        .listing-image { width: 100%; height: 150px; background: #e0e0e0; position: relative; }
         .favorite-btn { position: absolute; top: 8px; right: 8px; background: rgba(255,255,255,0.9); border: none; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; font-size: 16px; }
         .listing-info { padding: 1rem; }
         .listing-title { font-weight: 700; font-size: 13px; margin-bottom: 0.5rem; color: #333333; }
@@ -95,7 +95,7 @@
         
         .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 8px; padding: 2rem; max-width: 500px; width: 90%; position: relative; }
+        .modal-content { background: white; border-radius: 8px; padding: 2rem; max-width: 500px; width: 90%; }
         .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
         .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 1rem; }
         
@@ -174,8 +174,6 @@
                     <div class="search-field">
                         <select id="yearFilter" onchange="filterListings()">
                             <option value="" disabled selected hidden>Årgang</option>
-                            <option value="2026">2026</option>
-                            <option value="2025">2025</option>
                             <option value="2024">2024</option>
                             <option value="2023">2023</option>
                             <option value="2022">2022</option>
@@ -270,7 +268,7 @@
                 </div>
 
                 <div class="search-buttons">
-                    <button class="btn" onclick="goToListings()">Vis <span id="bikeCount">15</span> motorcykler</button>
+                    <button class="btn" onclick="window.location.href='listings.html'">Vis <span id="bikeCount">15</span> motorcykler</button>
                     <button class="btn btn-secondary" onclick="resetFilters()">Nulstil</button>
                 </div>
 
@@ -23151,12 +23149,40 @@ FcZBH508Z/ZKeP8A+T//2Q==" style="width: 100%; height: 60px; object-fit: cover; b
     </footer>
 
     <div id="feedbackModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="position:relative;">
             <button class="modal-close" onclick="closeFeedback()">✕</button>
             <h2 class="modal-title">Giv os feedback</h2>
-            <p style="color: #666; font-size: 13px; margin-bottom: 1rem;">Hjælp os med at gøre BikerBasen bedre!</p>
-            <textarea placeholder="Skriv din feedback her..." style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; height: 120px; resize: vertical; margin-bottom: 1rem;"></textarea>
-            <button class="btn" onclick="closeFeedback()" style="width: 100%;">Send feedback</button>
+            <p style="color:#666; font-size:13px; margin-bottom:1.5rem;">Hjælp os med at gøre BikerBasen bedre 🏍️</p>
+
+            <div id="feedbackSuccess" style="display:none; background:#e8f5e9; color:#2e7d32; padding:1rem; border-radius:6px; text-align:center; font-size:14px; margin-bottom:1rem;">
+                ✅ Tak for din feedback! Vi læser den snarest.
+            </div>
+
+            <div id="feedbackFormContent">
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; font-size:13px; font-weight:500; margin-bottom:5px;">Dit navn</label>
+                    <input type="text" id="feedbackName" placeholder="Dit navn" style="width:100%; padding:9px 12px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                </div>
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; font-size:13px; font-weight:500; margin-bottom:5px;">Email (valgfrit)</label>
+                    <input type="email" id="feedbackEmail" placeholder="din@email.dk" style="width:100%; padding:9px 12px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                </div>
+                <div style="margin-bottom:1rem;">
+                    <label style="display:block; font-size:13px; font-weight:500; margin-bottom:5px;">Emne</label>
+                    <select id="feedbackSubject" style="width:100%; padding:9px 12px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                        <option value="">Vælg emne...</option>
+                        <option value="Ros">😊 Ros</option>
+                        <option value="Forslag">💡 Forslag til forbedring</option>
+                        <option value="Fejl">🐛 Fejl på siden</option>
+                        <option value="Andet">💬 Andet</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:1.5rem;">
+                    <label style="display:block; font-size:13px; font-weight:500; margin-bottom:5px;">Besked</label>
+                    <textarea id="feedbackMessage" placeholder="Skriv din feedback her..." rows="4" style="width:100%; padding:9px 12px; border:1px solid #ddd; border-radius:6px; font-size:13px; resize:vertical; font-family:inherit;"></textarea>
+                </div>
+                <button onclick="submitFeedback()" style="width:100%; padding:11px; background:#1a1a1a; color:white; border:none; border-radius:6px; font-size:14px; font-weight:600; cursor:pointer;">Send feedback</button>
+            </div>
         </div>
     </div>
 
@@ -23326,7 +23352,7 @@ FcZBH508Z/ZKeP8A+T//2Q==" style="width: 100%; height: 60px; object-fit: cover; b
         function displayListings(items) {
             document.getElementById('listingsContainer').innerHTML = items.map(m => `
                 <div class="listing-card" onclick="window.location.href='listing-detail.html?id=${m.id}'">
-                    <div class="listing-image"><span>🏍️</span><button class="favorite-btn">🤍</button></div>
+                    <div class="listing-image"><button class="favorite-btn">🤍</button></div>
                     <div class="listing-info">
                         <div class="listing-title">${m.brand} ${m.model}</div>
                         <div class="listing-details">${m.year} • ${m.km.toLocaleString('da-DK')} km</div>
@@ -23336,21 +23362,6 @@ FcZBH508Z/ZKeP8A+T//2Q==" style="width: 100%; height: 60px; object-fit: cover; b
             `).join('');
             document.getElementById('bikeCount').textContent = items.length;
             document.getElementById('announceCount').textContent = items.length.toLocaleString('da-DK') + ' annoncer i dag';
-        }
-
-        function goToListings() {
-            const type = document.getElementById('typeFilter').value;
-            const year = document.getElementById('yearFilter').value;
-            const km = document.getElementById('kmFilter').value;
-            const price = document.getElementById('priceFilter').value;
-            const params = new URLSearchParams();
-            if (type) params.set('type', type);
-            if (year) params.set('year', year);
-            if (km) params.set('km', km);
-            if (price) params.set('price', price);
-            if (selectedBrands.length > 0) params.set('brands', selectedBrands.join(','));
-            if (selectedModels.length > 0) params.set('models', selectedModels.join(','));
-            window.location.href = 'listings.html' + (params.toString() ? '?' + params.toString() : '');
         }
 
         function filterCategory(type) {
@@ -23382,7 +23393,29 @@ FcZBH508Z/ZKeP8A+T//2Q==" style="width: 100%; height: 60px; object-fit: cover; b
         }
 
         function openFeedback() { document.getElementById('feedbackModal').classList.add('active'); }
-        function closeFeedback() { document.getElementById('feedbackModal').classList.remove('active'); }
+        function closeFeedback() {
+            document.getElementById('feedbackModal').classList.remove('active');
+            document.getElementById('feedbackSuccess').style.display = 'none';
+            document.getElementById('feedbackFormContent').style.display = 'block';
+            document.getElementById('feedbackName').value = '';
+            document.getElementById('feedbackEmail').value = '';
+            document.getElementById('feedbackSubject').value = '';
+            document.getElementById('feedbackMessage').value = '';
+        }
+        function submitFeedback() {
+            const name = document.getElementById('feedbackName').value.trim() || 'Anonym';
+            const email = document.getElementById('feedbackEmail').value.trim() || '–';
+            const subject = document.getElementById('feedbackSubject').value;
+            const message = document.getElementById('feedbackMessage').value.trim();
+            if (!subject) { alert('Vælg venligst et emne'); return; }
+            if (!message) { alert('Skriv venligst en besked'); return; }
+            const feedback = { id: Date.now(), name, email, subject, message, date: new Date().toLocaleString('da-DK'), status: 'Ny' };
+            const all = JSON.parse(localStorage.getItem('feedback') || '[]');
+            all.unshift(feedback);
+            localStorage.setItem('feedback', JSON.stringify(all));
+            document.getElementById('feedbackFormContent').style.display = 'none';
+            document.getElementById('feedbackSuccess').style.display = 'block';
+        }
         function openCustomer() { document.getElementById('customerModal').classList.add('active'); }
         function closeCustomer() { document.getElementById('customerModal').classList.remove('active'); }
 
