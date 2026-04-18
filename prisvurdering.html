@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gratis Prisvurdering - BikerBasen</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #e5e5e5; color: #333333; }
+
+        /* HEADER */
+        header { background: white; padding: 1rem 0; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-bottom: 1px solid #f0f0f0; }
+        .header-container { max-width: 100%; margin: 0; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 22px; font-weight: 700; color: #ff6600; cursor: pointer; text-decoration: none; white-space: nowrap; letter-spacing: -0.5px; }
+        .header-nav { display: flex; gap: 2.5rem; align-items: center; }
+        .header-link { color: #333333; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; transition: color 0.2s; }
+        .header-link:hover { color: #ff6600; }
+
+        /* HERO BANNER */
+        .hero-banner {
+            background: #1a1a1a;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        .hero-banner h1 { font-size: 30px; font-weight: 700; color: white; margin-bottom: 0.5rem; }
+        .hero-banner p { font-size: 15px; color: #aaa; }
+        .hero-badge {
+            display: inline-block;
+            background: #ff6600;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* TRUST BAR */
+        .trust-bar {
+            background: white;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+        }
+        .trust-item { font-size: 12px; color: #666; display: flex; align-items: center; gap: 6px; }
+        .trust-item strong { color: #333; }
+
+        /* MAIN LAYOUT */
+        .page-wrapper { max-width: 900px; margin: 2.5rem auto; padding: 0 1rem; }
+
+        /* STEPS */
+        .steps-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 8px;
+            border: 12px solid #f0f0f0;
+            overflow: hidden;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            font-size: 13px;
+            font-weight: 500;
+            color: #999;
+            border-right: 1px solid #f0f0f0;
+            position: relative;
+        }
+        .step:last-child { border-right: none; }
+        .step.active { color: #ff6600; background: #fff9f5; font-weight: 700; }
+        .step.done { color: #22c55e; }
+        .step-num {
+            display: inline-block;
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: #eee;
+            color: #999;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 22px;
+            margin-right: 6px;
+        }
+        .step.active .step-num { background: #ff6600; color: white; }
+        .step.done .step-num { background: #22c55e; color: white; }
+
+        /* CARD */
+        .card {
+            background: white;
+            border-radius: 8px;
+            border: 12px solid #f0f0f0;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card-header h2 { font-size: 16px; font-weight: 700; }
+        .card-header span { font-size: 20px; }
+        .card-body { padding: 1.5rem; }
+
+        /* FORM GRID */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label { font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group select,
+        .form-group input {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #333;
+            background: white;
+            transition: border-color 0.2s;
+        }
+        .form-group select:focus,
+        .form-group input:focus { outline: none; border-color: #ff6600; box-shadow: 0 0 0 3px rgba(255,102,0,0.08); }
+        .form-group select:disabled { background: #f5f5f5; color: #aaa; cursor: not-allowed; }
+
+        /* CONDITION BUTTONS */
+        .condition-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+        .condition-btn {
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .condition-btn:hover { border-color: #ff6600; }
+        .condition-btn.selected { border-color: #ff6600; background: #fff9f5; }
+        .condition-btn .cond-icon { font-size: 24px; margin-bottom: 4px; display: block; }
+        .condition-btn .cond-label { font-size: 12px; font-weight: 600; color: #333; }
+        .condition-btn .cond-desc { font-size: 11px; color: #999; margin-top: 2px; }
+
+        /* EXTRAS CHECKBOXES */
+        .extras-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+        .extra-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .extra-item:hover { border-color: #ff6600; background: #fff9f5; }
+        .extra-item input[type="checkbox"] { accent-color: #ff6600; width: 15px; height: 15px; cursor: pointer; }
+
+        /* CALCULATE BUTTON */
+        .calc-btn {
+            width: 100%;
+            padding: 14px;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 1rem;
+        }
+        .calc-btn:hover { background: #e55a00; }
+        .calc-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* LOADING */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+        }
+        .spinner {
+            width: 40px; height: 40px;
+            border: 4px solid #f0f0f0;
+            border-top-color: #ff6600;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* RESULT */
+        .result { display: none; }
+        .result-hero {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: white;
+            margin-bottom: 1.5rem;
+            border: 12px solid #f0f0f0;
+        }
+        .result-label { font-size: 13px; color: #aaa; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .result-price {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ff6600;
+            margin-bottom: 0.25rem;
+        }
+        .result-range { font-size: 14px; color: #aaa; margin-bottom: 1.5rem; }
+        .result-meta { display: flex; justify-content: center; gap: 2rem; }
+        .result-meta-item { font-size: 13px; color: #ccc; }
+        .result-meta-item strong { color: white; display: block; font-size: 15px; }
+
+        .result-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+        .result-card {
+            background: white;
+            border-radius: 8px;
+            border: 12px solid #f0f0f0;
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .result-card-icon { font-size: 28px; margin-bottom: 6px; }
+        .result-card-title { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .result-card-value { font-size: 16px; font-weight: 700; color: #333; }
+
+        .result-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .btn-primary { padding: 14px; background: #ff6600; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-primary:hover { background: #e55a00; }
+        .btn-secondary { padding: 14px; background: white; color: #333; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-secondary:hover { border-color: #ff6600; color: #ff6600; }
+
+        .disclaimer { font-size: 11px; color: #aaa; text-align: center; margin-top: 1rem; line-height: 1.6; }
+
+        /* FOOTER */
+        footer { background: white; color: #333333; padding: 2rem; text-align: center; margin-top: 2rem; box-shadow: 0 -1px 3px rgba(0,0,0,0.05); font-size: 13px; }
+
+        @media (max-width: 700px) {
+            .form-grid, .form-grid.three { grid-template-columns: 1fr; }
+            .condition-grid { grid-template-columns: 1fr 1fr; }
+            .extras-grid { grid-template-columns: 1fr 1fr; }
+            .result-cards { grid-template-columns: 1fr; }
+            .result-actions { grid-template-columns: 1fr; }
+            .result-price { font-size: 36px; }
+            .trust-bar { gap: 1rem; flex-wrap: wrap; }
+            .steps-bar { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">🏍️ BikerBasen</a>
+            <div class="header-nav">
+                <a class="header-link" href="prisvurdering.html" style="color:#ff6600;">Prisvurdering</a>
+                <a class="header-link" href="create-listing.html">Sælg din motorcykel</a>
+                <a class="header-link" href="login.html">Log ind</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+        <div class="hero-badge">✨ Gratis &amp; uforpligtende</div>
+        <h1>Hvad er din motorcykel værd?</h1>
+        <p>Få en gratis prisvurdering på under 1 minut — baseret på aktuelle salgspriser</p>
+    </div>
+
+    <!-- TRUST BAR -->
+    <div class="trust-bar">
+        <div class="trust-item">✅ <span><strong>100% gratis</strong> prisvurdering</span></div>
+        <div class="trust-item">📊 <span>Baseret på <strong>aktuelle salgspriser</strong></span></div>
+        <div class="trust-item">⚡ <span>Svar på <strong>under 1 minut</strong></span></div>
+        <div class="trust-item">🔒 <span><strong>Ingen forpligtelse</strong></span></div>
+    </div>
+
+    <div class="page-wrapper">
+
+        <!-- STEPS -->
+        <div class="steps-bar">
+            <div class="step active" id="step1"><span class="step-num">1</span>Motorcyklen</div>
+            <div class="step" id="step2"><span class="step-num">2</span>Stand &amp; udstyr</div>
+            <div class="step" id="step3"><span class="step-num">3</span>Prisvurdering</div>
+        </div>
+
+        <!-- FORM -->
+        <div id="formSection">
+
+            <!-- TRIN 1: MOTORCYKEL -->
+            <div class="card">
+                <div class="card-header">
+                    <span>🏍️</span>
+                    <h2>Motorcyklens oplysninger</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-grid" style="margin-bottom:1rem;">
+                        <div class="form-group">
+                            <label>Mærke *</label>
+                            <select id="brand" onchange="loadModels()">
+                                <option value="">Vælg mærke...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Model *</label>
+                            <select id="model" disabled onchange="updatePreview()">
+                                <option value="">Vælg mærke først...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-grid three">
+                        <div class="form-group">
+                            <label>Årgang *</label>
+                            <select id="year" onchange="updatePreview()">
+                                <option value="">Vælg år...</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label>Kilometerstand *</label>
+                            <input type="number" id="km" placeholder="F.eks. 15000" min="0" max="300000" oninput="updatePreview()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRIN 2: STAND -->
+            <div class="card">
+                <div class="card-header">
+                    <span>🔍</span>
+                    <h2>Stand og udstyr</h2>
+                </div>
+                <div class="card-body">
+                    <div style="margin-bottom:1.25rem;">
+                        <label style="display:block; font-size:12px; font-weight:600; color:#666; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.75rem;">Motorcyklens stand *</label>
+                        <div class="condition-grid">
+                            <div class="condition-btn selected" onclick="selectCondition('perfekt', this)">
+                                <span class="cond-icon">⭐</span>
+                                <div class="cond-label">Perfekt</div>
+                                <div class="cond-desc">Som ny</div>
+                            </div>
+                            <div class="condition-btn" onclick="selectCondition('god', this)">
+                                <span class="cond-icon">👍</span>
+                                <div class="cond-label">God</div>
+                                <div class="cond-desc">Mindre slid</div>
+                            </div>
+                            <div class="condition-btn" onclick="selectCondition('okay', this)">
+                                <span class="cond-icon">🔧</span>
+                                <div class="cond-label">Okay</div>
+                                <div class="cond-desc">Synligt slid</div>
+                            </div>
+                            <div class="condition-btn" onclick="selectCondition('slet', this)">
+                                <span class="cond-icon">⚠️</span>
+                                <div class="cond-label">Slidt</div>
+                                <div class="cond-desc">Kræver service</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:600; color:#666; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.75rem;">Ekstraudstyr (valgfrit)</label>
+                        <div class="extras-grid">
+                            <label class="extra-item"><input type="checkbox" value="abs" onchange="updatePreview()"> ABS bremser</label>
+                            <label class="extra-item"><input type="checkbox" value="saddeltasker" onchange="updatePreview()"> Saddeltasker</label>
+                            <label class="extra-item"><input type="checkbox" value="varmegreber" onchange="updatePreview()"> Varme greber</label>
+                            <label class="extra-item"><input type="checkbox" value="windskjold" onchange="updatePreview()"> Windskjold</label>
+                            <label class="extra-item"><input type="checkbox" value="alarm" onchange="updatePreview()"> Alarm / GPS</label>
+                            <label class="extra-item"><input type="checkbox" value="usb" onchange="updatePreview()"> USB oplader</label>
+                            <label class="extra-item"><input type="checkbox" value="topcase" onchange="updatePreview()"> Topcase</label>
+                            <label class="extra-item"><input type="checkbox" value="service" onchange="updatePreview()"> Servicebog</label>
+                            <label class="extra-item"><input type="checkbox" value="ny_dæk" onchange="updatePreview()"> Nye dæk</label>
+                        </div>
+                    </div>
+
+                    <button class="calc-btn" id="calcBtn" onclick="calculatePrice()">
+                        🔍 Beregn prisvurdering
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOADING -->
+        <div class="loading" id="loadingSection">
+            <div class="spinner"></div>
+            <p style="font-size:14px; color:#666;">Beregner din prisvurdering...</p>
+            <p style="font-size:12px; color:#aaa; margin-top:4px;">Sammenligner med aktuelle salgspriser</p>
+        </div>
+
+        <!-- RESULT -->
+        <div class="result" id="resultSection">
+
+            <div class="result-hero">
+                <div class="result-label">Estimeret salgspris</div>
+                <div class="result-price" id="resultPrice">–</div>
+                <div class="result-range" id="resultRange">Spænd: – til –</div>
+                <div class="result-meta">
+                    <div class="result-meta-item">
+                        <strong id="resultBike">–</strong>
+                        Motorcykel
+                    </div>
+                    <div class="result-meta-item">
+                        <strong id="resultYear">–</strong>
+                        Årgang
+                    </div>
+                    <div class="result-meta-item">
+                        <strong id="resultKm">–</strong>
+                        Kilometer
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-cards">
+                <div class="result-card">
+                    <div class="result-card-icon">📊</div>
+                    <div class="result-card-title">Sammenlignet med</div>
+                    <div class="result-card-value" id="demandValue">–</div>
+                    <div style="font-size:11px; color:#aaa; margin-top:4px;" id="dataSource"></div>
+                </div>
+                <div class="result-card">
+                    <div class="result-card-icon">⏱️</div>
+                    <div class="result-card-title">Forventet salgstid</div>
+                    <div class="result-card-value" id="timeValue">–</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-card-icon">🏆</div>
+                    <div class="result-card-title">Vurdering</div>
+                    <div class="result-card-value" id="ratingValue">–</div>
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="btn-primary" onclick="window.location.href='create-listing.html'">
+                    📢 Sæt til salg gratis
+                </button>
+                <button class="btn-secondary" onclick="resetForm()">
+                    🔄 Ny vurdering
+                </button>
+            </div>
+
+            <p class="disclaimer">
+                ⚠️ BikerBasens prisvurdering er en vejledende pris og ikke en garanti. Prisen er baseret på lignende annoncer og aktuelle markedspriser. Endelig salgspris afhænger af motorcyklens faktiske stand, efterspørgsel og forhandling.
+            </p>
+        </div>
+
+        <!-- STEPS MARKER BOTTOM -->
+        <div class="steps-bar" style="margin-top:1.5rem; margin-bottom:0;">
+            <div class="step" style="font-size:12px; color:#999; padding:0.75rem;">
+                💡 <strong>Tip:</strong> Jo mere præcist du udfylder, jo bedre vurdering får du
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2024 BikerBasen — Danmarks motorcykelmarkedsplads &nbsp;|&nbsp; <a href="index.html" style="color:#ff6600; text-decoration:none;">Forside</a> &nbsp;|&nbsp; <a href="listings.html" style="color:#ff6600; text-decoration:none;">Annoncer</a></p>
+    </footer>
+
+    <script>
+        // ── ALLE ANNONCER FRA SIDEN ──────────────────────────────────────────
+        const siteListings = [
+            { brand: 'Honda',           model: 'CB500',           type: 'Naked Bike', year: 2018, km: 12000, price: 85000 },
+            { brand: 'Yamaha',          model: 'Virago 535',      type: 'Cruiser',    year: 2010, km: 25000, price: 55000 },
+            { brand: 'BMW',             model: 'F 800 GS',        type: 'Adventure',  year: 2015, km: 22000, price: 95000 },
+            { brand: 'Harley-Davidson', model: 'Street 750',      type: 'Cruiser',    year: 2017, km: 18000, price: 75000 },
+            { brand: 'Kawasaki',        model: 'Ninja 650',       type: 'Sport',      year: 2020, km:  8000, price: 65000 },
+            { brand: 'Ducati',          model: 'Monster 821',     type: 'Naked Bike', year: 2019, km: 15000, price: 95000 },
+            { brand: 'Triumph',         model: 'Street Twin',     type: 'Retro',      year: 2016, km: 20000, price: 70000 },
+            { brand: 'KTM',             model: '790 Duke',        type: 'Naked Bike', year: 2021, km:  5000, price: 85000 },
+            { brand: 'Royal Enfield',   model: 'Interceptor 650', type: 'Retro',      year: 2022, km:  3000, price: 65000 },
+            { brand: 'Suzuki',          model: 'V-Strom 650',     type: 'Adventure',  year: 2018, km: 16000, price: 70000 },
+            { brand: 'Honda',           model: 'CB1100',          type: 'Retro',      year: 2017, km: 14000, price: 90000 },
+            { brand: 'Yamaha',          model: 'YZF-R6',          type: 'Sport',      year: 2019, km:  9000, price: 75000 },
+            { brand: 'BMW',             model: 'R 1200 GS',       type: 'Adventure',  year: 2016, km: 28000, price: 120000 },
+            { brand: 'Kawasaki',        model: 'Vulcan 900',      type: 'Cruiser',    year: 2014, km: 35000, price: 62000 },
+            { brand: 'Aprilia',         model: 'RS 125',          type: 'Sport',      year: 2019, km:  4200, price: 42000 },
+        ];
+
+        // Hent også bruger-oprettede annoncer fra localStorage
+        function getAllListings() {
+            const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            return [...siteListings, ...userListings];
+        }
+
+        const conditionMultiplier = { perfekt: 1.15, god: 1.0, okay: 0.85, slet: 0.65 };
+        let selectedCondition = 'perfekt';
+
+        // ── INIT ────────────────────────────────────────────────────────────
+        function init() {
+            const all = getAllListings();
+            const brands = [...new Set(all.map(l => l.brand))].sort();
+            const brandSelect = document.getElementById('brand');
+            brands.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b; opt.textContent = b;
+                brandSelect.appendChild(opt);
+            });
+            const yearSelect = document.getElementById('year');
+            for (let y = 2025; y >= 1990; y--) {
+                const opt = document.createElement('option');
+                opt.value = y; opt.textContent = y;
+                yearSelect.appendChild(opt);
+            }
+        }
+
+        function loadModels() {
+            const brand = document.getElementById('brand').value;
+            const all = getAllListings();
+            const models = [...new Set(all.filter(l => l.brand === brand).map(l => l.model))].sort();
+            const modelSelect = document.getElementById('model');
+            modelSelect.innerHTML = '<option value="">Vælg model...</option>';
+            if (models.length > 0) {
+                models.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m; opt.textContent = m;
+                    modelSelect.appendChild(opt);
+                });
+                modelSelect.disabled = false;
+            } else {
+                modelSelect.disabled = true;
+                modelSelect.innerHTML = '<option>Ingen modeller fundet</option>';
+            }
+        }
+
+        function selectCondition(cond, el) {
+            document.querySelectorAll('.condition-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedCondition = cond;
+        }
+
+        function updatePreview() {}
+
+        function calculatePrice() {
+            const brand = document.getElementById('brand').value;
+            const model = document.getElementById('model').value;
+            const year  = parseInt(document.getElementById('year').value);
+            const km    = parseInt(document.getElementById('km').value);
+
+            if (!brand || !model || !year || isNaN(km)) {
+                alert('Udfyld venligst alle obligatoriske felter (mærke, model, år og km)');
+                return;
+            }
+
+            document.getElementById('formSection').style.display = 'none';
+            document.getElementById('loadingSection').style.display = 'block';
+
+            setTimeout(() => {
+                const price = computePrice(brand, model, year, km);
+                showResult(brand, model, year, km, price);
+            }, 1800);
+        }
+
+        function computePrice(brand, model, year, km) {
+            const all = getAllListings();
+
+            // Find annoncer der matcher samme mærke + model
+            let matches = all.filter(l =>
+                l.brand.toLowerCase() === brand.toLowerCase() &&
+                l.model.toLowerCase() === model.toLowerCase()
+            );
+
+            // Ingen eksakt match — brug samme mærke
+            if (matches.length === 0) {
+                matches = all.filter(l => l.brand.toLowerCase() === brand.toLowerCase());
+            }
+
+            // Stadig ingen — brug alle annoncer
+            if (matches.length === 0) matches = all;
+
+            // Beregn gennemsnitspris fra matchende annoncer
+            const avgPrice = matches.reduce((sum, l) => sum + l.price, 0) / matches.length;
+
+            // Juster for årstal vs. reference (median år i matches)
+            const avgYear = matches.reduce((sum, l) => sum + l.year, 0) / matches.length;
+            const yearDiff = year - avgYear;
+            const yearAdj = avgPrice * (yearDiff * 0.04); // ±4% per år
+
+            // Juster for km vs. reference
+            const avgKm = matches.reduce((sum, l) => sum + l.km, 0) / matches.length;
+            const kmDiff = avgKm - km; // positiv = din mc har færre km = mere værd
+            const kmAdj = (kmDiff / 10000) * 3000; // 3.000 kr per 10.000 km forskel
+
+            let price = avgPrice + yearAdj + kmAdj;
+
+            // Stand
+            price *= conditionMultiplier[selectedCondition];
+
+            // Ekstraudstyr
+            const extras = document.querySelectorAll('.extra-item input:checked').length;
+            price += extras * 1500;
+
+            // Sørg for min pris
+            price = Math.max(price, 10000);
+
+            return { price: Math.round(price / 500) * 500, matchCount: matches.length, basedOn: matches.length === all.length ? 'alle annoncer' : matches.length === all.filter(l => l.brand.toLowerCase() === brand.toLowerCase()).length ? `${brand} annoncer` : `${brand} ${model} annoncer` };
+        }
+
+        function showResult(brand, model, year, km, result) {
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+
+            document.getElementById('step1').className = 'step done';
+            document.getElementById('step2').className = 'step done';
+            document.getElementById('step3').className = 'step active';
+
+            const price = result.price;
+            const low  = Math.round(price * 0.92 / 500) * 500;
+            const high = Math.round(price * 1.08 / 500) * 500;
+
+            document.getElementById('resultPrice').textContent = price.toLocaleString('da-DK') + ' kr';
+            document.getElementById('resultRange').textContent = `Spænd: ${low.toLocaleString('da-DK')} – ${high.toLocaleString('da-DK')} kr`;
+            document.getElementById('resultBike').textContent = `${brand} ${model}`;
+            document.getElementById('resultYear').textContent = year;
+            document.getElementById('resultKm').textContent = km.toLocaleString('da-DK') + ' km';
+
+            // Baseret på
+            document.getElementById('demandValue').textContent = `${result.matchCount} annoncer`;
+
+            // Indsæt note om datakilde
+            document.getElementById('dataSource').textContent = `Baseret på ${result.basedOn} på BikerBasen`;
+
+            document.getElementById('timeValue').textContent =
+                selectedCondition === 'perfekt' ? '1–2 uger' :
+                selectedCondition === 'god'     ? '2–4 uger' : '4–8 uger';
+
+            document.getElementById('ratingValue').textContent =
+                selectedCondition === 'perfekt' ? '⭐⭐⭐⭐⭐' :
+                selectedCondition === 'god'     ? '⭐⭐⭐⭐' :
+                selectedCondition === 'okay'    ? '⭐⭐⭐' : '⭐⭐';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('formSection').style.display = 'block';
+            document.getElementById('step1').className = 'step active';
+            document.getElementById('step2').className = 'step';
+            document.getElementById('step3').className = 'step';
+            document.getElementById('brand').value = '';
+            document.getElementById('model').innerHTML = '<option>Vælg mærke først...</option>';
+            document.getElementById('model').disabled = true;
+            document.getElementById('year').value = '';
+            document.getElementById('km').value = '';
+            document.querySelectorAll('.extra-item input').forEach(c => c.checked = false);
+            document.querySelectorAll('.condition-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector('.condition-btn').classList.add('selected');
+            selectedCondition = 'perfekt';
+        }
+
+        init();
+    </script>
+</body>
+</html>
