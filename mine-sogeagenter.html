@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mine søgeagenter - BikerBasen</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWJZ8NJB0C"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RWJZ8NJB0C');
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #e5e5e5; color: #333; }
+        header { background: white; padding: 1rem 0; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-bottom: 1px solid #f0f0f0; }
+        .header-container { max-width: 100%; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 22px; font-weight: 700; color: #ff6600; text-decoration: none; letter-spacing: -0.5px; }
+        .header-nav { display: flex; gap: 2.5rem; align-items: center; }
+        .header-link { color: #333; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; transition: color 0.2s; }
+        .header-link:hover { color: #ff6600; }
+        .user-dropdown { position: relative; display: inline-block; }
+        .user-btn { display: flex; align-items: center; gap: 7px; background: none; border: none; cursor: pointer; font-size: 13px; font-weight: 600; color: #333; padding: 4px 8px; border-radius: 6px; }
+        .user-btn:hover { background: #f5f5f5; }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: #ff6600; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+        .user-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: white; border-radius: 8px; min-width: 180px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 999; border: 1px solid #f0f0f0; overflow: hidden; }
+        .user-menu.open { display: block; }
+        .user-menu a, .user-menu button { display: block; width: 100%; text-align: left; padding: 11px 16px; font-size: 13px; font-weight: 500; color: #333; text-decoration: none; background: none; border: none; cursor: pointer; }
+        .user-menu a:hover, .user-menu button:hover { background: #f8f8f8; }
+        .user-menu .menu-divider { height: 1px; background: #f0f0f0; margin: 4px 0; }
+        .user-menu .logout-item { color: #ff6600; font-weight: 600; }
+
+        .page-wrapper { max-width: 900px; margin: 2.5rem auto; padding: 0 1rem; }
+        .page-header { background: white; border-radius: 8px; border: 12px solid #f0f0f0; padding: 1.5rem 2rem; margin-bottom: 1.5rem; }
+        .page-header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+        .page-header p { font-size: 13px; color: #999; }
+
+        .agent-card { background: white; border-radius: 8px; border: 12px solid #f0f0f0; padding: 1.25rem 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; }
+        .agent-icon { font-size: 24px; margin-right: 1rem; }
+        .agent-info { flex: 1; }
+        .agent-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+        .agent-desc { font-size: 12px; color: #999; }
+        .agent-delete { padding: 6px 12px; border: 1px solid #ddd; background: white; border-radius: 6px; font-size: 12px; cursor: pointer; color: #999; }
+        .agent-delete:hover { border-color: #dc2626; color: #dc2626; }
+
+        /* NY SØGEAGENT FORM */
+        .new-agent-card { background: white; border-radius: 8px; border: 12px solid #f0f0f0; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .new-agent-card h2 { font-size: 16px; font-weight: 700; margin-bottom: 1rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .form-group select, .form-group input { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; }
+        .form-group select:focus, .form-group input:focus { outline: none; border-color: #ff6600; }
+        .save-btn { padding: 10px 24px; background: #ff6600; color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; }
+        .save-btn:hover { background: #e55a00; }
+
+        .empty-state { text-align: center; padding: 3rem 2rem; background: white; border-radius: 8px; border: 12px solid #f0f0f0; }
+        .empty-icon { font-size: 48px; margin-bottom: 1rem; }
+        .empty-title { font-size: 17px; font-weight: 700; margin-bottom: 0.5rem; }
+        .empty-text { font-size: 13px; color: #999; }
+
+        footer { background: white; color: #666; padding: 2rem; text-align: center; margin-top: 2rem; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">🏍️ BikerBasen</a>
+            <div class="header-nav">
+                <a class="header-link" href="listings.html">Alle annoncer</a>
+                <a class="header-link" href="create-listing.html">Sælg din motorcykel</a>
+                <span id="headerAuth"></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-wrapper">
+        <div class="page-header">
+            <h1>🔔 Mine søgeagenter</h1>
+            <p>Få besked når der kommer nye motorcykler der matcher din søgning</p>
+        </div>
+
+        <!-- OPRET NY -->
+        <div class="new-agent-card">
+            <h2>+ Opret ny søgeagent</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Mærke</label>
+                    <select id="agentBrand">
+                        <option value="">Alle mærker</option>
+                        <option>Honda</option><option>Yamaha</option><option>BMW</option>
+                        <option>Kawasaki</option><option>Ducati</option><option>Harley-Davidson</option>
+                        <option>Triumph</option><option>KTM</option><option>Suzuki</option>
+                        <option>Royal Enfield</option><option>Aprilia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Maks pris</label>
+                    <input type="number" id="agentPrice" placeholder="F.eks. 80000">
+                </div>
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="agentType">
+                        <option value="">Alle typer</option>
+                        <option>Naked Bike</option><option>Sport</option><option>Cruiser</option>
+                        <option>Adventure</option><option>Retro</option><option>Touring</option>
+                    </select>
+                </div>
+            </div>
+            <button class="save-btn" onclick="saveAgent()">Gem søgeagent</button>
+        </div>
+
+        <div id="agentsContainer"></div>
+    </div>
+
+    <footer>© 2026 BikerBasen — Danmarks måske største motorcykelmarkedsplads</footer>
+
+    <script>
+        if (localStorage.getItem('userLoggedIn') !== 'true') window.location.href = 'login.html';
+
+        function getAgents() { return JSON.parse(localStorage.getItem('searchAgents') || '[]'); }
+
+        function saveAgent() {
+            const brand = document.getElementById('agentBrand').value;
+            const price = document.getElementById('agentPrice').value;
+            const type = document.getElementById('agentType').value;
+            if (!brand && !price && !type) { alert('Udfyld mindst ét felt'); return; }
+            const agents = getAgents();
+            agents.unshift({ id: Date.now(), brand, price, type, created: new Date().toLocaleDateString('da-DK') });
+            localStorage.setItem('searchAgents', JSON.stringify(agents));
+            document.getElementById('agentBrand').value = '';
+            document.getElementById('agentPrice').value = '';
+            document.getElementById('agentType').value = '';
+            render();
+        }
+
+        function deleteAgent(id) {
+            if (!confirm('Slet denne søgeagent?')) return;
+            const agents = getAgents().filter(a => a.id !== id);
+            localStorage.setItem('searchAgents', JSON.stringify(agents));
+            render();
+        }
+
+        function render() {
+            const agents = getAgents();
+            const c = document.getElementById('agentsContainer');
+            if (agents.length === 0) {
+                c.innerHTML = `<div class="empty-state"><div class="empty-icon">🔔</div><div class="empty-title">Ingen søgeagenter endnu</div><div class="empty-text">Opret en søgeagent ovenfor og få besked når der kommer nye MC'er.</div></div>`;
+                return;
+            }
+            c.innerHTML = agents.map(a => `
+                <div class="agent-card">
+                    <span class="agent-icon">🔔</span>
+                    <div class="agent-info">
+                        <div class="agent-title">${[a.brand, a.type].filter(Boolean).join(' · ') || 'Alle motorcykler'}</div>
+                        <div class="agent-desc">${a.price ? 'Maks ' + parseInt(a.price).toLocaleString('da-DK') + ' kr' : 'Alle priser'} · Oprettet ${a.created}</div>
+                    </div>
+                    <button class="agent-delete" onclick="deleteAgent(${a.id})">🗑️ Slet</button>
+                </div>`).join('');
+        }
+
+        function updateHeader() {
+            const rawName = localStorage.getItem('userName') || 'Profil';
+            const name = rawName.split(' ')[0].charAt(0).toUpperCase() + rawName.split(' ')[0].slice(1).toLowerCase();
+            document.getElementById('headerAuth').innerHTML = `
+                <a class="header-link" href="favoritter.html">❤️ Favoritter</a>
+                <div class="user-dropdown" id="userDropdown">
+                    <button class="user-btn" onclick="toggleUserMenu(event)">
+                        <div class="user-avatar">${name.charAt(0)}</div>${name}
+                    </button>
+                    <div class="user-menu" id="userMenu">
+                        <a href="mine-annoncer.html">🏍️ Mine annoncer</a>
+                        <a href="mine-sogeagenter.html" style="color:#ff6600;">🔔 Mine søgeagenter</a>
+                        <a href="min-profil.html">👤 Min profil</a>
+                        <div class="menu-divider"></div>
+                        <button class="logout-item" onclick="logoutUser()">Log ud</button>
+                    </div>
+                </div>`;
+        }
+        function toggleUserMenu(e) { e.stopPropagation(); document.getElementById('userMenu').classList.toggle('open'); }
+        function logoutUser() { localStorage.clear(); window.location.href = 'index.html'; }
+        document.addEventListener('click', () => { const m = document.getElementById('userMenu'); if (m) m.classList.remove('open'); });
+
+        updateHeader();
+        render();
+    </script>
+</body>
+</html>
