@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - BikerBasen</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f0f0f0; color: #333; }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 220px;
+            height: 100vh;
+            background: #1a1a1a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+        .sidebar-logo {
+            padding: 1.5rem;
+            font-size: 18px;
+            font-weight: 700;
+            color: #ff6600;
+            border-bottom: 1px solid #333;
+        }
+        .sidebar-logo span {
+            display: block;
+            font-size: 10px;
+            color: #888;
+            font-weight: 400;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .sidebar-nav { flex: 1; padding: 1rem 0; }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 1.5rem;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            color: #aaa;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .nav-item:hover { color: white; background: #2a2a2a; }
+        .nav-item.active { color: white; background: #2a2a2a; border-left-color: #ff6600; }
+        .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #333;
+            font-size: 12px;
+            color: #666;
+        }
+        .logout-btn {
+            display: block;
+            margin-top: 0.5rem;
+            padding: 8px 12px;
+            background: #333;
+            color: #aaa;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+        .logout-btn:hover { background: #444; color: white; }
+
+        /* MAIN */
+        .main { margin-left: 220px; padding: 2rem; }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .page-title { font-size: 22px; font-weight: 700; }
+        .page-subtitle { font-size: 13px; color: #999; margin-top: 2px; }
+
+        /* STATS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .stat-label { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+        .stat-value { font-size: 28px; font-weight: 700; color: #1a1a1a; }
+        .stat-change { font-size: 12px; color: #22c55e; margin-top: 4px; }
+
+        /* TABLE */
+        .section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .section-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-title { font-size: 15px; font-weight: 700; }
+        .section-action {
+            font-size: 12px;
+            color: #ff6600;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 10px 1.5rem;
+            background: #fafafa;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        td {
+            padding: 12px 1.5rem;
+            font-size: 13px;
+            border-bottom: 1px solid #f8f8f8;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #fafafa; }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-green { background: #dcfce7; color: #16a34a; }
+        .badge-orange { background: #fff7ed; color: #ea580c; }
+        .badge-red { background: #fee2e2; color: #dc2626; }
+        .badge-gray { background: #f3f4f6; color: #6b7280; }
+
+        .action-btn {
+            padding: 4px 10px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-right: 4px;
+            transition: all 0.2s;
+        }
+        .action-btn:hover { border-color: #ff6600; color: #ff6600; }
+        .action-btn.danger:hover { border-color: #dc2626; color: #dc2626; }
+
+        /* TABS */
+        .tabs { display: flex; gap: 0; border-bottom: 1px solid #f0f0f0; }
+        .tab {
+            padding: 12px 1.5rem;
+            font-size: 13px;
+            font-weight: 500;
+            color: #999;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+        }
+        .tab.active { color: #ff6600; border-bottom-color: #ff6600; }
+
+        /* SEARCH BAR */
+        .table-toolbar {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .table-toolbar input {
+            padding: 7px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            width: 260px;
+        }
+        .table-toolbar input:focus { outline: none; border-color: #ff6600; }
+        .toolbar-btn {
+            padding: 7px 14px;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* PAGES */
+        .page { display: none; }
+        .page.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            🏍️ BikerBasen
+            <span>Admin Panel</span>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-item active" onclick="showPage('dashboard', this)">
+                <span class="nav-icon">📊</span> Dashboard
+            </div>
+            <div class="nav-item" onclick="showPage('listings', this)">
+                <span class="nav-icon">📋</span> Annoncer
+            </div>
+            <div class="nav-item" onclick="showPage('users', this)">
+                <span class="nav-icon">👥</span> Brugere
+            </div>
+            <div class="nav-item" onclick="showPage('messages', this)">
+                <span class="nav-icon">✉️</span> Beskeder
+            </div>
+            <div class="nav-item" onclick="showPage('settings', this)">
+                <span class="nav-icon">⚙️</span> Indstillinger
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <div>Logget ind som</div>
+            <div style="color:white; font-weight:600; margin-top:2px;">admin</div>
+            <button class="logout-btn" onclick="logout()">🚪 Log ud</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+        <!-- DASHBOARD -->
+        <div class="page active" id="page-dashboard">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Dashboard</div>
+                    <div class="page-subtitle">Oversigt over BikerBasen</div>
+                </div>
+                <a href="index.html" style="font-size:13px; color:#ff6600; text-decoration:none;">← Se hjemmeside</a>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Aktive annoncer</div>
+                    <div class="stat-value" id="totalListings">15</div>
+                    <div class="stat-change">↑ 3 nye i dag</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Brugere</div>
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-change" style="color:#999;">Registrerede brugere</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Besøg i dag</div>
+                    <div class="stat-value">247</div>
+                    <div class="stat-change">↑ 12% fra i går</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Sidst opdateret</div>
+                    <div class="stat-value" style="font-size:16px;" id="lastUpdated">–</div>
+                    <div class="stat-change" style="color:#999;">Live data</div>
+                </div>
+            </div>
+
+            <!-- RECENT LISTINGS TABLE -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">Seneste annoncer</div>
+                    <div class="section-action" onclick="showPage('listings', document.querySelector('[onclick*=listings]'))">Se alle →</div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Motorcykel</th>
+                            <th>Type</th>
+                            <th>Pris</th>
+                            <th>By</th>
+                            <th>Status</th>
+                            <th>Handling</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentListingsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ANNONCER -->
+        <div class="page" id="page-listings">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Annoncer</div>
+                    <div class="page-subtitle">Administrer alle motorcykelannoncer</div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="tabs">
+                    <div class="tab active">Alle (15)</div>
+                    <div class="tab">Aktive</div>
+                    <div class="tab">Afventende</div>
+                    <div class="tab">Solgte</div>
+                </div>
+                <div class="table-toolbar">
+                    <input type="text" placeholder="Søg på mærke, model..." oninput="filterTable(this.value)">
+                    <button class="toolbar-btn">+ Opret annonce</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Motorcykel</th>
+                            <th>År / KM</th>
+                            <th>Pris</th>
+                            <th>By</th>
+                            <th>Status</th>
+                            <th>Handlinger</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allListingsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BRUGERE -->
+        <div class="page" id="page-users">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Brugere</div>
+                    <div class="page-subtitle">Administrer registrerede brugere</div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="table-toolbar">
+                    <input type="text" placeholder="Søg på navn eller email...">
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Navn</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Handlinger</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BESKEDER -->
+        <div class="page" id="page-messages">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Beskeder</div>
+                    <div class="page-subtitle">Feedback og kundeservice henvendelser</div>
+                </div>
+            </div>
+            <div class="section">
+                <table>
+                    <thead>
+                        <tr><th>Fra</th><th>Emne</th><th>Dato</th><th>Status</th><th>Handling</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>lars@gmail.com</td>
+                            <td>Spørgsmål om Honda CB500</td>
+                            <td>I dag</td>
+                            <td><span class="badge badge-orange">Ny</span></td>
+                            <td><button class="action-btn">Svar</button></td>
+                        </tr>
+                        <tr>
+                            <td>mette@hotmail.dk</td>
+                            <td>Problem med annonce upload</td>
+                            <td>I går</td>
+                            <td><span class="badge badge-green">Besvaret</span></td>
+                            <td><button class="action-btn">Se</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- INDSTILLINGER -->
+        <div class="page" id="page-settings">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Indstillinger</div>
+                    <div class="page-subtitle">Admin konto og hjemmeside indstillinger</div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-header"><div class="section-title">Skift admin adgangskode</div></div>
+                <div style="padding: 1.5rem; max-width: 400px;">
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display:block; font-size:13px; font-weight:500; margin-bottom:6px;">Nuværende adgangskode</label>
+                        <input type="password" id="oldPass" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display:block; font-size:13px; font-weight:500; margin-bottom:6px;">Ny adgangskode</label>
+                        <input type="password" id="newPass" style="width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                    </div>
+                    <button onclick="changePassword()" style="padding:10px 20px; background:#1a1a1a; color:white; border:none; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer;">Gem ny adgangskode</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ADGANGSKONTROL
+        if (localStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        const motorcycles = [
+            { id: 1, brand: 'Honda', model: 'CB500', type: 'Naked Bike', year: 2018, km: 12000, price: 85000, location: 'København', status: 'Aktiv' },
+            { id: 2, brand: 'Yamaha', model: 'Virago 535', type: 'Cruiser', year: 2010, km: 25000, price: 55000, location: 'Aarhus', status: 'Aktiv' },
+            { id: 3, brand: 'BMW', model: 'F 800 GS', type: 'Adventure', year: 2015, km: 22000, price: 95000, location: 'Odense', status: 'Aktiv' },
+            { id: 4, brand: 'Harley-Davidson', model: 'Street 750', type: 'Cruiser', year: 2017, km: 18000, price: 75000, location: 'Randers', status: 'Solgt' },
+            { id: 5, brand: 'Kawasaki', model: 'Ninja 650', type: 'Sport', year: 2020, km: 8000, price: 65000, location: 'Aalborg', status: 'Aktiv' },
+            { id: 6, brand: 'Ducati', model: 'Monster 821', type: 'Naked Bike', year: 2019, km: 15000, price: 95000, location: 'København', status: 'Aktiv' },
+            { id: 7, brand: 'Triumph', model: 'Street Twin', type: 'Retro', year: 2016, km: 20000, price: 70000, location: 'Herning', status: 'Afventende' },
+            { id: 8, brand: 'KTM', model: '790 Duke', type: 'Naked Bike', year: 2021, km: 5000, price: 85000, location: 'Vejle', status: 'Aktiv' },
+            { id: 9, brand: 'Royal Enfield', model: 'Interceptor 650', type: 'Retro', year: 2022, km: 3000, price: 65000, location: 'Silkeborg', status: 'Aktiv' },
+            { id: 10, brand: 'Suzuki', model: 'V-Strom 650', type: 'Adventure', year: 2018, km: 16000, price: 70000, location: 'Horsens', status: 'Aktiv' },
+            { id: 11, brand: 'Honda', model: 'CB1100', type: 'Retro', year: 2017, km: 14000, price: 90000, location: 'Svendborg', status: 'Aktiv' },
+            { id: 12, brand: 'Yamaha', model: 'YZF-R6', type: 'Sport', year: 2019, km: 9000, price: 75000, location: 'Viborg', status: 'Aktiv' },
+            { id: 13, brand: 'BMW', model: 'R 1200 GS', type: 'Adventure', year: 2016, km: 28000, price: 120000, location: 'Esbjerg', status: 'Solgt' },
+            { id: 14, brand: 'Kawasaki', model: 'Vulcan 900', type: 'Cruiser', year: 2014, km: 35000, price: 62000, location: 'Kolding', status: 'Aktiv' },
+            { id: 15, brand: 'Aprilia', model: 'RS 125', type: 'Sport', year: 2019, km: 4200, price: 42000, location: 'Lolland', status: 'Aktiv' }
+        ];
+
+        function statusBadge(s) {
+            if (s === 'Aktiv') return `<span class="badge badge-green">Aktiv</span>`;
+            if (s === 'Solgt') return `<span class="badge badge-gray">Solgt</span>`;
+            if (s === 'Afventende') return `<span class="badge badge-orange">Afventende</span>`;
+            return `<span class="badge">${s}</span>`;
+        }
+
+        function renderDashboard() {
+            // Stats
+            const users = JSON.parse(localStorage.getItem('allUsers') || '[]');
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString('da-DK', {hour:'2-digit', minute:'2-digit'});
+
+            // Recent listings (top 5)
+            const tbody = document.getElementById('recentListingsTable');
+            tbody.innerHTML = motorcycles.slice(0, 5).map(m => `
+                <tr>
+                    <td><strong>${m.brand} ${m.model}</strong></td>
+                    <td>${m.type}</td>
+                    <td>${m.price.toLocaleString('da-DK')} kr</td>
+                    <td>${m.location}</td>
+                    <td>${statusBadge(m.status)}</td>
+                    <td>
+                        <button class="action-btn">Rediger</button>
+                        <button class="action-btn danger" onclick="deleteListing(${m.id})">Slet</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderListings(data) {
+            const tbody = document.getElementById('allListingsTable');
+            tbody.innerHTML = (data || motorcycles).map(m => `
+                <tr>
+                    <td>#${m.id}</td>
+                    <td><strong>${m.brand} ${m.model}</strong></td>
+                    <td>${m.year} / ${m.km.toLocaleString('da-DK')} km</td>
+                    <td>${m.price.toLocaleString('da-DK')} kr</td>
+                    <td>${m.location}</td>
+                    <td>${statusBadge(m.status)}</td>
+                    <td>
+                        <button class="action-btn">Rediger</button>
+                        <button class="action-btn danger" onclick="deleteListing(${m.id})">Slet</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderUsers() {
+            const users = JSON.parse(localStorage.getItem('allUsers') || '[]');
+            const tbody = document.getElementById('usersTable');
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#999; padding:2rem;">Ingen brugere endnu</td></tr>`;
+            } else {
+                tbody.innerHTML = users.map(u => `
+                    <tr>
+                        <td>${u.name || '–'}</td>
+                        <td>${u.email}</td>
+                        <td><span class="badge badge-green">Aktiv</span></td>
+                        <td><button class="action-btn danger">Slet</button></td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        function filterTable(query) {
+            const filtered = motorcycles.filter(m =>
+                m.brand.toLowerCase().includes(query.toLowerCase()) ||
+                m.model.toLowerCase().includes(query.toLowerCase())
+            );
+            renderListings(filtered);
+        }
+
+        function deleteListing(id) {
+            if (confirm('Er du sikker på at du vil slette denne annonce?')) {
+                alert(`Annonce #${id} slettet!`);
+            }
+        }
+
+        function showPage(name, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('page-' + name).classList.add('active');
+            if (el) el.classList.add('active');
+            if (name === 'users') renderUsers();
+        }
+
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            window.location.href = 'admin-login.html';
+        }
+
+        function changePassword() {
+            const oldPass = document.getElementById('oldPass').value;
+            const newPass = document.getElementById('newPass').value;
+            if (oldPass === 'bikerbasen2024' && newPass.length >= 6) {
+                alert('Adgangskode ændret! Husk at opdatere koden i admin-login.html');
+            } else if (oldPass !== 'bikerbasen2024') {
+                alert('Forkert nuværende adgangskode!');
+            } else {
+                alert('Ny adgangskode skal være mindst 6 tegn!');
+            }
+        }
+
+        // Init
+        renderDashboard();
+        renderListings();
+    </script>
+</body>
+</html>
