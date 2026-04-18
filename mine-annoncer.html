@@ -53,6 +53,28 @@
         .btn-delete { padding: 7px 14px; border: 1px solid #ddd; background: white; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; color: #999; transition: all 0.2s; }
         .btn-delete:hover { border-color: #dc2626; color: #dc2626; }
         .badge-active { display: inline-block; background: #dcfce7; color: #16a34a; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-left: 8px; }
+        .badge-sold { display: inline-block; background: #f3f4f6; color: #6b7280; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-left: 8px; }
+        .listing-card.sold { opacity: 0.7; }
+        .btn-sold { padding: 7px 14px; border: 1px solid #ddd; background: white; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; color: #666; transition: all 0.2s; }
+        .btn-sold:hover { border-color: #16a34a; color: #16a34a; }
+        .btn-unsold { padding: 7px 14px; border: 1px solid #22c55e; background: #f0fdf4; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; color: #16a34a; transition: all 0.2s; }
+        .btn-unsold:hover { border-color: #dc2626; color: #dc2626; background: #fff0f0; }
+
+        /* EDIT MODAL */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-box { background: white; border-radius: 10px; padding: 2rem; width: 90%; max-width: 560px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .modal-box h2 { font-size: 18px; font-weight: 700; margin-bottom: 1.5rem; }
+        .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 22px; cursor: pointer; color: #999; }
+        .edit-group { margin-bottom: 1rem; }
+        .edit-group label { display: block; font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .edit-group input, .edit-group select, .edit-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; font-family: inherit; }
+        .edit-group input:focus, .edit-group select:focus, .edit-group textarea:focus { outline: none; border-color: #ff6600; }
+        .edit-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .modal-footer { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #f0f0f0; }
+        .btn-cancel { padding: 10px 20px; background: white; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; cursor: pointer; }
+        .btn-save { padding: 10px 24px; background: #ff6600; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; }
+        .btn-save:hover { background: #e55a00; }
 
         .empty-state { text-align: center; padding: 4rem 2rem; background: white; border-radius: 8px; border: 12px solid #f0f0f0; }
         .empty-icon { font-size: 56px; margin-bottom: 1rem; }
@@ -85,6 +107,82 @@
         <div id="listingsContainer"></div>
     </div>
 
+    <!-- EDIT MODAL -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeEdit()">✕</button>
+            <h2>✏️ Rediger annonce</h2>
+
+            <div class="edit-row">
+                <div class="edit-group">
+                    <label>Mærke</label>
+                    <input type="text" id="editBrand" readonly style="background:#f5f5f5;">
+                </div>
+                <div class="edit-group">
+                    <label>Model</label>
+                    <input type="text" id="editModel" readonly style="background:#f5f5f5;">
+                </div>
+            </div>
+            <div class="edit-row">
+                <div class="edit-group">
+                    <label>Pris (kr) *</label>
+                    <input type="number" id="editPrice" placeholder="F.eks. 85000">
+                </div>
+                <div class="edit-group">
+                    <label>Kilometerstand *</label>
+                    <input type="number" id="editKm" placeholder="F.eks. 12000">
+                </div>
+            </div>
+            <div class="edit-group">
+                <label>By / placering *</label>
+                <input type="text" id="editLocation" placeholder="F.eks. København">
+            </div>
+            <div class="edit-row">
+                <div class="edit-group">
+                    <label>Stand</label>
+                    <select id="editCondition">
+                        <option value="Ny">Ny</option>
+                        <option value="Meget god">Meget god</option>
+                        <option value="God">God</option>
+                        <option value="Acceptabel">Acceptabel</option>
+                        <option value="Til istandsættelse">Til istandsættelse</option>
+                    </select>
+                </div>
+                <div class="edit-group">
+                    <label>Servicehistorik</label>
+                    <select id="editService">
+                        <option value="Fuld service historia">Fuld servicehistorik</option>
+                        <option value="Delvis service historia">Delvis servicehistorik</option>
+                        <option value="Ingen service historia">Ingen servicehistorik</option>
+                    </select>
+                </div>
+            </div>
+            <div class="edit-group">
+                <label>Beskrivelse</label>
+                <textarea id="editDescription" rows="4" placeholder="Beskriv motorcyklen..."></textarea>
+            </div>
+            <div class="edit-row">
+                <div class="edit-group">
+                    <label>Kontaktperson</label>
+                    <input type="text" id="editContactName" placeholder="Dit navn">
+                </div>
+                <div class="edit-group">
+                    <label>Telefon</label>
+                    <input type="tel" id="editContactPhone" placeholder="+45 12 34 56 78">
+                </div>
+            </div>
+            <div class="edit-group">
+                <label>Email</label>
+                <input type="email" id="editContactEmail" placeholder="din@email.dk">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeEdit()">Annuller</button>
+                <button class="btn-save" onclick="saveEdit()">💾 Gem ændringer</button>
+            </div>
+        </div>
+    </div>
+
     <footer>© 2026 BikerBasen — Danmarks måske største motorcykelmarkedsplads</footer>
 
     <script>
@@ -92,6 +190,8 @@
         if (localStorage.getItem('userLoggedIn') !== 'true') {
             window.location.href = 'login.html';
         }
+
+        let editingId = null;
 
         function render() {
             const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
@@ -110,7 +210,7 @@
             }
 
             container.innerHTML = userListings.map(m => `
-                <div class="listing-card">
+                <div class="listing-card ${m.sold ? 'sold' : ''}">
                     <div class="listing-thumb">
                         ${m.images && m.images.length > 0
                             ? `<img src="${m.images[0].data}" alt="${m.brand} ${m.model}">`
@@ -119,17 +219,90 @@
                     <div class="listing-info">
                         <div class="listing-title">
                             ${m.brand} ${m.model}
-                            <span class="badge-active">Aktiv</span>
+                            ${m.sold
+                                ? '<span class="badge-sold">✓ Solgt</span>'
+                                : '<span class="badge-active">Aktiv</span>'}
                         </div>
                         <div class="listing-meta">${m.year} • ${(m.km||0).toLocaleString('da-DK')} km • ${m.location || ''}</div>
                         <div class="listing-price">${(m.price||0).toLocaleString('da-DK')} kr</div>
                     </div>
                     <div class="listing-actions">
-                        <button class="btn-edit" onclick="window.location.href='listing-detail.html?id=${m.id}'">Se annonce</button>
-                        <button class="btn-delete" onclick="deleteListing(${m.id})">🗑️ Slet</button>
+                        ${!m.sold
+                            ? `<button class="btn-sold" onclick="markSold(${m.id})">✓ Marker solgt</button>`
+                            : `<button class="btn-unsold" onclick="markUnsold(${m.id})">↩ Sæt aktiv igen</button>`
+                        }
+                        <button class="btn-edit" onclick="openEdit(${m.id})">✏️</button>
+                        <button class="btn-edit" onclick="window.location.href='listing-detail.html?id=${m.id}'">👁️</button>
+                        <button class="btn-delete" onclick="deleteListing(${m.id})">🗑️</button>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function openEdit(id) {
+            const listings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            const m = listings.find(l => l.id === id);
+            if (!m) return;
+            editingId = id;
+            document.getElementById('editBrand').value = m.brand || '';
+            document.getElementById('editModel').value = m.model || '';
+            document.getElementById('editPrice').value = m.price || '';
+            document.getElementById('editKm').value = m.km || '';
+            document.getElementById('editLocation').value = m.location || '';
+            document.getElementById('editCondition').value = m.condition || 'God';
+            document.getElementById('editService').value = m.service || 'Ingen service historia';
+            document.getElementById('editDescription').value = m.description || '';
+            document.getElementById('editContactName').value = m.contactName || '';
+            document.getElementById('editContactPhone').value = m.contactPhone || '';
+            document.getElementById('editContactEmail').value = m.contactEmail || '';
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        function closeEdit() {
+            document.getElementById('editModal').classList.remove('active');
+            editingId = null;
+        }
+
+        function saveEdit() {
+            const price = parseInt(document.getElementById('editPrice').value);
+            const location = document.getElementById('editLocation').value.trim();
+            if (!price || !location) { alert('Udfyld venligst pris og by'); return; }
+
+            let listings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            listings = listings.map(l => {
+                if (l.id !== editingId) return l;
+                return {
+                    ...l,
+                    price,
+                    km: parseInt(document.getElementById('editKm').value) || l.km,
+                    location,
+                    condition: document.getElementById('editCondition').value,
+                    service: document.getElementById('editService').value,
+                    description: document.getElementById('editDescription').value,
+                    contactName: document.getElementById('editContactName').value,
+                    contactPhone: document.getElementById('editContactPhone').value,
+                    contactEmail: document.getElementById('editContactEmail').value,
+                    updatedAt: new Date().toISOString()
+                };
+            });
+            localStorage.setItem('userListings', JSON.stringify(listings));
+            closeEdit();
+            render();
+        }
+
+        function markSold(id) {
+            if (!confirm('Marker denne annonce som solgt?')) return;
+            let listings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            listings = listings.map(l => l.id === id ? {...l, sold: true} : l);
+            localStorage.setItem('userListings', JSON.stringify(listings));
+            render();
+        }
+
+        function markUnsold(id) {
+            let listings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            listings = listings.map(l => l.id === id ? {...l, sold: false} : l);
+            localStorage.setItem('userListings', JSON.stringify(listings));
+            render();
         }
 
         function deleteListing(id) {
