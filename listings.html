@@ -75,7 +75,9 @@
         .listing-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0f0f0 25%, transparent 25%, transparent 50%, #f0f0f0 50%, #f0f0f0 75%, transparent 75%, transparent); background-size: 20px 20px; color: #ccc; font-size: 50px; }
         
         .listing-badge { position: absolute; top: 8px; right: 8px; background: #22c55e; color: white; padding: 4px 8px; border-radius: 2px; font-size: 10px; font-weight: 600; }
-        .favorite-btn { position: absolute; bottom: 12px; right: 12px; background: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .favorite-btn { position: absolute; bottom: 12px; right: 12px; background: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .favorite-btn:hover { transform: scale(1.2); }
+        .favorite-btn.active { background: #fff0f0; }
         
         .listing-info { padding: 1.8rem; }
         .listing-title { font-weight: 700; font-size: 16px; margin-bottom: 0.3rem; color: #333333; }
@@ -96,7 +98,7 @@
             <div class="header-nav">
                 <a class="header-link" onclick="window.location.href='create-listing.html'">Sælg din motorcykel</a>
                 <a class="header-link" onclick="alert('Feedback')">Giv feedback</a>
-                <a class="header-link" onclick="window.location.href='login.html'">Log ind</a>
+                <span id="headerAuth"></span>
                 <a class="header-link" onclick="alert('Kundeservice')">Kundeservice</a>
             </div>
         </div>
@@ -158,30 +160,56 @@
             return urlParams.get(param);
         }
 
+        function getFavorites() { return JSON.parse(localStorage.getItem('favorites') || '[]'); }
+        function saveFavorites(f) { localStorage.setItem('favorites', JSON.stringify(f)); }
+        function toggleFavorite(event, id) {
+            event.stopPropagation();
+            if (localStorage.getItem('userLoggedIn') !== 'true') {
+                if (confirm('Du skal være logget ind for at gemme favoritter.\n\nGå til login?')) window.location.href = 'login.html';
+                return;
+            }
+            let favs = getFavorites();
+            const btn = event.currentTarget;
+            if (favs.includes(id)) {
+                favs = favs.filter(f => f !== id);
+                btn.textContent = '🤍'; btn.classList.remove('active');
+            } else {
+                favs.push(id);
+                btn.textContent = '❤️'; btn.classList.add('active');
+                btn.style.transform = 'scale(1.4)';
+                setTimeout(() => btn.style.transform = '', 300);
+            }
+            saveFavorites(favs);
+        }
+        function updateHeader() {
+            const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const name = localStorage.getItem('userName') || 'Profil';
+            const el = document.getElementById('headerAuth');
+            if (loggedIn) {
+                el.innerHTML = `<a class="header-link" href="favoritter.html">❤️ Favoritter</a><a class="header-link" onclick="logout()" style="color:#ff6600;">Log ud (${name})</a>`;
+            } else {
+                el.innerHTML = `<a class="header-link" href="login.html">Log ind</a>`;
+            }
+        }
+        function logout() { localStorage.removeItem('userLoggedIn'); localStorage.removeItem('userName'); window.location.reload(); }
+
         function displayListings(items) {
+            const favs = getFavorites();
             const grid = document.getElementById('listingsGrid');
             grid.innerHTML = items.map(m => `
                 <div class="listing-card" onclick="window.location.href='listing-detail.html?id=${m.id}'">
                     <div class="listing-image">
                         <div class="listing-image-placeholder">🏍️</div>
                         ${m.createdDaysAgo < 7 ? '<div class="listing-badge">Ny annonce</div>' : ''}
-                        <button class="favorite-btn">🤍</button>
+                        <button class="favorite-btn ${favs.includes(m.id) ? 'active' : ''}" onclick="toggleFavorite(event, ${m.id})">${favs.includes(m.id) ? '❤️' : '🤍'}</button>
                     </div>
                     <div class="listing-info">
                         <div class="listing-title">${m.brand} ${m.model}</div>
                         <div class="listing-model">${m.type}</div>
-                        
                         <div class="listing-details">
-                            <div>
-                                <div class="detail-label">År</div>
-                                <div class="detail-item">${m.year}</div>
-                            </div>
-                            <div>
-                                <div class="detail-label">KM</div>
-                                <div class="detail-item">${m.km.toLocaleString('da-DK')}</div>
-                            </div>
+                            <div><div class="detail-label">År</div><div class="detail-item">${m.year}</div></div>
+                            <div><div class="detail-label">KM</div><div class="detail-item">${m.km.toLocaleString('da-DK')}</div></div>
                         </div>
-                        
                         <div class="listing-price">${m.price.toLocaleString('da-DK')} kr</div>
                         <div class="listing-location">📍 ${m.location}</div>
                     </div>
@@ -224,6 +252,7 @@
         }
         
         filterListings();
+        updateHeader();
     </script>
 </body>
 </html>
