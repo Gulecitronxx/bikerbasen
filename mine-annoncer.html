@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mine annoncer - BikerBasen</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWJZ8NJB0C"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RWJZ8NJB0C');
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #e5e5e5; color: #333; }
+        header { background: white; padding: 1rem 0; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-bottom: 1px solid #f0f0f0; }
+        .header-container { max-width: 100%; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 22px; font-weight: 700; color: #ff6600; text-decoration: none; letter-spacing: -0.5px; }
+        .header-nav { display: flex; gap: 2.5rem; align-items: center; }
+        .header-link { color: #333; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; transition: color 0.2s; }
+        .header-link:hover { color: #ff6600; }
+        .user-dropdown { position: relative; display: inline-block; }
+        .user-btn { display: flex; align-items: center; gap: 7px; background: none; border: none; cursor: pointer; font-size: 13px; font-weight: 600; color: #333; padding: 4px 8px; border-radius: 6px; transition: background 0.2s; }
+        .user-btn:hover { background: #f5f5f5; }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: #ff6600; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+        .user-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: white; border-radius: 8px; min-width: 180px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 999; border: 1px solid #f0f0f0; overflow: hidden; }
+        .user-menu.open { display: block; }
+        .user-menu a, .user-menu button { display: block; width: 100%; text-align: left; padding: 11px 16px; font-size: 13px; font-weight: 500; color: #333; text-decoration: none; background: none; border: none; cursor: pointer; transition: background 0.15s; }
+        .user-menu a:hover, .user-menu button:hover { background: #f8f8f8; }
+        .user-menu .menu-divider { height: 1px; background: #f0f0f0; margin: 4px 0; }
+        .user-menu .logout-item { color: #ff6600; font-weight: 600; }
+
+        .page-wrapper { max-width: 900px; margin: 2.5rem auto; padding: 0 1rem; }
+        .page-header { background: white; border-radius: 8px; border: 12px solid #f0f0f0; padding: 1.5rem 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+        .page-header h1 { font-size: 22px; font-weight: 700; }
+        .page-header p { font-size: 13px; color: #999; margin-top: 3px; }
+        .new-btn { padding: 10px 20px; background: #ff6600; color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; }
+        .new-btn:hover { background: #e55a00; }
+
+        .listing-card { background: white; border-radius: 8px; border: 12px solid #f0f0f0; margin-bottom: 1rem; display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem; transition: box-shadow 0.2s; }
+        .listing-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .listing-thumb { width: 100px; height: 75px; background: #e5e5e5; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; overflow: hidden; }
+        .listing-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .listing-info { flex: 1; }
+        .listing-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .listing-meta { font-size: 12px; color: #999; margin-bottom: 6px; }
+        .listing-price { font-size: 16px; font-weight: 700; color: #ff6600; }
+        .listing-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .btn-edit { padding: 7px 14px; border: 1px solid #ddd; background: white; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .btn-edit:hover { border-color: #ff6600; color: #ff6600; }
+        .btn-delete { padding: 7px 14px; border: 1px solid #ddd; background: white; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; color: #999; transition: all 0.2s; }
+        .btn-delete:hover { border-color: #dc2626; color: #dc2626; }
+        .badge-active { display: inline-block; background: #dcfce7; color: #16a34a; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-left: 8px; }
+
+        .empty-state { text-align: center; padding: 4rem 2rem; background: white; border-radius: 8px; border: 12px solid #f0f0f0; }
+        .empty-icon { font-size: 56px; margin-bottom: 1rem; }
+        .empty-title { font-size: 18px; font-weight: 700; margin-bottom: 0.5rem; }
+        .empty-text { font-size: 13px; color: #999; margin-bottom: 1.5rem; }
+
+        footer { background: white; color: #666; padding: 2rem; text-align: center; margin-top: 2rem; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">🏍️ BikerBasen</a>
+            <div class="header-nav">
+                <a class="header-link" href="listings.html">Alle annoncer</a>
+                <a class="header-link" href="create-listing.html">Sælg din motorcykel</a>
+                <span id="headerAuth"></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-wrapper">
+        <div class="page-header">
+            <div>
+                <h1>🏍️ Mine annoncer</h1>
+                <p id="countText">Indlæser...</p>
+            </div>
+            <a href="create-listing.html" class="new-btn">+ Opret annonce</a>
+        </div>
+        <div id="listingsContainer"></div>
+    </div>
+
+    <footer>© 2026 BikerBasen — Danmarks måske største motorcykelmarkedsplads</footer>
+
+    <script>
+        // Redirect hvis ikke logget ind
+        if (localStorage.getItem('userLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        function render() {
+            const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            const container = document.getElementById('listingsContainer');
+            document.getElementById('countText').textContent = userListings.length + ' aktive annonce' + (userListings.length !== 1 ? 'r' : '');
+
+            if (userListings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🏍️</div>
+                        <div class="empty-title">Ingen annoncer endnu</div>
+                        <div class="empty-text">Du har ikke oprettet nogen annoncer endnu.</div>
+                        <a href="create-listing.html" class="new-btn">Opret din første annonce</a>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = userListings.map(m => `
+                <div class="listing-card">
+                    <div class="listing-thumb">
+                        ${m.images && m.images.length > 0
+                            ? `<img src="${m.images[0].data}" alt="${m.brand} ${m.model}">`
+                            : '🏍️'}
+                    </div>
+                    <div class="listing-info">
+                        <div class="listing-title">
+                            ${m.brand} ${m.model}
+                            <span class="badge-active">Aktiv</span>
+                        </div>
+                        <div class="listing-meta">${m.year} • ${(m.km||0).toLocaleString('da-DK')} km • ${m.location || ''}</div>
+                        <div class="listing-price">${(m.price||0).toLocaleString('da-DK')} kr</div>
+                    </div>
+                    <div class="listing-actions">
+                        <button class="btn-edit" onclick="window.location.href='listing-detail.html?id=${m.id}'">Se annonce</button>
+                        <button class="btn-delete" onclick="deleteListing(${m.id})">🗑️ Slet</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function deleteListing(id) {
+            if (!confirm('Er du sikker på at du vil slette denne annonce?')) return;
+            let listings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            listings = listings.filter(l => l.id !== id);
+            localStorage.setItem('userListings', JSON.stringify(listings));
+            render();
+        }
+
+        function updateHeader() {
+            const rawName = localStorage.getItem('userName') || 'Profil';
+            const name = rawName.split(' ')[0].charAt(0).toUpperCase() + rawName.split(' ')[0].slice(1).toLowerCase();
+            document.getElementById('headerAuth').innerHTML = `
+                <a class="header-link" href="favoritter.html">❤️ Favoritter</a>
+                <div class="user-dropdown" id="userDropdown">
+                    <button class="user-btn" onclick="toggleUserMenu(event)">
+                        <div class="user-avatar">${name.charAt(0)}</div>
+                        ${name}
+                    </button>
+                    <div class="user-menu" id="userMenu">
+                        <a href="mine-annoncer.html" style="color:#ff6600;">🏍️ Mine annoncer</a>
+                        <a href="mine-sogeagenter.html">🔔 Mine søgeagenter</a>
+                        <a href="min-profil.html">👤 Min profil</a>
+                        <div class="menu-divider"></div>
+                        <button class="logout-item" onclick="logoutUser()">Log ud</button>
+                    </div>
+                </div>`;
+        }
+        function toggleUserMenu(e) { e.stopPropagation(); document.getElementById('userMenu').classList.toggle('open'); }
+        function logoutUser() { localStorage.clear(); window.location.href = 'index.html'; }
+        document.addEventListener('click', () => { const m = document.getElementById('userMenu'); if (m) m.classList.remove('open'); });
+
+        updateHeader();
+        render();
+    </script>
+</body>
+</html>
