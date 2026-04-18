@@ -371,30 +371,16 @@
             <div class="page-header">
                 <div>
                     <div class="page-title">Beskeder</div>
-                    <div class="page-subtitle">Feedback og kundeservice henvendelser</div>
+                    <div class="page-subtitle">Feedback fra kunder</div>
                 </div>
+                <button class="toolbar-btn" onclick="clearFeedback()">🗑️ Ryd alt</button>
             </div>
             <div class="section">
                 <table>
                     <thead>
-                        <tr><th>Fra</th><th>Emne</th><th>Dato</th><th>Status</th><th>Handling</th></tr>
+                        <tr><th>Fra</th><th>Email</th><th>Emne</th><th>Besked</th><th>Dato</th><th>Status</th><th>Handling</th></tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>lars@gmail.com</td>
-                            <td>Spørgsmål om Honda CB500</td>
-                            <td>I dag</td>
-                            <td><span class="badge badge-orange">Ny</span></td>
-                            <td><button class="action-btn">Svar</button></td>
-                        </tr>
-                        <tr>
-                            <td>mette@hotmail.dk</td>
-                            <td>Problem med annonce upload</td>
-                            <td>I går</td>
-                            <td><span class="badge badge-green">Besvaret</span></td>
-                            <td><button class="action-btn">Se</button></td>
-                        </tr>
-                    </tbody>
+                    <tbody id="feedbackTable"></tbody>
                 </table>
             </div>
         </div>
@@ -528,12 +514,56 @@
             }
         }
 
+        function renderFeedback() {
+            const all = JSON.parse(localStorage.getItem('feedback') || '[]');
+            const tbody = document.getElementById('feedbackTable');
+            if (all.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#999; padding:2rem;">Ingen feedback endnu</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = all.map(f => `
+                <tr>
+                    <td><strong>${f.name}</strong></td>
+                    <td>${f.email}</td>
+                    <td>${f.subject}</td>
+                    <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${f.message}">${f.message}</td>
+                    <td style="white-space:nowrap;">${f.date}</td>
+                    <td>${f.status === 'Ny' ? '<span class="badge badge-orange">Ny</span>' : '<span class="badge badge-green">Læst</span>'}</td>
+                    <td>
+                        <button class="action-btn" onclick="markRead(${f.id})">Marker læst</button>
+                        <button class="action-btn danger" onclick="deleteFeedback(${f.id})">Slet</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function markRead(id) {
+            const all = JSON.parse(localStorage.getItem('feedback') || '[]');
+            const updated = all.map(f => f.id === id ? {...f, status: 'Læst'} : f);
+            localStorage.setItem('feedback', JSON.stringify(updated));
+            renderFeedback();
+        }
+
+        function deleteFeedback(id) {
+            if (!confirm('Slet denne feedback?')) return;
+            const all = JSON.parse(localStorage.getItem('feedback') || '[]');
+            localStorage.setItem('feedback', JSON.stringify(all.filter(f => f.id !== id)));
+            renderFeedback();
+        }
+
+        function clearFeedback() {
+            if (!confirm('Slet AL feedback? Dette kan ikke fortrydes!')) return;
+            localStorage.removeItem('feedback');
+            renderFeedback();
+        }
+
         function showPage(name, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById('page-' + name).classList.add('active');
             if (el) el.classList.add('active');
             if (name === 'users') renderUsers();
+            if (name === 'messages') renderFeedback();
         }
 
         function logout() {
