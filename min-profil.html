@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min profil - BikerBasen</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWJZ8NJB0C"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RWJZ8NJB0C');
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #e5e5e5; color: #333; }
+        header { background: white; padding: 1rem 0; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-bottom: 1px solid #f0f0f0; }
+        .header-container { max-width: 100%; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 22px; font-weight: 700; color: #ff6600; text-decoration: none; letter-spacing: -0.5px; }
+        .header-nav { display: flex; gap: 2.5rem; align-items: center; }
+        .header-link { color: #333; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; transition: color 0.2s; }
+        .header-link:hover { color: #ff6600; }
+        .user-dropdown { position: relative; display: inline-block; }
+        .user-btn { display: flex; align-items: center; gap: 7px; background: none; border: none; cursor: pointer; font-size: 13px; font-weight: 600; color: #333; padding: 4px 8px; border-radius: 6px; }
+        .user-btn:hover { background: #f5f5f5; }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: #ff6600; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+        .user-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: white; border-radius: 8px; min-width: 180px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 999; border: 1px solid #f0f0f0; overflow: hidden; }
+        .user-menu.open { display: block; }
+        .user-menu a, .user-menu button { display: block; width: 100%; text-align: left; padding: 11px 16px; font-size: 13px; font-weight: 500; color: #333; text-decoration: none; background: none; border: none; cursor: pointer; }
+        .user-menu a:hover, .user-menu button:hover { background: #f8f8f8; }
+        .user-menu .menu-divider { height: 1px; background: #f0f0f0; margin: 4px 0; }
+        .user-menu .logout-item { color: #ff6600; font-weight: 600; }
+
+        .page-wrapper { max-width: 700px; margin: 2.5rem auto; padding: 0 1rem; }
+
+        .profile-hero { background: white; border-radius: 8px; border: 12px solid #f0f0f0; padding: 2rem; margin-bottom: 1.5rem; text-align: center; }
+        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ff6600, #ff8f3d); color: white; font-size: 32px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; }
+        .profile-name { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+        .profile-email { font-size: 13px; color: #999; }
+        .profile-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #f0f0f0; }
+        .stat { text-align: center; }
+        .stat-num { font-size: 22px; font-weight: 700; color: #ff6600; }
+        .stat-label { font-size: 12px; color: #999; margin-top: 2px; }
+
+        .card { background: white; border-radius: 8px; border: 12px solid #f0f0f0; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .card h2 { font-size: 16px; font-weight: 700; margin-bottom: 1.25rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; transition: border-color 0.2s; }
+        .form-group input:focus { outline: none; border-color: #ff6600; box-shadow: 0 0 0 3px rgba(255,102,0,0.08); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .save-btn { padding: 11px 28px; background: #1a1a1a; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .save-btn:hover { background: #333; }
+        .success-msg { display: none; background: #e8f5e9; color: #2e7d32; padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 1rem; }
+
+        .danger-zone { background: white; border-radius: 8px; border: 12px solid #ffe0e0; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .danger-zone h2 { font-size: 16px; font-weight: 700; color: #dc2626; margin-bottom: 0.5rem; }
+        .danger-zone p { font-size: 13px; color: #999; margin-bottom: 1rem; }
+        .delete-btn { padding: 10px 20px; background: white; color: #dc2626; border: 2px solid #dc2626; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .delete-btn:hover { background: #dc2626; color: white; }
+
+        footer { background: white; color: #666; padding: 2rem; text-align: center; margin-top: 2rem; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">🏍️ BikerBasen</a>
+            <div class="header-nav">
+                <a class="header-link" href="listings.html">Alle annoncer</a>
+                <a class="header-link" href="create-listing.html">Sælg din motorcykel</a>
+                <span id="headerAuth"></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-wrapper">
+
+        <!-- PROFIL HERO -->
+        <div class="profile-hero">
+            <div class="profile-avatar" id="avatarEl"></div>
+            <div class="profile-name" id="profileName"></div>
+            <div class="profile-email" id="profileEmail"></div>
+            <div class="profile-stats">
+                <div class="stat">
+                    <div class="stat-num" id="statAnnoncer">0</div>
+                    <div class="stat-label">Annoncer</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num" id="statFavoritter">0</div>
+                    <div class="stat-label">Favoritter</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num" id="statAgenter">0</div>
+                    <div class="stat-label">Søgeagenter</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REDIGER PROFIL -->
+        <div class="card">
+            <h2>👤 Rediger profil</h2>
+            <div class="success-msg" id="saveSuccess">✅ Profil gemt!</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Fuldt navn</label>
+                    <input type="text" id="inputName" placeholder="Dit navn">
+                </div>
+                <div class="form-group">
+                    <label>Telefon</label>
+                    <input type="tel" id="inputPhone" placeholder="+45 12 34 56 78">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="inputEmail" placeholder="din@email.dk">
+            </div>
+            <div class="form-group">
+                <label>By</label>
+                <input type="text" id="inputCity" placeholder="F.eks. København">
+            </div>
+            <button class="save-btn" onclick="saveProfile()">Gem ændringer</button>
+        </div>
+
+        <!-- SKIFT ADGANGSKODE -->
+        <div class="card">
+            <h2>🔐 Skift adgangskode</h2>
+            <div class="form-group">
+                <label>Ny adgangskode</label>
+                <input type="password" id="newPass" placeholder="Mindst 6 tegn">
+            </div>
+            <div class="form-group">
+                <label>Bekræft ny adgangskode</label>
+                <input type="password" id="confirmPass" placeholder="Gentag adgangskode">
+            </div>
+            <button class="save-btn" onclick="changePassword()">Skift adgangskode</button>
+        </div>
+
+        <!-- DANGER ZONE -->
+        <div class="danger-zone">
+            <h2>⚠️ Slet konto</h2>
+            <p>Dette sletter din konto, alle annoncer og favoritter permanent. Kan ikke fortrydes.</p>
+            <button class="delete-btn" onclick="deleteAccount()">Slet min konto</button>
+        </div>
+
+    </div>
+
+    <footer>© 2026 BikerBasen — Danmarks måske største motorcykelmarkedsplads</footer>
+
+    <script>
+        if (localStorage.getItem('userLoggedIn') !== 'true') window.location.href = 'login.html';
+
+        function loadProfile() {
+            const name = localStorage.getItem('userName') || '';
+            const email = localStorage.getItem('userEmail') || '';
+            const phone = localStorage.getItem('userPhone') || '';
+            const city = localStorage.getItem('userCity') || '';
+            const firstName = name.split(' ')[0].charAt(0).toUpperCase() + name.split(' ')[0].slice(1).toLowerCase();
+
+            document.getElementById('avatarEl').textContent = firstName.charAt(0) || '?';
+            document.getElementById('profileName').textContent = name || 'Ukendt bruger';
+            document.getElementById('profileEmail').textContent = email;
+            document.getElementById('inputName').value = name;
+            document.getElementById('inputEmail').value = email;
+            document.getElementById('inputPhone').value = phone;
+            document.getElementById('inputCity').value = city;
+
+            document.getElementById('statAnnoncer').textContent = JSON.parse(localStorage.getItem('userListings') || '[]').length;
+            document.getElementById('statFavoritter').textContent = JSON.parse(localStorage.getItem('favorites') || '[]').length;
+            document.getElementById('statAgenter').textContent = JSON.parse(localStorage.getItem('searchAgents') || '[]').length;
+        }
+
+        function saveProfile() {
+            localStorage.setItem('userName', document.getElementById('inputName').value);
+            localStorage.setItem('userEmail', document.getElementById('inputEmail').value);
+            localStorage.setItem('userPhone', document.getElementById('inputPhone').value);
+            localStorage.setItem('userCity', document.getElementById('inputCity').value);
+            document.getElementById('saveSuccess').style.display = 'block';
+            setTimeout(() => document.getElementById('saveSuccess').style.display = 'none', 3000);
+            loadProfile();
+            updateHeader();
+        }
+
+        function changePassword() {
+            const p1 = document.getElementById('newPass').value;
+            const p2 = document.getElementById('confirmPass').value;
+            if (p1.length < 6) { alert('Adgangskoden skal være mindst 6 tegn'); return; }
+            if (p1 !== p2) { alert('Adgangskoderne matcher ikke'); return; }
+            alert('✅ Adgangskode ændret!');
+            document.getElementById('newPass').value = '';
+            document.getElementById('confirmPass').value = '';
+        }
+
+        function deleteAccount() {
+            if (!confirm('Er du HELT sikker? Dette kan ikke fortrydes!')) return;
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        function updateHeader() {
+            const rawName = localStorage.getItem('userName') || 'Profil';
+            const name = rawName.split(' ')[0].charAt(0).toUpperCase() + rawName.split(' ')[0].slice(1).toLowerCase();
+            document.getElementById('headerAuth').innerHTML = `
+                <a class="header-link" href="favoritter.html">❤️ Favoritter</a>
+                <div class="user-dropdown" id="userDropdown">
+                    <button class="user-btn" onclick="toggleUserMenu(event)">
+                        <div class="user-avatar">${name.charAt(0)}</div>${name}
+                    </button>
+                    <div class="user-menu" id="userMenu">
+                        <a href="mine-annoncer.html">🏍️ Mine annoncer</a>
+                        <a href="mine-sogeagenter.html">🔔 Mine søgeagenter</a>
+                        <a href="min-profil.html" style="color:#ff6600;">👤 Min profil</a>
+                        <div class="menu-divider"></div>
+                        <button class="logout-item" onclick="logoutUser()">Log ud</button>
+                    </div>
+                </div>`;
+        }
+        function toggleUserMenu(e) { e.stopPropagation(); document.getElementById('userMenu').classList.toggle('open'); }
+        function logoutUser() { localStorage.clear(); window.location.href = 'index.html'; }
+        document.addEventListener('click', () => { const m = document.getElementById('userMenu'); if (m) m.classList.remove('open'); });
+
+        updateHeader();
+        loadProfile();
+    </script>
+</body>
+</html>
