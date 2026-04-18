@@ -424,6 +424,30 @@
             font-weight: 600;
         }
 
+        /* OWNER BAR */
+        .owner-bar { background: #fff9f5; border: 2px solid #ff6600; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .owner-bar-text { font-size: 13px; color: #666; }
+        .owner-bar-text strong { color: #ff6600; }
+        .owner-bar-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .btn-owner-edit { padding: 8px 16px; background: #ff6600; color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .btn-owner-edit:hover { background: #e55a00; }
+        .btn-owner-sold { padding: 8px 16px; background: white; color: #16a34a; border: 2px solid #16a34a; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .btn-owner-sold:hover { background: #f0fdf4; }
+        .btn-owner-delete { padding: 8px 16px; background: white; color: #dc2626; border: 2px solid #dc2626; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .btn-owner-delete:hover { background: #fff0f0; }
+
+        /* EDIT PANEL */
+        .edit-panel { display: none; background: white; border-radius: 8px; border: 2px solid #ff6600; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .edit-panel h3 { font-size: 16px; font-weight: 700; margin-bottom: 1.25rem; }
+        .edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .edit-field label { display: block; font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .edit-field input, .edit-field select, .edit-field textarea { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; font-family: inherit; }
+        .edit-field input:focus, .edit-field select:focus, .edit-field textarea:focus { outline: none; border-color: #ff6600; }
+        .edit-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f0f0f0; }
+        .btn-save-edit { padding: 10px 24px; background: #ff6600; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; }
+        .btn-cancel-edit { padding: 10px 20px; background: white; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; cursor: pointer; }
+        .edit-saved-msg { display: none; background: #e8f5e9; color: #2e7d32; padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 1rem; }
+
         /* RESPONSIVE */
         @media (max-width: 900px) {
             .main-grid {
@@ -552,8 +576,77 @@
         </div>
     </header>
 
-    <!-- CONTAINER -->
-    <div class="container" id="mainContent">
+    <!-- OWNER BAR - vises kun for ejeren -->
+    <div class="container">
+        <div id="ownerBar" style="display:none;">
+            <div class="owner-bar">
+                <div class="owner-bar-text">✏️ <strong>Dette er din annonce</strong> — du kan redigere eller markere den som solgt</div>
+                <div class="owner-bar-actions">
+                    <button class="btn-owner-edit" onclick="toggleEditPanel()">✏️ Rediger annonce</button>
+                    <button class="btn-owner-sold" id="soldBtn" onclick="toggleSold()">✓ Marker solgt</button>
+                    <button class="btn-owner-delete" onclick="deleteOwnerListing()">🗑️ Slet</button>
+                </div>
+            </div>
+
+            <!-- EDIT PANEL -->
+            <div class="edit-panel" id="editPanel">
+                <h3>✏️ Rediger annonce</h3>
+                <div class="edit-saved-msg" id="editSavedMsg">✅ Ændringer gemt!</div>
+                <div class="edit-grid">
+                    <div class="edit-field">
+                        <label>Pris (kr)</label>
+                        <input type="number" id="epPrice" placeholder="85000">
+                    </div>
+                    <div class="edit-field">
+                        <label>Kilometerstand</label>
+                        <input type="number" id="epKm" placeholder="12000">
+                    </div>
+                </div>
+                <div class="edit-grid">
+                    <div class="edit-field">
+                        <label>By / placering</label>
+                        <input type="text" id="epLocation" placeholder="København">
+                    </div>
+                    <div class="edit-field">
+                        <label>Stand</label>
+                        <select id="epCondition">
+                            <option value="Ny">Ny</option>
+                            <option value="Meget god">Meget god</option>
+                            <option value="God">God</option>
+                            <option value="Acceptabel">Acceptabel</option>
+                            <option value="Til istandsættelse">Til istandsættelse</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="edit-grid">
+                    <div class="edit-field">
+                        <label>Telefon</label>
+                        <input type="tel" id="epPhone" placeholder="+45 12 34 56 78">
+                    </div>
+                    <div class="edit-field">
+                        <label>Email</label>
+                        <input type="email" id="epEmail" placeholder="din@email.dk">
+                    </div>
+                </div>
+                <div class="edit-field" style="margin-bottom:0.75rem;">
+                    <label>Beskrivelse</label>
+                    <textarea id="epDescription" rows="4" placeholder="Beskriv motorcyklen..."></textarea>
+                </div>
+                <div class="edit-field">
+                    <label>Servicehistorik</label>
+                    <select id="epService">
+                        <option value="Fuld service historia">Fuld servicehistorik</option>
+                        <option value="Delvis service historia">Delvis servicehistorik</option>
+                        <option value="Ingen service historia">Ingen servicehistorik</option>
+                    </select>
+                </div>
+                <div class="edit-actions">
+                    <button class="btn-cancel-edit" onclick="toggleEditPanel()">Annuller</button>
+                    <button class="btn-save-edit" onclick="saveOwnerEdit()">💾 Gem ændringer</button>
+                </div>
+            </div>
+        </div>
+    </div>
         <!-- LOADING -->
         <div style="text-align: center; padding: 3rem; color: #999;">
             Indlæser annonce...
@@ -803,11 +896,105 @@
         // ANMELD ANNONCE
         function openReportModal() {
             const reason = prompt('Hvorfor anmelder du denne annonce?\n\n1. Svindelannonce\n2. Falskt billede\n3. Upassende indhold\n4. Duplikat\n5. Andet');
-            
             if (reason) {
                 alert('Tak for anmeldelsen! 👍\n\nVi kontakter dig snart angående denne sag.');
-                // Her kan du sende anmeldelsen til backend
             }
+        }
+
+        // OWNER FUNKTIONER
+        function checkOwner() {
+            const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            if (!loggedIn || !listing) return;
+            const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            const isOwner = userListings.some(l => l.id === listing.id);
+            if (!isOwner) return;
+
+            // Vis owner bar
+            document.getElementById('ownerBar').style.display = 'block';
+
+            // Opdater solgt-knap
+            updateSoldBtn();
+
+            // Udfyld edit felter
+            document.getElementById('epPrice').value = listing.price || '';
+            document.getElementById('epKm').value = listing.km || '';
+            document.getElementById('epLocation').value = listing.location || '';
+            document.getElementById('epCondition').value = listing.condition || 'God';
+            document.getElementById('epDescription').value = listing.description || '';
+            document.getElementById('epPhone').value = listing.contactPhone || '';
+            document.getElementById('epEmail').value = listing.contactEmail || '';
+            document.getElementById('epService').value = listing.service || 'Ingen service historia';
+        }
+
+        function updateSoldBtn() {
+            const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            const current = userListings.find(l => l.id === listing.id);
+            const btn = document.getElementById('soldBtn');
+            if (current && current.sold) {
+                btn.textContent = '↩ Sæt aktiv igen';
+                btn.style.color = '#dc2626';
+                btn.style.borderColor = '#dc2626';
+            } else {
+                btn.textContent = '✓ Marker solgt';
+                btn.style.color = '#16a34a';
+                btn.style.borderColor = '#16a34a';
+            }
+        }
+
+        function toggleEditPanel() {
+            const panel = document.getElementById('editPanel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+            if (panel.style.display === 'block') panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function saveOwnerEdit() {
+            let userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            userListings = userListings.map(l => {
+                if (l.id !== listing.id) return l;
+                return {
+                    ...l,
+                    price: parseInt(document.getElementById('epPrice').value) || l.price,
+                    km: parseInt(document.getElementById('epKm').value) || l.km,
+                    location: document.getElementById('epLocation').value || l.location,
+                    condition: document.getElementById('epCondition').value,
+                    description: document.getElementById('epDescription').value,
+                    contactPhone: document.getElementById('epPhone').value,
+                    contactEmail: document.getElementById('epEmail').value,
+                    service: document.getElementById('epService').value,
+                    updatedAt: new Date().toISOString()
+                };
+            });
+            localStorage.setItem('userListings', JSON.stringify(userListings));
+
+            // Vis gemt besked
+            const msg = document.getElementById('editSavedMsg');
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+                toggleEditPanel();
+                // Genindlæs siden for at vise opdaterede data
+                window.location.reload();
+            }, 1500);
+        }
+
+        function toggleSold() {
+            let userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            const current = userListings.find(l => l.id === listing.id);
+            const newSold = !(current && current.sold);
+            if (newSold && !confirm('Marker annoncen som solgt?')) return;
+            userListings = userListings.map(l => l.id === listing.id ? {...l, sold: newSold} : l);
+            localStorage.setItem('userListings', JSON.stringify(userListings));
+            updateSoldBtn();
+            alert(newSold ? '✅ Annonce markeret som solgt!' : '✅ Annonce sat aktiv igen!');
+        }
+
+        function deleteOwnerListing() {
+            if (!confirm('Er du sikker på at du vil slette denne annonce?\n\nDette kan ikke fortrydes!')) return;
+            let userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            userListings = userListings.filter(l => l.id !== listing.id);
+            localStorage.setItem('userListings', JSON.stringify(userListings));
+            alert('Annonce slettet!');
+            window.location.href = 'mine-annoncer.html';
         }
     </script>
     <script>
@@ -852,6 +1039,7 @@
             window.location.href = 'index.html';
         }
         updateHeader();
+        checkOwner();
     </script>
 </body>
 </html>
