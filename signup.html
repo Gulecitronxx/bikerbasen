@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mine favoritter - BikerBasen</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWJZ8NJB0C"></script>
     <script>
@@ -9,430 +12,239 @@
       gtag('js', new Date());
       gtag('config', 'G-RWJZ8NJB0C');
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opret konto - BikerBasen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #e5e5e5; color: #333; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", "Helvetica Neue", sans-serif;
-            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        header { background: white; padding: 1rem 0; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-bottom: 1px solid #f0f0f0; }
+        .header-container { max-width: 100%; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 22px; font-weight: 700; color: #ff6600; text-decoration: none; letter-spacing: -0.5px; }
+        .header-nav { display: flex; gap: 2.5rem; align-items: center; }
+        .header-link { color: #333; font-size: 13px; font-weight: 500; cursor: pointer; text-decoration: none; transition: color 0.2s; }
+        .header-link:hover { color: #ff6600; }
 
-        /* HEADER */
-        header {
-            background: white;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 1.5rem 2rem;
-        }
+        .page-wrapper { max-width: 900px; margin: 2.5rem auto; padding: 0 1rem; }
 
-        .header-content {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ff6600;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .logo:hover {
-            opacity: 0.8;
-        }
-
-        /* MAIN CONTENT */
-        .signup-container {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .signup-box {
+        .page-header {
             background: white;
             border-radius: 8px;
-            padding: 2.5rem;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .signup-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333333;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-
-        .signup-subtitle {
-            font-size: 14px;
-            color: #999;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .form-group {
+            border: 12px solid #f0f0f0;
+            padding: 1.5rem 2rem;
             margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: #4a4a4a;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            font-family: 'Roboto', sans-serif;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #ff6600;
-            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
-        }
-
-        .password-requirements {
-            font-size: 12px;
-            color: #999;
-            margin-top: 0.5rem;
-        }
-
-        .checkbox-group {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            font-size: 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .page-header h1 { font-size: 22px; font-weight: 700; }
+        .page-header p { font-size: 13px; color: #999; margin-top: 3px; }
+        .clear-btn { padding: 8px 16px; border: 1px solid #ddd; background: white; border-radius: 6px; font-size: 13px; cursor: pointer; color: #999; transition: all 0.2s; }
+        .clear-btn:hover { border-color: #dc2626; color: #dc2626; }
+
+        .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+        .listing-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.3s; position: relative; }
+        .listing-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.15); transform: translateY(-4px); }
+        .listing-image { width: 100%; height: 200px; background: #e0e0e0; position: relative; display: flex; align-items: center; justify-content: center; font-size: 48px; }
+        .listing-image img { width: 100%; height: 100%; object-fit: cover; }
+        .listing-badge { position: absolute; top: 8px; left: 8px; background: #22c55e; color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+        .fav-btn { position: absolute; top: 8px; right: 8px; background: #fff0f0; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 17px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .fav-btn:hover { transform: scale(1.2); }
+        .listing-info { padding: 1.25rem; }
+        .listing-title { font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+        .listing-type { font-size: 12px; color: #999; margin-bottom: 0.75rem; }
+        .listing-meta { display: flex; gap: 1rem; font-size: 12px; color: #666; margin-bottom: 0.75rem; }
+        .listing-price { font-size: 18px; font-weight: 700; color: #ff6600; }
+        .listing-location { font-size: 12px; color: #999; margin-top: 4px; }
+
+        /* EMPTY STATE */
+        .empty-state { text-align: center; padding: 5rem 2rem; background: white; border-radius: 8px; border: 12px solid #f0f0f0; }
+        .empty-icon { font-size: 64px; margin-bottom: 1rem; }
+        .empty-title { font-size: 20px; font-weight: 700; margin-bottom: 0.5rem; }
+        .empty-text { font-size: 14px; color: #999; margin-bottom: 2rem; }
+        .browse-btn { display: inline-block; padding: 12px 28px; background: #ff6600; color: white; border-radius: 8px; font-weight: 700; font-size: 14px; text-decoration: none; transition: background 0.2s; }
+        .browse-btn:hover { background: #e55a00; }
+
+        /* NOT LOGGED IN */
+        .login-prompt { text-align: center; padding: 5rem 2rem; background: white; border-radius: 8px; border: 12px solid #f0f0f0; }
+        .login-btn { display: inline-block; padding: 12px 28px; background: #1a1a1a; color: white; border-radius: 8px; font-weight: 700; font-size: 14px; text-decoration: none; margin-top: 1.5rem; }
+
+        footer { background: white; color: #666; padding: 2rem; text-align: center; margin-top: 2rem; font-size: 13px; box-shadow: 0 -1px 3px rgba(0,0,0,0.05); }
+
+        @media (max-width: 700px) {
+            .listings-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 500px) {
+            .listings-grid { grid-template-columns: 1fr; }
         }
 
-        .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: #ff6600;
-            flex-shrink: 0;
+        /* USER DROPDOWN */
+        .user-dropdown { position: relative; display: inline-block; }
+        .user-btn {
+            display: flex; align-items: center; gap: 7px;
+            background: none; border: none; cursor: pointer;
+            font-size: 13px; font-weight: 600; color: #333;
+            padding: 4px 8px; border-radius: 6px;
+            transition: background 0.2s;
         }
-
-        .checkbox-group label {
-            cursor: pointer;
-            margin: 0;
-            color: #666;
-            line-height: 1.3;
+        .user-btn:hover { background: #f5f5f5; }
+        .user-btn .user-avatar {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: #ff6600; color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; flex-shrink: 0;
         }
-
-        .checkbox-group a {
-            color: #0066cc;
-            text-decoration: none;
+        .user-menu {
+            display: none; position: absolute; top: calc(100% + 8px); right: 0;
+            background: white; border-radius: 8px; min-width: 180px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 999;
+            border: 1px solid #f0f0f0; overflow: hidden;
         }
-
-        .checkbox-group a:hover {
-            text-decoration: underline;
+        .user-menu.open { display: block; animation: fadeDown 0.15s ease; }
+        @keyframes fadeDown { from { opacity:0; transform: translateY(-6px); } to { opacity:1; transform: translateY(0); } }
+        .user-menu a, .user-menu button {
+            display: block; width: 100%; text-align: left;
+            padding: 11px 16px; font-size: 13px; font-weight: 500;
+            color: #333; text-decoration: none; background: none; border: none;
+            cursor: pointer; transition: background 0.15s;
         }
-
-        .signup-button {
-            width: 100%;
-            padding: 12px;
-            background: #ff6600;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .signup-button:hover {
-            background: #e55a00;
-        }
-
-        .signup-button:active {
-            transform: scale(0.98);
-        }
-
-        .divider {
-            text-align: center;
-            margin: 1.5rem 0;
-            font-size: 13px;
-            color: #999;
-            position: relative;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: #e0e0e0;
-        }
-
-        .divider span {
-            background: white;
-            padding: 0 0.5rem;
-            position: relative;
-        }
-
-        .login-section {
-            text-align: center;
-            font-size: 13px;
-            color: #666;
-        }
-
-        .login-section a {
-            color: #ff6600;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        .login-section a:hover {
-            color: #e55a00;
-        }
-
-        /* SOCIAL LOGIN */
-        .social-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .social-button {
-            padding: 10px;
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .social-button:hover {
-            border-color: #ff6600;
-            background: #fff9f5;
-        }
-
-        .success-message {
-            display: none;
-            padding: 1rem;
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-radius: 4px;
-            text-align: center;
-            font-size: 13px;
-            margin-bottom: 1rem;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 600px) {
-            header {
-                padding: 1rem;
-            }
-
-            .signup-box {
-                padding: 1.5rem;
-                border-radius: 8px;
-            }
-
-            .signup-title {
-                font-size: 20px;
-            }
-
-            .signup-container {
-                padding: 1rem;
-            }
-        }
+        .user-menu a:hover, .user-menu button:hover { background: #f8f8f8; }
+        .user-menu .menu-divider { height: 1px; background: #f0f0f0; margin: 4px 0; }
+        .user-menu .logout-item { color: #ff6600; font-weight: 600; }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
+
     <header>
-        <div class="header-content">
-            <a href="index.html" class="logo">BikerBasen</a>
+        <div class="header-container">
+            <a href="index.html" class="logo">🏍️ BikerBasen</a>
+            <div class="header-nav">
+                <a class="header-link" href="listings.html">Alle annoncer</a>
+                <a class="header-link" href="create-listing.html">Sælg din motorcykel</a>
+                <span id="headerAuth"></span>
+            </div>
         </div>
     </header>
 
-    <!-- SIGNUP CONTAINER -->
-    <div class="signup-container">
-        <div class="signup-box">
-            <div class="success-message" id="successMessage">
-                Konto oprettet! Logget ind automatisk...
-            </div>
+    <div class="page-wrapper" id="pageContent"></div>
 
-            <h1 class="signup-title">Opret konto</h1>
-            <p class="signup-subtitle">og start med at sælge dine motorcykler</p>
-
-            <form id="signupForm" onsubmit="handleSignup(event)">
-                <div class="form-group">
-                    <label for="fullname">Fuldt navn</label>
-                    <input 
-                        type="text" 
-                        id="fullname" 
-                        placeholder="Dit navn" 
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        placeholder="din@email.dk" 
-                        required
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Telefon (valgfrit)</label>
-                    <input 
-                        type="tel" 
-                        id="phone" 
-                        placeholder="+45 12 34 56 78"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Adgangskode</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        placeholder="Mindst 6 karakterer" 
-                        required
-                    >
-                    <div class="password-requirements">
-                        Skal være mindst 6 karakterer lang
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="password-confirm">Bekræft adgangskode</label>
-                    <input 
-                        type="password" 
-                        id="password-confirm" 
-                        placeholder="Gentag adgangskoden" 
-                        required
-                    >
-                </div>
-
-                <div class="checkbox-group">
-                    <input type="checkbox" id="terms" required>
-                    <label for="terms">
-                        Jeg accepterer <a href="#">vilkår og betingelser</a>
-                    </label>
-                </div>
-
-                <div class="checkbox-group">
-                    <input type="checkbox" id="newsletter">
-                    <label for="newsletter">
-                        Send mig nyheder og tilbud fra BikerBasen
-                    </label>
-                </div>
-
-                <button type="submit" class="signup-button">Opret gratis konto</button>
-            </form>
-
-            <div class="divider">
-                <span>eller</span>
-            </div>
-
-            <div class="social-buttons">
-                <button class="social-button" type="button" onclick="signupWith('Google')">
-                    🔵 Google
-                </button>
-                <button class="social-button" type="button" onclick="signupWith('Facebook')">
-                    👤 Facebook
-                </button>
-            </div>
-
-            <div class="login-section">
-                Har du allerede en konto? 
-                <a href="login.html">Log ind her</a>
-            </div>
-        </div>
-    </div>
+    <footer>© 2026 BikerBasen — Danmarks måske største motorcykelmarkedsplads</footer>
 
     <script>
-        function handleSignup(event) {
-            event.preventDefault();
+        const allMotorcycles = [
+            { id: 1, brand: 'Honda', model: 'CB500', type: 'Naked Bike', year: 2018, km: 12000, price: 85000, location: 'København', new: true },
+            { id: 2, brand: 'Yamaha', model: 'Virago 535', type: 'Cruiser', year: 2010, km: 25000, price: 55000, location: 'Aarhus', new: false },
+            { id: 3, brand: 'BMW', model: 'F 800 GS', type: 'Adventure', year: 2015, km: 22000, price: 95000, location: 'Odense', new: false },
+            { id: 4, brand: 'Harley-Davidson', model: 'Street 750', type: 'Cruiser', year: 2017, km: 18000, price: 75000, location: 'Randers', new: true },
+            { id: 5, brand: 'Kawasaki', model: 'Ninja 650', type: 'Sport', year: 2020, km: 8000, price: 65000, location: 'Aalborg', new: true },
+            { id: 6, brand: 'Ducati', model: 'Monster 821', type: 'Naked Bike', year: 2019, km: 15000, price: 95000, location: 'København', new: false },
+            { id: 7, brand: 'Triumph', model: 'Street Twin', type: 'Retro', year: 2016, km: 20000, price: 70000, location: 'Herning', new: false },
+            { id: 8, brand: 'KTM', model: '790 Duke', type: 'Naked Bike', year: 2021, km: 5000, price: 85000, location: 'Vejle', new: true },
+            { id: 9, brand: 'Royal Enfield', model: 'Interceptor 650', type: 'Retro', year: 2022, km: 3000, price: 65000, location: 'Silkeborg', new: true },
+            { id: 10, brand: 'Suzuki', model: 'V-Strom 650', type: 'Adventure', year: 2018, km: 16000, price: 70000, location: 'Horsens', new: false },
+            { id: 11, brand: 'Honda', model: 'CB1100', type: 'Retro', year: 2017, km: 14000, price: 90000, location: 'Svendborg', new: false },
+            { id: 12, brand: 'Yamaha', model: 'YZF-R6', type: 'Sport', year: 2019, km: 9000, price: 75000, location: 'Viborg', new: true },
+            { id: 13, brand: 'BMW', model: 'R 1200 GS', type: 'Adventure', year: 2016, km: 28000, price: 120000, location: 'Esbjerg', new: false },
+            { id: 14, brand: 'Kawasaki', model: 'Vulcan 900', type: 'Cruiser', year: 2014, km: 35000, price: 62000, location: 'Kolding', new: true },
+            { id: 15, brand: 'Aprilia', model: 'RS 125', type: 'Sport', year: 2019, km: 4200, price: 42000, location: 'Lolland', new: true },
+        ];
 
-            const fullname = document.getElementById('fullname').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const passwordConfirm = document.getElementById('password-confirm').value;
-            const terms = document.getElementById('terms').checked;
+        function getFavorites() { return JSON.parse(localStorage.getItem('favorites') || '[]'); }
+        function saveFavorites(f) { localStorage.setItem('favorites', JSON.stringify(f)); }
 
-            // Validering
-            if (password !== passwordConfirm) {
-                alert('Adgangskoderne matcher ikke!');
-                return;
-            }
-
-            if (password.length < 6) {
-                alert('Adgangskoden skal være mindst 6 karakterer!');
-                return;
-            }
-
-            if (!terms) {
-                alert('Du skal acceptere vilkår og betingelser!');
-                return;
-            }
-
-            // Gem brugerdata
-            localStorage.setItem('userName', fullname);
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('userLoggedIn', 'true');
-
-            // Vis success besked
-            document.getElementById('signupForm').style.display = 'none';
-            document.getElementById('successMessage').style.display = 'block';
-
-            // Redirect efter 2 sekunder
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
+        function removeFavorite(event, id) {
+            event.stopPropagation();
+            let favs = getFavorites().filter(f => f !== id);
+            saveFavorites(favs);
+            render();
         }
 
-        function signupWith(provider) {
-            const email = prompt(`Opret med ${provider}\n\nAngiv din email:`);
-            if (email) {
-                const name = email.split('@')[0];
-                localStorage.setItem('userName', name);
-                localStorage.setItem('userEmail', email);
-                localStorage.setItem('userLoggedIn', 'true');
-                
-                document.getElementById('signupForm').style.display = 'none';
-                document.getElementById('successMessage').style.display = 'block';
+        function clearAll() {
+            if (!confirm('Fjern alle favoritter?')) return;
+            saveFavorites([]);
+            render();
+        }
 
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 2000);
+        function updateHeader() {
+            const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const rawName = localStorage.getItem('userName') || 'Profil';
+            const name = rawName.split(' ')[0].charAt(0).toUpperCase() + rawName.split(' ')[0].slice(1).toLowerCase();
+            const el = document.getElementById('headerAuth');
+            if (loggedIn) {
+                el.innerHTML = `<a class="header-link" href="favoritter.html" style="color:#ff6600;">❤️ Favoritter</a><a class="header-link" onclick="logout()">Log ud (${name})</a>`;
+            } else {
+                el.innerHTML = `<a class="header-link" href="login.html">Log ind</a>`;
             }
         }
+
+        function render() {
+            const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const content = document.getElementById('pageContent');
+
+            if (!loggedIn) {
+                content.innerHTML = `
+                    <div class="login-prompt">
+                        <div style="font-size:56px; margin-bottom:1rem;">🔐</div>
+                        <h2 style="font-size:20px; font-weight:700; margin-bottom:0.5rem;">Log ind for at se dine favoritter</h2>
+                        <p style="color:#999; font-size:14px;">Gem motorcykler du er interesseret i og find dem nemt igen.</p>
+                        <a href="login.html" class="login-btn">Log ind</a>
+                    </div>`;
+                return;
+            }
+
+            const favIds = getFavorites();
+            const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            const allListings = [...allMotorcycles, ...userListings];
+            const favListings = allListings.filter(m => favIds.includes(m.id));
+
+            if (favListings.length === 0) {
+                content.innerHTML = `
+                    <div class="page-header">
+                        <div><h1>❤️ Mine favoritter</h1><p>0 gemte motorcykler</p></div>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-icon">🤍</div>
+                        <div class="empty-title">Ingen favoritter endnu</div>
+                        <div class="empty-text">Tryk på hjertet 🤍 på en annonce for at gemme den her.</div>
+                        <a href="listings.html" class="browse-btn">Se alle motorcykler</a>
+                    </div>`;
+                return;
+            }
+
+            content.innerHTML = `
+                <div class="page-header">
+                    <div>
+                        <h1>❤️ Mine favoritter</h1>
+                        <p>${favListings.length} gemte motorcykel${favListings.length !== 1 ? 'r' : ''}</p>
+                    </div>
+                    <button class="clear-btn" onclick="clearAll()">🗑️ Ryd alle</button>
+                </div>
+                <div class="listings-grid">
+                    ${favListings.map(m => `
+                        <div class="listing-card" onclick="window.location.href='listing-detail.html?id=${m.id}'">
+                            <div class="listing-image">
+                                ${m.images && m.images.length > 0
+                                    ? `<img src="${m.images[0].data}" alt="${m.brand} ${m.model}">`
+                                    : '🏍️'}
+                                ${m.new ? '<div class="listing-badge">Ny annonce</div>' : ''}
+                                <button class="fav-btn" onclick="removeFavorite(event, ${m.id})">❤️</button>
+                            </div>
+                            <div class="listing-info">
+                                <div class="listing-title">${m.brand} ${m.model}</div>
+                                <div class="listing-type">${m.type || ''}</div>
+                                <div class="listing-meta">
+                                    <span>📅 ${m.year}</span>
+                                    <span>🛣️ ${m.km.toLocaleString('da-DK')} km</span>
+                                </div>
+                                <div class="listing-price">${m.price.toLocaleString('da-DK')} kr</div>
+                                <div class="listing-location">📍 ${m.location}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>`;
+        }
+
+        updateHeader();
+        render();
     </script>
 </body>
 </html>
