@@ -270,7 +270,7 @@
             <div class="header-nav">
                 <a class="header-link" href="prisvurdering.html" style="color:#ff6600;">Prisvurdering</a>
                 <a class="header-link" href="create-listing.html">Sælg din motorcykel</a>
-                <a class="header-link" href="login.html">Log ind</a>
+                <span id="headerAuth"></span>
             </div>
         </div>
     </header>
@@ -662,6 +662,27 @@
         }
 
         init();
+    </script>
+
+        function updateHeader() {
+            const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const name = localStorage.getItem('userName') || 'Profil';
+            const el = document.getElementById('headerAuth');
+            if (!el) return;
+            if (loggedIn) {
+                el.innerHTML = `<a class="header-link" href="favoritter.html">❤️ Favoritter</a><a class="header-link" onclick="logoutUser()" style="color:#ff6600;">Log ud (${name})</a>`;
+            } else {
+                el.innerHTML = `<a class="header-link" href="login.html">Log ind</a>`;
+            }
+        }
+        function logoutUser() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            window.location.href = 'index.html';
+        }
+
+        updateHeader();
     </script>
 </body>
 </html>
