@@ -351,19 +351,76 @@
         let currentListings = [...motorcycles];
         let selectedType = null;
 
-        // Tilføj bruger-oprettede annoncer fra localStorage
-        const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
-        userListings.filter(u => !u.sold).forEach(u => {
-            if (!motorcycles.find(m => m.id === u.id)) {
-                motorcycles.push({...u, createdDaysAgo: 0});
-                currentListings.push({...u, createdDaysAgo: 0});
-            }
-        });
-
         // Læs URL parameter ?type=
         function getUrlParameter(param) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
+        }
+
+        // HENT ANNONCER FRA SUPABASE + hardkodede
+        async function loadAllListings() {
+            // Hent fra Supabase
+            const { data: sbListings, error } = await sb
+                .from('listings')
+                .select('*')
+                .eq('sold', false)
+                .order('created_at', { ascending: false });
+
+            if (sbListings && sbListings.length > 0) {
+                sbListings.forEach(l => {
+                    if (!motorcycles.find(m => m.id === l.id)) {
+                        motorcycles.push({
+                            id: l.id,
+                            brand: l.brand, model: l.model,
+                            type: l.type, year: l.year,
+                            km: l.km, price: l.price,
+                            location: l.location,
+                            condition: l.condition, service: l.service,
+                            description: l.description,
+                            contactName: l.contact_name,
+                            contactEmail: l.contact_email,
+                            contactPhone: l.contact_phone,
+                            isDealer: l.is_dealer,
+                            dealerName: l.dealer_name,
+                            dealerAddress: l.dealer_address,
+                            dealerWebsite: l.dealer_website,
+                            dealerCVR: l.dealer_cvr,
+                            images: JSON.parse(localStorage.getItem('listingImages_' + l.id) || '[]'),
+                            dealerLogo: localStorage.getItem('dealerLogo_' + l.id),
+                            createdDaysAgo: Math.floor((Date.now() - new Date(l.created_at)) / 86400000),
+                            createdAt: l.created_at
+                        });
+                    }
+                });
+            }
+
+            // Fallback: tilføj localStorage annoncer der ikke er i Supabase
+            const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            userListings.filter(u => !u.sold).forEach(u => {
+                if (!motorcycles.find(m => m.id === u.id)) {
+                    motorcycles.push({...u, createdDaysAgo: 0});
+                }
+            });
+
+            currentListings = [...motorcycles];
+
+            // Anvend URL filtre
+            selectedType = getUrlParameter('type');
+            const urlBrands = getUrlParameter('brands');
+            const urlKm = getUrlParameter('km');
+            const urlPrice = getUrlParameter('price');
+
+            if (urlBrands) document.getElementById('searchInput').value = urlBrands.split(',')[0];
+            if (selectedType) document.getElementById('typeFilterPanel').value = selectedType;
+            if (urlKm) document.getElementById('kmFilterPanel').value =
+                urlKm === '0-5000' ? '5000' : urlKm === '5000-20000' ? '15000' : urlKm === '20000+' ? '30000' : '';
+            if (urlPrice) document.getElementById('priceFilterPanel').value =
+                urlPrice === '0-50000' ? '50000' : urlPrice === '50000-100000' ? '100000' : urlPrice === '100000+' ? '150000' : '';
+
+            document.getElementById('pageTitle').textContent = selectedType ? `${selectedType} motorcykler` : 'Alle motorcykler';
+            filterListings();
+            updateUI();
+            updateHeader();
         }
 
         let filterPanelOpen = false;
@@ -575,40 +632,8 @@
             displayListings(currentListings);
         }
 
-        // Initialiser siden
-        selectedType = getUrlParameter('type');
-
-        // Læs alle filtre fra URL
-        const urlBrands = getUrlParameter('brands');
-        const urlModels = getUrlParameter('models');
-        const urlYear   = getUrlParameter('year');
-        const urlKm     = getUrlParameter('km');
-        const urlPrice  = getUrlParameter('price');
-
-        if (urlBrands) {
-            urlBrands.split(',').forEach(b => {
-                if (!motorcycles.find(m => m.brand === b)) return;
-                // Sæt filter panel type til brand (bruges i filterListings)
-            });
-            // Gem som typeFilterPanel workaround — brug searchInput
-            document.getElementById('searchInput').value = urlBrands.split(',')[0];
-        }
-        if (selectedType) document.getElementById('typeFilterPanel').value = selectedType;
-        if (urlYear) {
-            // Åbn filter panel og sæt år
-        }
-        if (urlKm) document.getElementById('kmFilterPanel').value =
-            urlKm === '0-5000' ? '5000' : urlKm === '5000-20000' ? '15000' : urlKm === '20000+' ? '30000' : '';
-        if (urlPrice) document.getElementById('priceFilterPanel').value =
-            urlPrice === '0-50000' ? '50000' : urlPrice === '50000-100000' ? '100000' : urlPrice === '100000+' ? '150000' : '';
-
-        const pageTitle = document.getElementById('pageTitle');
-        pageTitle.textContent = selectedType ? `${selectedType} motorcykler` : 'Alle motorcykler';
-        filterListings();
-        updateUI();
-        updateHeader();
-        const el = document.getElementById('bikeCountDisplay');
-        if (el) el.textContent = motorcycles.length.toLocaleString('da-DK');
+        // Start
+        loadAllListings();
         document.addEventListener('click', () => { const m = document.getElementById('userMenu'); if (m) m.classList.remove('open'); });
     </script>
 </body>
