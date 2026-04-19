@@ -1152,24 +1152,20 @@
             });
         }, 500);
 
-        let isSubmitting = false; // Guard mod dobbelt-submit
+        let isSubmitting = false;
 
         async function submitListing(event) {
             event.preventDefault();
-
-            // Forhindre dobbelt-submit
             if (isSubmitting) return;
             isSubmitting = true;
 
             const submitBtn = document.querySelector('button[type="submit"]');
             const errorEl = document.getElementById('errorMessage');
-            if (errorEl) errorEl.style.display = 'none';
+            if (errorEl) { errorEl.style.display = 'none'; errorEl.textContent = ''; }
 
             // Tjek login
             const { data: { session } } = await sb.auth.getSession();
-            const localLogin = localStorage.getItem('userLoggedIn') === 'true';
-
-            if (!session && !localLogin) {
+            if (!session) {
                 isSubmitting = false;
                 alert('Du skal være logget ind for at oprette en annonce');
                 window.location.href = 'login.html';
@@ -1177,42 +1173,28 @@
             }
 
             // Validering
-            if (!selectedMoto.brand) { 
-                alert('Vælg venligst en motorcykel først (Trin 1)'); 
-                return; 
-            }
-            if (!document.getElementById('price').value) { 
-                alert('Udfyld venligst prisen'); 
-                return; 
-            }
-            if (!document.getElementById('location').value) { 
-                alert('Udfyld venligst by/lokation'); 
-                return; 
-            }
-
-            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Gemmer...'; }
-
-            // Tjek for duplikat (samme brand+model+pris fra samme bruger inden for 10 sek)
-            const existingListings = JSON.parse(localStorage.getItem('userListings') || '[]');
-            const tenSecondsAgo = Date.now() - 10000;
-            const isDuplicate = existingListings.some(l =>
-                l.brand === selectedMoto.brand &&
-                l.model === selectedMoto.model &&
-                l.price === parseInt(document.getElementById('price').value) &&
-                new Date(l.createdAt).getTime() > tenSecondsAgo
-            );
-            if (isDuplicate) {
+            if (!selectedMoto || !selectedMoto.brand) {
                 isSubmitting = false;
-                if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Opret annonce'; }
-                alert('Annoncen ser ud til allerede at være oprettet!');
-                window.location.href = 'index.html';
+                alert('Du skal vælge en motorcykel i Trin 1 først!');
                 return;
             }
+            if (!document.getElementById('price').value) {
+                isSubmitting = false;
+                alert('Udfyld venligst prisen');
+                return;
+            }
+            if (!document.getElementById('location').value) {
+                isSubmitting = false;
+                alert('Udfyld venligst by/lokation');
+                return;
+            }
+
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '⏳ Gemmer...'; }
 
             const imageData = uploadedImages.map(img => img.data || img);
 
             const listing = {
-                user_id: session?.user?.id || localStorage.getItem('userId'),
+                user_id: session.user.id,
                 brand: selectedMoto.brand,
                 model: selectedMoto.model,
                 year: selectedMoto.year,
@@ -1231,30 +1213,35 @@
                 dealer_address: document.getElementById('dealerAddress')?.value || null,
                 dealer_website: document.getElementById('dealerWebsite')?.value || null,
                 dealer_cvr: document.getElementById('dealerCVR')?.value || null,
+                sold: false,
             };
 
-            // Forsøg Supabase insert hvis session
-            let savedId = null;
-            if (session) {
-                const { data, error } = await sb.from('listings').insert([listing]).select().single();
-                if (error) {
-                    console.error('Supabase fejl:', error);
-                    // Fortsæt med localStorage som fallback
+            // Gem i Supabase
+            const { data, error } = await sb.from('listings').insert([listing]).select().single();
+
+            if (error) {
+                isSubmitting = false;
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Opret annonce'; }
+                if (errorEl) {
+                    errorEl.textContent = '❌ Fejl: ' + error.message;
+                    errorEl.style.display = 'block';
                 } else {
-                    savedId = data.id;
-                    if (imageData.length > 0) {
-                        localStorage.setItem('listingImages_' + savedId, JSON.stringify(imageData.map(d => ({data: d}))));
-                    }
-                    if (dealerLogoBase64) {
-                        localStorage.setItem('dealerLogo_' + savedId, dealerLogoBase64);
-                    }
+                    alert('Fejl ved oprettelse: ' + error.message);
                 }
+                return;
             }
 
-            // Gem altid i localStorage
-            const localId = savedId || Date.now();
+            // Gem billeder og logo i localStorage med Supabase ID
+            if (imageData.length > 0) {
+                localStorage.setItem('listingImages_' + data.id, JSON.stringify(imageData.map(d => ({data: d}))));
+            }
+            if (dealerLogoBase64) {
+                localStorage.setItem('dealerLogo_' + data.id, dealerLogoBase64);
+            }
+
+            // Gem i localStorage så siden vises med det samme
             const localListing = {
-                id: localId,
+                id: data.id,
                 brand: listing.brand, model: listing.model,
                 year: listing.year, km: listing.km, type: listing.type,
                 price: listing.price, location: listing.location,
@@ -1270,25 +1257,19 @@
                 dealerCVR: listing.dealer_cvr,
                 dealerLogo: dealerLogoBase64,
                 images: uploadedImages,
+                sold: false,
                 createdAt: new Date().toISOString()
             };
-
-            if (!savedId) {
-                // Gem billeder med lokal ID
-                if (imageData.length > 0) {
-                    localStorage.setItem('listingImages_' + localId, JSON.stringify(imageData.map(d => ({data: d}))));
-                }
-                if (dealerLogoBase64) {
-                    localStorage.setItem('dealerLogo_' + localId, dealerLogoBase64);
-                }
-            }
-
             let userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            // Fjern eventuelle duplikater med samme ID
+            userListings = userListings.filter(l => l.id !== data.id);
             userListings.push(localListing);
             localStorage.setItem('userListings', JSON.stringify(userListings));
 
+            // Vis success og gå videre
             document.getElementById('successMessage').style.display = 'block';
-            setTimeout(() => window.location.href = 'index.html', 2000);
+            if (submitBtn) submitBtn.textContent = '✅ Annonce oprettet!';
+            setTimeout(() => window.location.href = 'listings.html', 2000);
         }
     </script>
     <script>
