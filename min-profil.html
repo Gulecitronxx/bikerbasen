@@ -62,6 +62,8 @@
 
         footer { background: white; color: #666; padding: 2rem; text-align: center; margin-top: 2rem; font-size: 13px; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>const sb=window.supabase.createClient('https://dxefcvlerxugymjfjgoe.supabase.co','sb_publishable_05IjuXC5ZJO912AGP-qZ4Q_IujZju7U');</script>
 </head>
 <body>
     <header>
@@ -149,15 +151,35 @@
     <footer>© 2026 BikerBasen — Danmarks måske største motorcykelmarkedsplads</footer>
 
     <script>
-        if (localStorage.getItem('userLoggedIn') !== 'true') window.location.href = 'login.html';
+        // Tjek login
+        sb.auth.getSession().then(({data:{session}})=>{
+            if (!session && localStorage.getItem('userLoggedIn') !== 'true') {
+                window.location.href = 'login.html';
+            } else {
+                loadProfile();
+            }
+        });
 
-        function loadProfile() {
-            const name = localStorage.getItem('userName') || '';
-            const email = localStorage.getItem('userEmail') || '';
-            const phone = localStorage.getItem('userPhone') || '';
-            const city = localStorage.getItem('userCity') || '';
+        async function loadProfile() {
+            const { data: { session } } = await sb.auth.getSession();
+
+            let name = '', email = '', phone = '', city = '';
+
+            if (session) {
+                const { data: profile } = await sb.from('profiles')
+                    .select('*').eq('id', session.user.id).single();
+                name = profile?.name || session.user.email.split('@')[0];
+                email = session.user.email;
+                phone = profile?.phone || '';
+                city = profile?.city || '';
+            } else {
+                name = localStorage.getItem('userName') || '';
+                email = localStorage.getItem('userEmail') || '';
+                phone = localStorage.getItem('userPhone') || '';
+                city = localStorage.getItem('userCity') || '';
+            }
+
             const firstName = name.split(' ')[0].charAt(0).toUpperCase() + name.split(' ')[0].slice(1).toLowerCase();
-
             document.getElementById('avatarEl').textContent = firstName.charAt(0) || '?';
             document.getElementById('profileName').textContent = name || 'Ukendt bruger';
             document.getElementById('profileEmail').textContent = email;
@@ -166,34 +188,56 @@
             document.getElementById('inputPhone').value = phone;
             document.getElementById('inputCity').value = city;
 
-            document.getElementById('statAnnoncer').textContent = JSON.parse(localStorage.getItem('userListings') || '[]').length;
+            // Stats
+            if (session) {
+                const { count: annCount } = await sb.from('listings').select('*', {count:'exact',head:true}).eq('user_id', session.user.id);
+                document.getElementById('statAnnoncer').textContent = annCount || 0;
+            } else {
+                document.getElementById('statAnnoncer').textContent = JSON.parse(localStorage.getItem('userListings') || '[]').length;
+            }
             document.getElementById('statFavoritter').textContent = JSON.parse(localStorage.getItem('favorites') || '[]').length;
             document.getElementById('statAgenter').textContent = JSON.parse(localStorage.getItem('searchAgents') || '[]').length;
         }
 
-        function saveProfile() {
-            localStorage.setItem('userName', document.getElementById('inputName').value);
-            localStorage.setItem('userEmail', document.getElementById('inputEmail').value);
-            localStorage.setItem('userPhone', document.getElementById('inputPhone').value);
-            localStorage.setItem('userCity', document.getElementById('inputCity').value);
+        async function saveProfile() {
+            const name = document.getElementById('inputName').value;
+            const email = document.getElementById('inputEmail').value;
+            const phone = document.getElementById('inputPhone').value;
+            const city = document.getElementById('inputCity').value;
+
+            const { data: { session } } = await sb.auth.getSession();
+            if (session) {
+                await sb.from('profiles').upsert({
+                    id: session.user.id, name, phone, city
+                });
+            }
+
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userPhone', phone);
+            localStorage.setItem('userCity', city);
+
             document.getElementById('saveSuccess').style.display = 'block';
             setTimeout(() => document.getElementById('saveSuccess').style.display = 'none', 3000);
             loadProfile();
             updateHeader();
         }
 
-        function changePassword() {
+        async function changePassword() {
             const p1 = document.getElementById('newPass').value;
             const p2 = document.getElementById('confirmPass').value;
             if (p1.length < 6) { alert('Adgangskoden skal være mindst 6 tegn'); return; }
             if (p1 !== p2) { alert('Adgangskoderne matcher ikke'); return; }
+            const { error } = await sb.auth.updateUser({ password: p1 });
+            if (error) { alert('Fejl: ' + error.message); return; }
             alert('✅ Adgangskode ændret!');
             document.getElementById('newPass').value = '';
             document.getElementById('confirmPass').value = '';
         }
 
-        function deleteAccount() {
+        async function deleteAccount() {
             if (!confirm('Er du HELT sikker? Dette kan ikke fortrydes!')) return;
+            await sb.auth.signOut();
             localStorage.clear();
             window.location.href = 'index.html';
         }
