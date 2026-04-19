@@ -179,15 +179,16 @@
             render();
         }
 
-        function updateHeader() {
-            const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
-            const rawName = localStorage.getItem('userName') || 'Profil';
+        async function updateHeader() {
+            const { data: { session } } = await sb.auth.getSession();
+            const loggedIn = session || localStorage.getItem('userLoggedIn') === 'true';
+            const rawName = localStorage.getItem('userName') || (session?.user?.email?.split('@')[0] || 'Profil');
             const name = rawName.split(' ')[0].charAt(0).toUpperCase() + rawName.split(' ')[0].slice(1).toLowerCase();
             const el = document.getElementById('headerAuth');
             if (!el) return;
             if (loggedIn) {
                 el.innerHTML = `
-                    <a class="header-link" href="favoritter.html" style="color:#ff6600;">❤️ Favoritter</a>
+                    <a class="header-link" href="favoritter.html">❤️ Favoritter</a>
                     <div class="user-dropdown" id="userDropdown">
                         <button class="user-btn" onclick="toggleUserMenu(event)">
                             <div class="user-avatar">${name.charAt(0)}</div>
@@ -219,8 +220,9 @@
         }
         document.addEventListener('click', () => { const m = document.getElementById('userMenu'); if (m) m.classList.remove('open'); });
 
-        function render() {
-            const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
+        async function render() {
+            const { data: { session } } = await sb.auth.getSession();
+            const loggedIn = session || localStorage.getItem('userLoggedIn') === 'true';
             const content = document.getElementById('pageContent');
 
             if (!loggedIn) {
@@ -235,9 +237,17 @@
             }
 
             const favIds = getFavorites();
+
+            // Hent alle annoncer fra Supabase
+            const { data: sbListings } = await sb.from('listings').select('*').in('id', favIds.length > 0 ? favIds : [-1]);
             const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
-            const allListings = [...allMotorcycles, ...userListings];
-            const favListings = allListings.filter(m => favIds.includes(m.id));
+            const allListings = [...(sbListings || []).map(l => ({
+                id: l.id, brand: l.brand, model: l.model,
+                type: l.type, year: l.year, km: l.km, price: l.price,
+                location: l.location,
+                images: JSON.parse(localStorage.getItem('listingImages_' + l.id) || '[]'),
+            })), ...allMotorcycles, ...userListings];
+            const favListings = allListings.filter(m => favIds.map(String).includes(String(m.id)));
 
             if (favListings.length === 0) {
                 content.innerHTML = `
