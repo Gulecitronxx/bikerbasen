@@ -1,487 +1,126 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWJZ8NJB0C"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-RWJZ8NJB0C');
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log ind - BikerBasen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWJZ8NJB0C"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RWJZ8NJB0C');</script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>const sb=window.supabase.createClient('https://dxefcvlerxugymjfjgoe.supabase.co','sb_publishable_05IjuXC5ZJO912AGP-qZ4Q_IujZju7U');</script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", "Helvetica Neue", sans-serif;
-            background: white;
-            color: #4a4a4a;
-            min-height: 100vh;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 100vh;
-        }
-
-        /* LEFT SIDE - ILLUSTRATION */
-        .left-side {
-            background: linear-gradient(135deg, #f5f5f5 0%, #efefef 100%);
-            padding: 4rem 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .left-side::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 500px;
-            height: 500px;
-            background: rgba(255, 102, 0, 0.05);
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .left-content {
-            position: relative;
-            z-index: 1;
-            max-width: 400px;
-        }
-
-        .logo-left {
-            font-size: 32px;
-            font-weight: 700;
-            color: #ff6600;
-            margin-bottom: 3rem;
-        }
-
-        .left-title {
-            font-size: 32px;
-            font-weight: 700;
-            color: #333333;
-            margin-bottom: 1rem;
-            line-height: 1.3;
-        }
-
-        .left-text {
-            font-size: 15px;
-            color: #666;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-
-        .features {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .feature {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #ff6600 0%, #ff8f3d 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-
-        .feature-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .feature-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333333;
-            margin-bottom: 0.25rem;
-        }
-
-        .feature-desc {
-            font-size: 12px;
-            color: #999;
-        }
-
-        /* RIGHT SIDE - FORM */
-        .right-side {
-            background: white;
-            padding: 4rem 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .form-container {
-            width: 100%;
-            max-width: 380px;
-        }
-
-        .form-header {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .form-icon {
-            font-size: 48px;
-            margin-bottom: 1rem;
-        }
-
-        .form-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333333;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-subtitle {
-            font-size: 13px;
-            color: #999;
-        }
-
-        form {
-            margin-top: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            color: #4a4a4a;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #ff6600;
-            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
-        }
-
-        .remember-forgot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            font-size: 13px;
-        }
-
-        .checkbox-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-
-        .checkbox-wrapper input {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: #ff6600;
-        }
-
-        .forgot-password {
-            color: #0066cc;
-            text-decoration: none;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-
-        .forgot-password:hover {
-            color: #ff6600;
-        }
-
-        .login-button {
-            width: 100%;
-            padding: 12px;
-            background: #1a1a1a;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .login-button:hover {
-            background: #333;
-            transform: translateY(-2px);
-        }
-
-        .divider {
-            text-align: center;
-            margin: 1.5rem 0;
-            font-size: 13px;
-            color: #999;
-            position: relative;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: #e0e0e0;
-        }
-
-        .divider span {
-            background: white;
-            padding: 0 0.5rem;
-            position: relative;
-        }
-
-        .social-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .social-button {
-            padding: 10px;
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 6px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .social-button:hover {
-            border-color: #ff6600;
-            background: #fff9f5;
-        }
-
-        .signup-text {
-            text-align: center;
-            font-size: 13px;
-            color: #666;
-            margin-top: 1.5rem;
-        }
-
-        .signup-text a {
-            color: #ff6600;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .signup-text a:hover {
-            text-decoration: underline;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 1000px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            .left-side {
-                display: none;
-            }
-
-            .right-side {
-                min-height: 100vh;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .left-side,
-            .right-side {
-                padding: 2rem 1rem;
-            }
-
-            .form-title {
-                font-size: 20px;
-            }
-        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:white;min-height:100vh;}
+        .container{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+        .left{background:linear-gradient(135deg,#f5f5f5,#efefef);padding:4rem 2rem;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+        .left-content{max-width:400px;}
+        .logo{font-size:28px;font-weight:700;color:#ff6600;text-decoration:none;display:block;margin-bottom:2.5rem;}
+        .left h1{font-size:28px;font-weight:700;color:#333;margin-bottom:1rem;line-height:1.3;}
+        .left p{font-size:14px;color:#666;margin-bottom:2rem;line-height:1.6;}
+        .feature{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;}
+        .f-icon{width:44px;height:44px;background:linear-gradient(135deg,#ff6600,#ff8f3d);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+        .f-title{font-size:13px;font-weight:600;color:#333;}
+        .f-desc{font-size:12px;color:#999;}
+        .right{padding:4rem 2rem;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+        .form-box{width:100%;max-width:380px;}
+        .form-icon{font-size:44px;text-align:center;margin-bottom:0.75rem;}
+        .form-title{font-size:22px;font-weight:700;color:#333;text-align:center;margin-bottom:0.25rem;}
+        .form-sub{font-size:13px;color:#999;text-align:center;margin-bottom:2rem;}
+        .field{margin-bottom:1.25rem;}
+        .field label{display:block;font-size:13px;font-weight:500;color:#555;margin-bottom:5px;}
+        .field input{width:100%;padding:11px 14px;border:1px solid #ddd;border-radius:6px;font-size:14px;font-family:inherit;transition:border-color 0.2s;}
+        .field input:focus{outline:none;border-color:#ff6600;box-shadow:0 0 0 3px rgba(255,102,0,0.1);}
+        .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;font-size:13px;}
+        .cb{display:flex;align-items:center;gap:6px;cursor:pointer;}
+        .cb input{width:16px;height:16px;accent-color:#ff6600;}
+        .forgot{color:#0066cc;text-decoration:none;cursor:pointer;}
+        .forgot:hover{color:#ff6600;}
+        .btn-login{width:100%;padding:12px;background:#1a1a1a;color:white;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.2s;}
+        .btn-login:hover{background:#333;}
+        .btn-login:disabled{background:#ccc;cursor:not-allowed;}
+        .alert{padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:1rem;display:none;}
+        .alert-err{background:#fff0f0;border:1px solid #ffcccc;color:#cc0000;}
+        .alert-ok{background:#f0fff4;border:1px solid #9ae6b4;color:#276749;}
+        .bottom{text-align:center;font-size:13px;color:#666;margin-top:1.5rem;}
+        .bottom a{color:#ff6600;text-decoration:none;font-weight:600;}
+        @media(max-width:900px){.container{grid-template-columns:1fr;}.left{display:none;}}
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- LEFT SIDE -->
-        <div class="left-side">
-            <div class="left-content">
-                <div class="logo-left">🏍️ BikerBasen</div>
-                
-                <h1 class="left-title">Log ind for en bedre oplevelse</h1>
-                
-                <p class="left-text">
-                    Gem favoritter, få besked når nye motorcykler matcher dine søgninger og sælg din motorcykel.
-                </p>
-
-                <div class="features">
-                    <div class="feature">
-                        <div class="feature-icon">❤️</div>
-                        <div class="feature-text">
-                            <div class="feature-title">Gem favoritter</div>
-                            <div class="feature-desc">Gem motorcykler du elsker</div>
-                        </div>
-                    </div>
-
-                    <div class="feature">
-                        <div class="feature-icon">🔔</div>
-                        <div class="feature-text">
-                            <div class="feature-title">Varsler</div>
-                            <div class="feature-desc">Få besked om nye annoncer</div>
-                        </div>
-                    </div>
-
-                    <div class="feature">
-                        <div class="feature-icon">📢</div>
-                        <div class="feature-text">
-                            <div class="feature-title">Sælg gratis</div>
-                            <div class="feature-desc">Opret annonce på 5 minutter</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- RIGHT SIDE -->
-        <div class="right-side">
-            <div class="form-container">
-                <div class="form-header">
-                    <div class="form-icon">🔐</div>
-                    <h1 class="form-title">Log ind</h1>
-                    <p class="form-subtitle">Fortsæt til BikerBasen</p>
-                </div>
-
-                <form id="loginForm" onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label for="email">E-mailadresse</label>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            placeholder="Tast din e-mailadresse" 
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">Adgangskode</label>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            placeholder="Tast din adgangskode" 
-                            required
-                        >
-                    </div>
-
-                    <div class="remember-forgot">
-                        <label class="checkbox-wrapper">
-                            <input type="checkbox" id="remember">
-                            <span>Husk mig</span>
-                        </label>
-                        <a href="#" class="forgot-password">Glemt adgangskode?</a>
-                    </div>
-
-                    <button type="submit" class="login-button">Fortsæt</button>
-                </form>
-
-                <div class="divider">
-                    <span>eller</span>
-                </div>
-
-                <div class="social-buttons">
-                    <button class="social-button" type="button" onclick="loginWith('Google')">
-                        🔵 Google
-                    </button>
-                    <button class="social-button" type="button" onclick="loginWith('Facebook')">
-                        👤 Facebook
-                    </button>
-                </div>
-
-                <div class="signup-text">
-                    Er du ikke registreret endnu? <a href="signup.html">Opret en konto</a>
-                </div>
-            </div>
+<div class="container">
+    <div class="left">
+        <div class="left-content">
+            <a href="index.html" class="logo">🏍️ BikerBasen</a>
+            <h1>Log ind for en bedre oplevelse</h1>
+            <p>Gem favoritter, få besked om nye annoncer og sælg din motorcykel.</p>
+            <div class="feature"><div class="f-icon">❤️</div><div><div class="f-title">Gem favoritter</div><div class="f-desc">Gem motorcykler du elsker</div></div></div>
+            <div class="feature"><div class="f-icon">🔔</div><div><div class="f-title">Søgeagenter</div><div class="f-desc">Få besked om nye annoncer</div></div></div>
+            <div class="feature"><div class="f-icon">📢</div><div><div class="f-title">Sælg gratis</div><div class="f-desc">Opret annonce på 5 minutter</div></div></div>
         </div>
     </div>
+    <div class="right">
+        <div class="form-box">
+            <div class="form-icon">🔐</div>
+            <div class="form-title">Log ind</div>
+            <div class="form-sub">Fortsæt til BikerBasen</div>
+            <div class="alert alert-err" id="err"></div>
+            <div class="alert alert-ok" id="ok"></div>
+            <div class="field"><label>E-mail</label><input type="email" id="email" placeholder="din@email.dk"></div>
+            <div class="field"><label>Adgangskode</label><input type="password" id="pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"></div>
+            <div class="row">
+                <label class="cb"><input type="checkbox" id="rem"> Husk mig</label>
+                <a class="forgot" onclick="forgot()">Glemt adgangskode?</a>
+            </div>
+            <button class="btn-login" id="btn" onclick="login()">Log ind</button>
+            <div class="bottom">Ikke registreret? <a href="signup.html">Opret konto</a></div>
+        </div>
+    </div>
+</div>
+<script>
+    // Redirect hvis allerede logget ind
+    sb.auth.getSession().then(({data:{session}})=>{ if(session) window.location.href='index.html'; });
 
-    <script>
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const remember = document.getElementById('remember').checked;
+    async function login() {
+        const email = document.getElementById('email').value.trim();
+        const pw = document.getElementById('pw').value;
+        const btn = document.getElementById('btn');
+        const err = document.getElementById('err');
+        err.style.display = 'none';
 
-            if (email && password) {
-                localStorage.setItem('userEmail', email);
-                localStorage.setItem('userName', email.split('@')[0]);
-                localStorage.setItem('userLoggedIn', 'true');
-                
-                if (remember) {
-                    localStorage.setItem('rememberMe', 'true');
-                }
-                
-                alert(`Velkommen tilbage! 🏍️`);
-                window.location.href = 'index.html';
-            }
+        if (!email || !pw) { showErr('Udfyld email og adgangskode'); return; }
+
+        btn.disabled = true; btn.textContent = 'Logger ind...';
+
+        const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+
+        if (error) {
+            showErr(error.message.includes('Invalid') ? 'Forkert email eller adgangskode' : error.message);
+            btn.disabled = false; btn.textContent = 'Log ind';
+            return;
         }
 
-        function loginWith(provider) {
-            const email = prompt(`Login med ${provider}\n\nAngiv din email:`);
-            if (email) {
-                localStorage.setItem('userEmail', email);
-                localStorage.setItem('userName', email.split('@')[0]);
-                localStorage.setItem('userLoggedIn', 'true');
-                alert(`Logget ind med ${provider}! 🎉`);
-                window.location.href = 'index.html';
-            }
-        }
+        // Hent profil
+        const { data: profile } = await sb.from('profiles').select('name').eq('id', data.user.id).single();
+        localStorage.setItem('userLoggedIn', 'true');
+        localStorage.setItem('userId', data.user.id);
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userName', profile?.name || email.split('@')[0]);
 
-        // PRE-FILL IF REMEMBERED
-        window.addEventListener('load', function() {
-            if (localStorage.getItem('rememberMe') === 'true') {
-                const savedEmail = localStorage.getItem('userEmail');
-                if (savedEmail) {
-                    document.getElementById('email').value = savedEmail;
-                    document.getElementById('remember').checked = true;
-                }
-            }
-        });
-    </script>
+        window.location.href = 'index.html';
+    }
+
+    async function forgot() {
+        const email = document.getElementById('email').value.trim();
+        if (!email) { showErr('Skriv din email først'); return; }
+        await sb.auth.resetPasswordForEmail(email, { redirectTo: 'https://gulecitronxx.github.io/bikerbasen/login.html' });
+        document.getElementById('ok').textContent = '✅ Nulstillingslink sendt til ' + email;
+        document.getElementById('ok').style.display = 'block';
+    }
+
+    function showErr(msg) {
+        const el = document.getElementById('err');
+        el.textContent = msg; el.style.display = 'block';
+    }
+</script>
 </body>
 </html>
