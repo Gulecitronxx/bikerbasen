@@ -105,6 +105,7 @@
                 <p id="countText">Indlæser...</p>
             </div>
             <a href="create-listing.html" class="new-btn">+ Opret annonce</a>
+            <button onclick="rydDuplikater()" style="padding:8px 14px;border:1px solid #ddd;background:white;border-radius:6px;font-size:12px;cursor:pointer;color:#999;">🧹 Ryd duplikater</button>
         </div>
         <div id="listingsContainer"></div>
     </div>
@@ -196,6 +197,20 @@
                 render();
             }
         });
+
+        function rydDuplikater() {
+            const listings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            const seen = new Set();
+            const unique = listings.filter(l => {
+                const key = (l.brand || '') + (l.model || '') + (l.price || '') + (l.contactEmail || '');
+                if (seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            });
+            localStorage.setItem('userListings', JSON.stringify(unique));
+            alert(`Ryddet! ${listings.length} → ${unique.length} annoncer`);
+            render();
+        }
 
         async function render() {
             const container = document.getElementById('listingsContainer');
