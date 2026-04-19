@@ -1152,8 +1152,14 @@
             });
         }, 500);
 
+        let isSubmitting = false; // Guard mod dobbelt-submit
+
         async function submitListing(event) {
             event.preventDefault();
+
+            // Forhindre dobbelt-submit
+            if (isSubmitting) return;
+            isSubmitting = true;
 
             const submitBtn = document.querySelector('button[type="submit"]');
             const errorEl = document.getElementById('errorMessage');
@@ -1164,6 +1170,7 @@
             const localLogin = localStorage.getItem('userLoggedIn') === 'true';
 
             if (!session && !localLogin) {
+                isSubmitting = false;
                 alert('Du skal være logget ind for at oprette en annonce');
                 window.location.href = 'login.html';
                 return;
@@ -1184,6 +1191,23 @@
             }
 
             if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Gemmer...'; }
+
+            // Tjek for duplikat (samme brand+model+pris fra samme bruger inden for 10 sek)
+            const existingListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            const tenSecondsAgo = Date.now() - 10000;
+            const isDuplicate = existingListings.some(l =>
+                l.brand === selectedMoto.brand &&
+                l.model === selectedMoto.model &&
+                l.price === parseInt(document.getElementById('price').value) &&
+                new Date(l.createdAt).getTime() > tenSecondsAgo
+            );
+            if (isDuplicate) {
+                isSubmitting = false;
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Opret annonce'; }
+                alert('Annoncen ser ud til allerede at være oprettet!');
+                window.location.href = 'index.html';
+                return;
+            }
 
             const imageData = uploadedImages.map(img => img.data || img);
 
