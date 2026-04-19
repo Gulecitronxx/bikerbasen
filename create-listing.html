@@ -3,12 +3,9 @@
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RWJZ8NJB0C"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-RWJZ8NJB0C');
-    </script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RWJZ8NJB0C');</script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>const sb=window.supabase.createClient('https://dxefcvlerxugymjfjgoe.supabase.co','sb_publishable_05IjuXC5ZJO912AGP-qZ4Q_IujZju7U');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sælg din motorcykel - BikerBasen</title>
@@ -1038,11 +1035,25 @@
         }
 
         // SUBMIT FORM
-        function submitListing(event) {
+        async function submitListing(event) {
             event.preventDefault();
 
+            // Tjek login via Supabase
+            const { data: { session } } = await sb.auth.getSession();
+            if (!session) {
+                alert('Du skal være logget ind for at oprette en annonce');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const submitBtn = document.querySelector('button[type="submit"]');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Gemmer...'; }
+
+            // Konverter billeder til base64 strings til Supabase
+            const imageData = uploadedImages.map(img => img.data || img);
+
             const listing = {
-                id: Date.now(),
+                user_id: session.user.id,
                 brand: selectedMoto.brand,
                 model: selectedMoto.model,
                 year: selectedMoto.year,
@@ -1053,24 +1064,49 @@
                 condition: document.getElementById('condition').value,
                 service: document.getElementById('service').value,
                 description: document.getElementById('description').value,
-                contactName: document.getElementById('contactName').value,
-                contactEmail: document.getElementById('contactEmail').value,
-                contactPhone: document.getElementById('contactPhone').value,
-                images: uploadedImages, // BILLEDER GEMMES HER
-                createdAt: new Date().toISOString()
+                contact_name: document.getElementById('contactName').value,
+                contact_email: document.getElementById('contactEmail').value,
+                contact_phone: document.getElementById('contactPhone').value,
+                is_dealer: document.getElementById('isDealer')?.checked || false,
+                dealer_name: document.getElementById('dealerName')?.value || null,
+                dealer_address: document.getElementById('dealerAddress')?.value || null,
+                dealer_website: document.getElementById('dealerWebsite')?.value || null,
+                dealer_cvr: document.getElementById('dealerCVR')?.value || null,
             };
 
-            // Save to localStorage
-            let userListings = JSON.parse(localStorage.getItem('userListings')) || [];
-            userListings.push(listing);
+            const { data, error } = await sb.from('listings').insert([listing]).select().single();
+
+            if (error) {
+                alert('Fejl ved oprettelse: ' + error.message);
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Opret annonce'; }
+                return;
+            }
+
+            // Gem billeder i localStorage med ny Supabase ID
+            if (imageData.length > 0) {
+                localStorage.setItem('listingImages_' + data.id, JSON.stringify(imageData.map(d => ({data: d}))));
+            }
+
+            // Gem også i localStorage for bagudkompatibilitet
+            const localListing = {
+                id: data.id,
+                brand: listing.brand, model: listing.model,
+                year: listing.year, km: listing.km, type: listing.type,
+                price: listing.price, location: listing.location,
+                condition: listing.condition, service: listing.service,
+                description: listing.description,
+                contactName: listing.contact_name,
+                contactEmail: listing.contact_email,
+                contactPhone: listing.contact_phone,
+                images: uploadedImages,
+                createdAt: new Date().toISOString()
+            };
+            let userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            userListings.push(localListing);
             localStorage.setItem('userListings', JSON.stringify(userListings));
 
-            // Show success
             document.getElementById('successMessage').style.display = 'block';
-
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
+            setTimeout(() => window.location.href = 'index.html', 2000);
         }
     </script>
     <script>
@@ -1108,10 +1144,12 @@
             const m = document.getElementById('userMenu');
             if (m) m.classList.remove('open');
         });
-        function logoutUser() {
+        async function logoutUser() {
+            await sb.auth.signOut();
             localStorage.removeItem('userLoggedIn');
             localStorage.removeItem('userName');
             localStorage.removeItem('userEmail');
+            localStorage.removeItem('userId');
             window.location.href = 'index.html';
         }
         updateHeader();
