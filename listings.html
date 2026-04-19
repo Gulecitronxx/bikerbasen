@@ -349,6 +349,15 @@
         let currentListings = [...motorcycles];
         let selectedType = null;
 
+        // Tilføj bruger-oprettede annoncer fra localStorage
+        const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+        userListings.forEach(u => {
+            if (!motorcycles.find(m => m.id === u.id)) {
+                motorcycles.push({...u, createdDaysAgo: 0});
+                currentListings.push({...u, createdDaysAgo: 0});
+            }
+        });
+
         // Læs URL parameter ?type=
         function getUrlParameter(param) {
             const urlParams = new URLSearchParams(window.location.search);
@@ -466,9 +475,11 @@
             const favs = getFavorites();
             const grid = document.getElementById('listingsGrid');
             grid.innerHTML = items.map(m => {
-                // Hent thumbnail fra localStorage hvis tilgængeligt
+                // Hent thumbnail: fra thumbnail felt, images array, eller localStorage cache
                 const cachedImgs = JSON.parse(localStorage.getItem('listingImages_' + m.id) || '[]');
-                const thumb = m.thumbnail || (cachedImgs.length > 0 ? cachedImgs[0].data : null);
+                const thumb = m.thumbnail
+                    || (m.images && m.images.length > 0 ? m.images[0].data : null)
+                    || (cachedImgs.length > 0 ? cachedImgs[0].data : null);
                 return `
                 <div class="listing-card" onclick="window.location.href='listing-detail.html?id=${m.id}'">
                     <div class="listing-image">
