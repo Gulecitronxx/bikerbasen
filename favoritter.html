@@ -124,6 +124,8 @@
         .user-menu .menu-divider { height: 1px; background: #f0f0f0; margin: 4px 0; }
         .user-menu .logout-item { color: #ff6600; font-weight: 600; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>const sb=window.supabase.createClient('https://dxefcvlerxugymjfjgoe.supabase.co','sb_publishable_05IjuXC5ZJO912AGP-qZ4Q_IujZju7U');</script>
 </head>
 <body>
 
@@ -207,10 +209,12 @@
             event.stopPropagation();
             document.getElementById('userMenu').classList.toggle('open');
         }
-        function logoutUser() {
+        async function logoutUser() {
+            await sb.auth.signOut();
             localStorage.removeItem('userLoggedIn');
             localStorage.removeItem('userName');
             localStorage.removeItem('userEmail');
+            localStorage.removeItem('userId');
             window.location.href = 'index.html';
         }
         document.addEventListener('click', () => { const m = document.getElementById('userMenu'); if (m) m.classList.remove('open'); });
