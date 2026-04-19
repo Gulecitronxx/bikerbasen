@@ -506,12 +506,38 @@
             const type = document.getElementById('typeFilterPanel') ? document.getElementById('typeFilterPanel').value : '';
             const maxPrice = document.getElementById('priceFilterPanel') ? parseInt(document.getElementById('priceFilterPanel').value) || 0 : 0;
             const maxKm = document.getElementById('kmFilterPanel') ? parseInt(document.getElementById('kmFilterPanel').value) || 0 : 0;
+
+            // URL brands og models
+            const urlBrands = getUrlParameter('brands') ? getUrlParameter('brands').split(',').map(b => b.toLowerCase()) : [];
+            const urlModels = getUrlParameter('models') ? getUrlParameter('models').split(',').map(m => m.toLowerCase()) : [];
+            const urlYear   = parseInt(getUrlParameter('year')) || 0;
+            const urlKmParam = getUrlParameter('km') || '';
+            const urlPrice  = getUrlParameter('price') || '';
+
             currentListings = motorcycles.filter(m => {
+                // Søgefelt
                 if (search && !m.brand.toLowerCase().includes(search) && !m.model.toLowerCase().includes(search)) return false;
+                // Type fra URL eller filter panel
                 if (selectedType && m.type !== selectedType) return false;
                 if (type && m.type !== type) return false;
-                if (maxPrice && m.price > maxPrice) return false;
+                // Brands fra URL
+                if (urlBrands.length > 0 && !urlBrands.includes(m.brand.toLowerCase())) return false;
+                // Models fra URL
+                if (urlModels.length > 0 && !urlModels.includes(m.model.toLowerCase())) return false;
+                // År fra URL
+                if (urlYear && m.year !== urlYear) return false;
+                // Km fra URL
+                if (urlKmParam === '0-5000' && m.km >= 5000) return false;
+                if (urlKmParam === '5000-20000' && (m.km < 5000 || m.km >= 20000)) return false;
+                if (urlKmParam === '20000+' && m.km < 20000) return false;
+                // Km fra filter panel
                 if (maxKm && m.km > maxKm) return false;
+                // Pris fra URL
+                if (urlPrice === '0-50000' && m.price >= 50000) return false;
+                if (urlPrice === '50000-100000' && (m.price < 50000 || m.price >= 100000)) return false;
+                if (urlPrice === '100000+' && m.price < 100000) return false;
+                // Pris fra filter panel
+                if (maxPrice && m.price > maxPrice) return false;
                 return true;
             });
             displayListings(currentListings);
@@ -533,12 +559,33 @@
 
         // Initialiser siden
         selectedType = getUrlParameter('type');
-        const pageTitle = document.getElementById('pageTitle');
-        if (selectedType) {
-            pageTitle.textContent = `${selectedType} motorcykler`;
-        } else {
-            pageTitle.textContent = 'Alle motorcykler';
+
+        // Læs alle filtre fra URL
+        const urlBrands = getUrlParameter('brands');
+        const urlModels = getUrlParameter('models');
+        const urlYear   = getUrlParameter('year');
+        const urlKm     = getUrlParameter('km');
+        const urlPrice  = getUrlParameter('price');
+
+        if (urlBrands) {
+            urlBrands.split(',').forEach(b => {
+                if (!motorcycles.find(m => m.brand === b)) return;
+                // Sæt filter panel type til brand (bruges i filterListings)
+            });
+            // Gem som typeFilterPanel workaround — brug searchInput
+            document.getElementById('searchInput').value = urlBrands.split(',')[0];
         }
+        if (selectedType) document.getElementById('typeFilterPanel').value = selectedType;
+        if (urlYear) {
+            // Åbn filter panel og sæt år
+        }
+        if (urlKm) document.getElementById('kmFilterPanel').value =
+            urlKm === '0-5000' ? '5000' : urlKm === '5000-20000' ? '15000' : urlKm === '20000+' ? '30000' : '';
+        if (urlPrice) document.getElementById('priceFilterPanel').value =
+            urlPrice === '0-50000' ? '50000' : urlPrice === '50000-100000' ? '100000' : urlPrice === '100000+' ? '150000' : '';
+
+        const pageTitle = document.getElementById('pageTitle');
+        pageTitle.textContent = selectedType ? `${selectedType} motorcykler` : 'Alle motorcykler';
         filterListings();
         updateUI();
         updateHeader();
