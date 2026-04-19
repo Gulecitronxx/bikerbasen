@@ -281,12 +281,12 @@
                     </div>
                     <div class="listing-actions">
                         ${!m.sold
-                            ? `<button class="btn-sold" onclick="markSold(${m.id})">✓ Marker solgt</button>`
-                            : `<button class="btn-unsold" onclick="markUnsold(${m.id})">↩ Sæt aktiv igen</button>`
+                            ? `<button class="btn-sold" onclick="markSold('${m.id}')">✓ Marker solgt</button>`
+                            : `<button class="btn-unsold" onclick="markUnsold('${m.id}')">↩ Sæt aktiv igen</button>`
                         }
-                        <button class="btn-edit" onclick="openEdit(${m.id})">✏️</button>
+                        <button class="btn-edit" onclick="openEdit('${m.id}')">✏️</button>
                         <button class="btn-edit" onclick="window.location.href='listing-detail.html?id=${m.id}'">👁️</button>
-                        <button class="btn-delete" onclick="deleteListing(${m.id})">🗑️</button>
+                        <button class="btn-delete" onclick="deleteListing('${m.id}')">🗑️</button>
                     </div>
                 </div>
             `).join('');
@@ -294,9 +294,11 @@
 
         async function openEdit(id) {
             editingId = id;
+            document.getElementById('editModal').classList.add('active');
+            document.getElementById('editBrand').value = 'Indlæser...';
 
-            // Prøv Supabase først
-            const { data: m } = await sb.from('listings').select('*').eq('id', id).single();
+            // Hent fra Supabase
+            const { data: m, error } = await sb.from('listings').select('*').eq('id', id).single();
 
             if (m) {
                 document.getElementById('editBrand').value = m.brand || '';
@@ -313,8 +315,12 @@
             } else {
                 // Fallback til localStorage
                 const listings = JSON.parse(localStorage.getItem('userListings') || '[]');
-                const loc = listings.find(l => l.id === id);
-                if (!loc) { alert('Annonce ikke fundet'); return; }
+                const loc = listings.find(l => String(l.id) === String(id));
+                if (!loc) { 
+                    document.getElementById('editModal').classList.remove('active');
+                    alert('Annonce ikke fundet'); 
+                    return; 
+                }
                 document.getElementById('editBrand').value = loc.brand || '';
                 document.getElementById('editModel').value = loc.model || '';
                 document.getElementById('editPrice').value = loc.price || '';
@@ -327,8 +333,6 @@
                 document.getElementById('editContactPhone').value = loc.contactPhone || '';
                 document.getElementById('editContactEmail').value = loc.contactEmail || '';
             }
-
-            document.getElementById('editModal').classList.add('active');
         }
 
         function closeEdit() {
