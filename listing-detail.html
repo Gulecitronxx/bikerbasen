@@ -21,9 +21,9 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", "Helvetica Neue", sans-serif;
-            background: #f5f5f5;
-            color: #4a4a4a;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f0f0f0;
+            color: #333;
         }
 
         /* HEADER */
@@ -90,17 +90,18 @@
 
         /* CONTAINER */
         .container {
-            max-width: 1100px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
         /* MAIN GRID */
         .main-grid {
             display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 2rem;
+            grid-template-columns: 1fr 360px;
+            gap: 1.5rem;
             margin-bottom: 2rem;
+            align-items: start;
         }
 
         /* GALLERY */
@@ -113,7 +114,7 @@
 
         .image-main {
             width: 100%;
-            height: 450px;
+            height: 520px;
             background: #f0f0f0;
             display: flex;
             align-items: center;
@@ -290,11 +291,9 @@
         /* PRICE CARD */
         .price-card {
             background: white;
-            border: 3px solid #ff6600;
-            padding: 2rem;
             border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 1.5rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
         }
 
         .price-label {
@@ -305,10 +304,10 @@
         }
 
         .price {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
-            color: #ff6600;
-            margin-bottom: 1.5rem;
+            color: #333;
+            margin-bottom: 0.25rem;
         }
 
         .action-buttons {
@@ -719,43 +718,44 @@
         function displayListing() {
             const container = document.getElementById('mainContent');
             const imageGallery = buildGallery();
+            const isFav = getFavorites().includes(listing.id);
 
             container.innerHTML = `
+                <div style="padding:1rem 0;font-size:13px;color:#999;display:flex;align-items:center;gap:6px;">
+                    <a href="listings.html" style="color:#ff6600;text-decoration:none;">Alle motorcykler</a>
+                    <span>›</span>
+                    <a href="listings.html?type=${listing.type}" style="color:#ff6600;text-decoration:none;">${listing.type}</a>
+                    <span>›</span>
+                    <span style="color:#333;">${listing.brand} ${listing.model}</span>
+                </div>
+
                 <div class="main-grid">
                     <!-- LEFT SIDE -->
                     <div class="left-content">
-                        <!-- GALLERY -->
+
+                        <!-- BILLEDE -->
                         <div class="gallery-section">
                             <div class="image-main" id="mainImage">
-                                ${listing.images && listing.images.length > 0 
-                                    ? `<img src="${listing.images[0].data}" alt="${listing.brand} ${listing.model}" style="max-width: 100%; max-height: 100%;">` 
-                                    : '<span style="color: #999;">📸 Ingen billeder</span>'
+                                ${listing.images && listing.images.length > 0
+                                    ? `<img src="${listing.images[0].data}" alt="${listing.brand} ${listing.model}">`
+                                    : `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:1rem;color:#ccc;"><span style="font-size:80px;">🏍️</span><span style="font-size:14px;font-weight:500;">Ingen billeder</span></div>`
                                 }
-                                <button class="favorite-btn" onclick="toggleFavorite()">♡</button>
+                                <button class="favorite-btn" id="favBtn" onclick="toggleFavorite()">${isFav ? '❤️' : '🤍'}</button>
                             </div>
                             ${imageGallery}
                         </div>
 
-                        <!-- MOTO INFO -->
+                        <!-- TITEL OG SPECS -->
                         <div class="moto-info">
                             <h1 class="moto-title">${listing.brand} ${listing.model}</h1>
+                            <div style="font-size:13px;color:#999;margin-bottom:1.25rem;">📍 ${listing.location}</div>
                             <div class="moto-specs">
-                                <div class="spec">
-                                    <div class="spec-label">År</div>
-                                    <div class="spec-value">${listing.year}</div>
-                                </div>
-                                <div class="spec">
-                                    <div class="spec-label">Km</div>
-                                    <div class="spec-value">${listing.km.toLocaleString('da-DK')}</div>
-                                </div>
-                                <div class="spec">
-                                    <div class="spec-label">Type</div>
-                                    <div class="spec-value">${listing.type}</div>
-                                </div>
-                                <div class="spec">
-                                    <div class="spec-label">Lokation</div>
-                                    <div class="spec-value">📍 ${listing.location}</div>
-                                </div>
+                                <div class="spec"><div class="spec-label">Årgang</div><div class="spec-value">${listing.year}</div></div>
+                                <div class="spec"><div class="spec-label">Kilometer</div><div class="spec-value">${listing.km.toLocaleString('da-DK')}</div></div>
+                                <div class="spec"><div class="spec-label">Type</div><div class="spec-value">${listing.type}</div></div>
+                                <div class="spec"><div class="spec-label">Stand</div><div class="spec-value">${listing.condition || '–'}</div></div>
+                                ${listing.cc ? `<div class="spec"><div class="spec-label">CC</div><div class="spec-value">${listing.cc} cc</div></div>` : ''}
+                                ${listing.hp ? `<div class="spec"><div class="spec-label">HK</div><div class="spec-value">${listing.hp} hk</div></div>` : ''}
                             </div>
                         </div>
 
@@ -765,54 +765,44 @@
                             <p class="description-text">${listing.description || 'Ingen beskrivelse'}</p>
                         </div>
 
-                        <!-- DETALJER -->
+                        <!-- SPECIFIKATIONER -->
                         <div class="detaljer-section">
-                            <h2 class="section-title">Detaljer</h2>
-                            <div class="detail-row">
-                                <div class="detail-label">Mærke & Model</div>
-                                <div class="detail-value">${listing.brand} ${listing.model}</div>
-                            </div>
-                            <div class="detail-row">
-                                <div class="detail-label">År</div>
-                                <div class="detail-value">${listing.year}</div>
-                            </div>
-                            <div class="detail-row">
-                                <div class="detail-label">Kilometer</div>
-                                <div class="detail-value">${listing.km.toLocaleString('da-DK')} km</div>
-                            </div>
-                            <div class="detail-row">
-                                <div class="detail-label">Type</div>
-                                <div class="detail-value">${listing.type}</div>
-                            </div>
-                            <div class="detail-row">
-                                <div class="detail-label">Tilstand</div>
-                                <div class="detail-value">${listing.condition}</div>
-                            </div>
-                            <div class="detail-row">
-                                <div class="detail-label">Service</div>
-                                <div class="detail-value">${listing.service}</div>
-                            </div>
-                            <div class="detail-row">
-                                <div class="detail-label">Lokation</div>
-                                <div class="detail-value">${listing.location}</div>
-                            </div>
+                            <h2 class="section-title">Specifikationer</h2>
+                            <div class="detail-row"><div class="detail-label">Mærke</div><div class="detail-value">${listing.brand}</div></div>
+                            <div class="detail-row"><div class="detail-label">Model</div><div class="detail-value">${listing.model}</div></div>
+                            <div class="detail-row"><div class="detail-label">Årgang</div><div class="detail-value">${listing.year}</div></div>
+                            <div class="detail-row"><div class="detail-label">Kilometer</div><div class="detail-value">${listing.km.toLocaleString('da-DK')} km</div></div>
+                            <div class="detail-row"><div class="detail-label">Type</div><div class="detail-value">${listing.type}</div></div>
+                            <div class="detail-row"><div class="detail-label">Stand</div><div class="detail-value">${listing.condition || '–'}</div></div>
+                            <div class="detail-row"><div class="detail-label">Servicehistorik</div><div class="detail-value">${listing.service || '–'}</div></div>
+                            ${listing.cc ? `<div class="detail-row"><div class="detail-label">Motor</div><div class="detail-value">${listing.cc} cc${listing.hp ? ' / ' + listing.hp + ' hk' : ''}</div></div>` : ''}
+                            ${listing.weight ? `<div class="detail-row"><div class="detail-label">Vægt</div><div class="detail-value">${listing.weight} kg</div></div>` : ''}
+                            <div class="detail-row"><div class="detail-label">Lokation</div><div class="detail-value">📍 ${listing.location}</div></div>
                         </div>
                     </div>
 
                     <!-- RIGHT SIDEBAR -->
                     <div class="sidebar">
-                        <!-- PRICE CARD -->
+
+                        <!-- PRIS + KNAPPER -->
                         <div class="price-card">
-                            <div class="price-label">Pris</div>
+                            <div style="font-size:12px;color:#999;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Pris</div>
                             <div class="price">${listing.price.toLocaleString('da-DK')} kr</div>
+                            <div style="font-size:12px;color:#aaa;margin-bottom:1.5rem;">inkl. leveringsomkostninger</div>
                             <div class="action-buttons">
-                                <a href="tel:${listing.contactPhone}" class="btn btn-primary">📞 Ring nu</a>
-                                <a href="mailto:${listing.contactEmail}" class="btn btn-secondary">✉️ Skriv til sælger</a>
-                                <button class="btn btn-report" onclick="openReportModal()">⚠️ Anmeld annonce</button>
+                                <a href="tel:${listing.contactPhone}" class="btn btn-primary" style="font-size:15px;padding:15px;border-radius:6px;display:block;text-align:center;text-decoration:none;font-weight:700;">
+                                    📞 Ring til sælger
+                                </a>
+                                <a href="mailto:${listing.contactEmail}" class="btn btn-secondary" style="font-size:15px;padding:13px;border-radius:6px;display:block;text-align:center;text-decoration:none;font-weight:700;margin-top:0.75rem;">
+                                    ✉️ Skriv til sælger
+                                </a>
+                                <button onclick="openReportModal()" style="background:none;border:none;color:#aaa;font-size:12px;cursor:pointer;padding:10px 0;text-align:center;width:100%;display:block;margin-top:4px;">
+                                    ⚠️ Anmeld annonce
+                                </button>
                             </div>
                         </div>
 
-                        <!-- SELLER CARD -->
+                        <!-- SÆLGER KORT -->
                         <div class="seller-card">
                             <div class="seller-header">
                                 <div class="seller-avatar">${listing.contactName.charAt(0).toUpperCase()}</div>
@@ -821,18 +811,32 @@
                                     <p>📍 ${listing.location}</p>
                                 </div>
                             </div>
-
                             <div class="seller-contact">
                                 <label>TELEFON</label>
                                 <p>${listing.contactPhone}</p>
-
                                 <label>EMAIL</label>
                                 <p>${listing.contactEmail}</p>
-
                                 <label>OPRETTET</label>
-                                <p>${listing.createdAt ? new Date(listing.createdAt).toLocaleDateString('da-DK') : '-'}</p>
+                                <p>${listing.createdAt ? new Date(listing.createdAt).toLocaleDateString('da-DK') : '–'}</p>
                             </div>
                         </div>
+
+                        <!-- DEALER CARD -->
+                        ${listing.isDealer ? `
+                        <div class="dealer-card">
+                            <div class="dealer-logo-section">
+                                ${listing.dealerLogo ? `<img src="${listing.dealerLogo}" alt="${listing.dealerName}">` : `<div class="dealer-logo-placeholder">🏍️ ${listing.dealerName}</div>`}
+                            </div>
+                            <div class="dealer-body">
+                                <div class="dealer-badge">🏪 Forhandler</div>
+                                <div class="dealer-name">${listing.dealerName}</div>
+                                ${listing.dealerAddress ? `<div class="dealer-row"><span class="dealer-row-icon">📍</span><span>${listing.dealerAddress}</span></div>` : ''}
+                                ${listing.dealerWebsite ? `<div class="dealer-row"><span class="dealer-row-icon">🔗</span><a href="${listing.dealerWebsite}" target="_blank">Besøg hjemmeside</a></div>` : ''}
+                                ${listing.dealerCVR ? `<div class="dealer-cvr">CVR-nr.: ${listing.dealerCVR}</div>` : ''}
+                                <div style="font-size:11px;color:#aaa;margin-top:6px;">Forhandleren har accepteret, at de kun annoncerer i overensstemmelse med gældende lovgivning.</div>
+                            </div>
+                        </div>` : ''}
+
                     </div>
                 </div>
             `;
