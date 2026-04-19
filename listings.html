@@ -351,7 +351,7 @@
 
         // Tilføj bruger-oprettede annoncer fra localStorage
         const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
-        userListings.forEach(u => {
+        userListings.filter(u => !u.sold).forEach(u => {
             if (!motorcycles.find(m => m.id === u.id)) {
                 motorcycles.push({...u, createdDaysAgo: 0});
                 currentListings.push({...u, createdDaysAgo: 0});
