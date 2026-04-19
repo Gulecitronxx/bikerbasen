@@ -145,7 +145,7 @@
         .listing-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.15); transform: translateY(-6px); }
         
         .listing-image { width: 100%; height: 280px; background: #e0e0e0; position: relative; overflow: hidden; }
-        .listing-image img { width: 100%; height: 100%; object-fit: cover; }
+        .listing-image img { width: 100%; height: 100%; object-fit: contain; background: white; }
         .listing-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0f0f0 25%, transparent 25%, transparent 50%, #f0f0f0 50%, #f0f0f0 75%, transparent 75%, transparent); background-size: 20px 20px; color: #ccc; font-size: 50px; }
         
         .listing-badge { position: absolute; top: 8px; right: 8px; background: #22c55e; color: white; padding: 4px 8px; border-radius: 2px; font-size: 10px; font-weight: 600; }
@@ -479,15 +479,29 @@
             const favs = getFavorites();
             const grid = document.getElementById('listingsGrid');
             grid.innerHTML = items.map(m => {
-                // Hent thumbnail: fra thumbnail felt, images array, eller localStorage cache
                 const cachedImgs = JSON.parse(localStorage.getItem('listingImages_' + m.id) || '[]');
                 const thumb = m.thumbnail
                     || (m.images && m.images.length > 0 ? m.images[0].data : null)
                     || (cachedImgs.length > 0 ? cachedImgs[0].data : null);
+
+                // Dealer logo
+                const isDealer = m.isDealer || m.is_dealer;
+                const dealerLogo = m.dealerLogo || m.dealer_logo || localStorage.getItem('dealerLogo_' + m.id);
+                const dealerName = m.dealerName || m.dealer_name;
+
+                const dealerHeader = isDealer ? `
+                    <div style="padding:8px 12px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;background:white;min-height:44px;">
+                        ${dealerLogo
+                            ? `<img src="${dealerLogo}" style="max-height:28px;max-width:100px;object-fit:contain;">`
+                            : `<span style="font-size:12px;font-weight:700;color:#333;">${dealerName || 'Forhandler'}</span>`
+                        }
+                    </div>` : '';
+
                 return `
                 <div class="listing-card" onclick="window.location.href='listing-detail.html?id=${m.id}'">
+                    ${dealerHeader}
                     <div class="listing-image">
-                        ${thumb ? `<img src="${thumb}" alt="${m.brand} ${m.model}" style="width:100%;height:100%;object-fit:cover;">` : '<div class="listing-image-placeholder">🏍️</div>'}
+                        ${thumb ? `<img src="${thumb}" alt="${m.brand} ${m.model}" style="width:100%;height:100%;object-fit:contain;background:white;">` : '<div class="listing-image-placeholder">🏍️</div>'}
                         ${m.createdDaysAgo < 7 ? '<div class="listing-badge">Ny annonce</div>' : ''}
                         <button class="favorite-btn ${favs.includes(m.id) ? 'active' : ''}" onclick="toggleFavorite(event, ${m.id})">${favs.includes(m.id) ? '❤️' : '🤍'}</button>
                     </div>
