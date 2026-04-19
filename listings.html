@@ -405,6 +405,7 @@
             updateUI();
         }
         function saveFavorites(f) { localStorage.setItem('favorites', JSON.stringify(f)); }
+        function getFavorites() { return JSON.parse(localStorage.getItem('favorites') || '[]'); }
         function toggleFavorite(event, id) {
             event.stopPropagation();
             if (localStorage.getItem('userLoggedIn') !== 'true') {
