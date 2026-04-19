@@ -485,7 +485,7 @@
             }
             let favs = getFavorites();
             const btn = event.currentTarget;
-            if (favs.includes(id)) {
+            if (favs.map(String).includes(String(id))) {
                 favs = favs.filter(f => f !== id);
                 btn.textContent = '🤍'; btn.classList.remove('active');
             } else {
@@ -496,9 +496,10 @@
             }
             saveFavorites(favs);
         }
-        function updateHeader() {
-            const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
-            const rawName = localStorage.getItem('userName') || 'Profil';
+        async function updateHeader() {
+            const { data: { session } } = await sb.auth.getSession();
+            const loggedIn = session || localStorage.getItem('userLoggedIn') === 'true';
+            const rawName = localStorage.getItem('userName') || (session?.user?.email?.split('@')[0] || 'Profil');
             const name = rawName.split(' ')[0].charAt(0).toUpperCase() + rawName.split(' ')[0].slice(1).toLowerCase();
             const el = document.getElementById('headerAuth');
             if (!el) return;
@@ -563,7 +564,7 @@
                     <div class="listing-image">
                         ${thumb ? `<img src="${thumb}" alt="${m.brand} ${m.model}" style="width:100%;height:100%;object-fit:contain;background:white;">` : '<div class="listing-image-placeholder">🏍️</div>'}
                         ${m.createdDaysAgo < 7 ? '<div class="listing-badge">Ny annonce</div>' : ''}
-                        <button class="favorite-btn ${favs.includes(m.id) ? 'active' : ''}" onclick="toggleFavorite(event, ${m.id})">${favs.includes(m.id) ? '❤️' : '🤍'}</button>
+                        <button class="favorite-btn ${favs.map(String).includes(String(m.id)) ? 'active' : ''}" onclick="toggleFavorite(event, ${m.id})">${favs.map(String).includes(String(m.id)) ? '❤️' : '🤍'}</button>
                     </div>
                     <div class="listing-info">
                         <div class="listing-title">${m.brand} ${m.model}</div>
