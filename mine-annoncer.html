@@ -292,22 +292,42 @@
             `).join('');
         }
 
-        function openEdit(id) {
-            const listings = JSON.parse(localStorage.getItem('userListings') || '[]');
-            const m = listings.find(l => l.id === id);
-            if (!m) return;
+        async function openEdit(id) {
             editingId = id;
-            document.getElementById('editBrand').value = m.brand || '';
-            document.getElementById('editModel').value = m.model || '';
-            document.getElementById('editPrice').value = m.price || '';
-            document.getElementById('editKm').value = m.km || '';
-            document.getElementById('editLocation').value = m.location || '';
-            document.getElementById('editCondition').value = m.condition || 'God';
-            document.getElementById('editService').value = m.service || 'Ingen service historia';
-            document.getElementById('editDescription').value = m.description || '';
-            document.getElementById('editContactName').value = m.contactName || '';
-            document.getElementById('editContactPhone').value = m.contactPhone || '';
-            document.getElementById('editContactEmail').value = m.contactEmail || '';
+
+            // Prøv Supabase først
+            const { data: m } = await sb.from('listings').select('*').eq('id', id).single();
+
+            if (m) {
+                document.getElementById('editBrand').value = m.brand || '';
+                document.getElementById('editModel').value = m.model || '';
+                document.getElementById('editPrice').value = m.price || '';
+                document.getElementById('editKm').value = m.km || '';
+                document.getElementById('editLocation').value = m.location || '';
+                document.getElementById('editCondition').value = m.condition || 'God';
+                document.getElementById('editService').value = m.service || 'Ingen service historia';
+                document.getElementById('editDescription').value = m.description || '';
+                document.getElementById('editContactName').value = m.contact_name || '';
+                document.getElementById('editContactPhone').value = m.contact_phone || '';
+                document.getElementById('editContactEmail').value = m.contact_email || '';
+            } else {
+                // Fallback til localStorage
+                const listings = JSON.parse(localStorage.getItem('userListings') || '[]');
+                const loc = listings.find(l => l.id === id);
+                if (!loc) { alert('Annonce ikke fundet'); return; }
+                document.getElementById('editBrand').value = loc.brand || '';
+                document.getElementById('editModel').value = loc.model || '';
+                document.getElementById('editPrice').value = loc.price || '';
+                document.getElementById('editKm').value = loc.km || '';
+                document.getElementById('editLocation').value = loc.location || '';
+                document.getElementById('editCondition').value = loc.condition || 'God';
+                document.getElementById('editService').value = loc.service || 'Ingen service historia';
+                document.getElementById('editDescription').value = loc.description || '';
+                document.getElementById('editContactName').value = loc.contactName || '';
+                document.getElementById('editContactPhone').value = loc.contactPhone || '';
+                document.getElementById('editContactEmail').value = loc.contactEmail || '';
+            }
+
             document.getElementById('editModal').classList.add('active');
         }
 
@@ -316,29 +336,37 @@
             editingId = null;
         }
 
-        function saveEdit() {
+        async function saveEdit() {
             const price = parseInt(document.getElementById('editPrice').value);
             const location = document.getElementById('editLocation').value.trim();
             if (!price || !location) { alert('Udfyld venligst pris og by'); return; }
 
+            const updates = {
+                price,
+                km: parseInt(document.getElementById('editKm').value) || 0,
+                location,
+                condition: document.getElementById('editCondition').value,
+                service: document.getElementById('editService').value,
+                description: document.getElementById('editDescription').value,
+                contact_name: document.getElementById('editContactName').value,
+                contact_phone: document.getElementById('editContactPhone').value,
+                contact_email: document.getElementById('editContactEmail').value,
+            };
+
+            // Gem i Supabase
+            const { error } = await sb.from('listings').update(updates).eq('id', editingId);
+            if (error) console.error('Supabase opdatering fejlede:', error);
+
+            // Opdater også localStorage
             let listings = JSON.parse(localStorage.getItem('userListings') || '[]');
-            listings = listings.map(l => {
-                if (l.id !== editingId) return l;
-                return {
-                    ...l,
-                    price,
-                    km: parseInt(document.getElementById('editKm').value) || l.km,
-                    location,
-                    condition: document.getElementById('editCondition').value,
-                    service: document.getElementById('editService').value,
-                    description: document.getElementById('editDescription').value,
-                    contactName: document.getElementById('editContactName').value,
-                    contactPhone: document.getElementById('editContactPhone').value,
-                    contactEmail: document.getElementById('editContactEmail').value,
-                    updatedAt: new Date().toISOString()
-                };
+            listings = listings.map(l => l.id !== editingId ? l : {
+                ...l, ...updates,
+                contactName: updates.contact_name,
+                contactPhone: updates.contact_phone,
+                contactEmail: updates.contact_email,
             });
             localStorage.setItem('userListings', JSON.stringify(listings));
+
             closeEdit();
             render();
         }
