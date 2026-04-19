@@ -770,6 +770,69 @@
                     </div>
                 </div>
 
+                <!-- FORHANDLER SEKTION -->
+                <div class="form-section">
+                    <h3>Er du forhandler?</h3>
+                    <p style="font-size:13px;color:#999;margin-bottom:1rem;">Forhandlere får et professionelt kort med logo, adresse og hjemmeside — ligesom billedet nedenfor.</p>
+
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;">
+                        <input type="checkbox" id="isDealer" onchange="toggleDealerSection()" style="width:18px;height:18px;accent-color:#ff6600;cursor:pointer;">
+                        <label for="isDealer" style="font-size:14px;font-weight:600;cursor:pointer;">Ja, jeg er forhandler</label>
+                    </div>
+
+                    <div id="dealerSection" style="display:none;">
+
+                        <!-- LOGO UPLOAD -->
+                        <div class="form-group" style="margin-bottom:1.25rem;">
+                            <label>Firmalogo</label>
+                            <div id="logoUploadArea" onclick="document.getElementById('logoInput').click()"
+                                style="background:#1a1a1a;border-radius:8px;min-height:110px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.2s;position:relative;">
+                                <div id="logoPlaceholder" style="text-align:center;color:#aaa;">
+                                    <div style="font-size:28px;margin-bottom:6px;">🖼️</div>
+                                    <div style="font-size:13px;font-weight:500;">Klik for at uploade logo</div>
+                                    <div style="font-size:11px;color:#666;margin-top:4px;">PNG eller JPG — maks 2MB · Vises på mørk baggrund</div>
+                                </div>
+                                <img id="logoPreviewImg" style="display:none;max-height:80px;max-width:220px;object-fit:contain;" alt="Logo preview">
+                                <input type="file" id="logoInput" accept="image/*" style="display:none;" onchange="previewLogo(event)">
+                            </div>
+                            <div style="font-size:11px;color:#aaa;margin-top:6px;">💡 Tip: Brug en logo-version med hvid eller transparent baggrund — den vises på mørk baggrund</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Firmanavn *</label>
+                                <input type="text" id="dealerName" placeholder="F.eks. Rydbergs MC ApS">
+                            </div>
+                            <div class="form-group">
+                                <label>CVR-nummer</label>
+                                <input type="text" id="dealerCVR" placeholder="DK12345678">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:1rem;">
+                            <label>Adresse</label>
+                            <input type="text" id="dealerAddress" placeholder="F.eks. Motorcykelvej 12, 8000 Aarhus">
+                        </div>
+                        <div class="form-group">
+                            <label>Hjemmeside</label>
+                            <input type="url" id="dealerWebsite" placeholder="https://www.rydbergsmc.dk">
+                        </div>
+
+                        <!-- PREVIEW AF DEALER KORT -->
+                        <div style="margin-top:1.25rem;border:1px solid #eee;border-radius:8px;overflow:hidden;">
+                            <div style="background:#1a1a1a;padding:1.25rem;text-align:center;min-height:90px;display:flex;align-items:center;justify-content:center;" id="dealerPreviewLogo">
+                                <span style="color:#555;font-size:13px;">Logo vises her</span>
+                            </div>
+                            <div style="padding:1rem;background:white;">
+                                <div style="font-size:14px;font-weight:700;margin-bottom:0.75rem;color:#333;" id="dealerPreviewName">Firmanavn</div>
+                                <div style="font-size:12px;color:#ff6600;margin-bottom:4px;">🏍️ Se forhandlerens annoncer</div>
+                                <div style="font-size:12px;color:#555;" id="dealerPreviewAddr"></div>
+                                <div style="font-size:12px;color:#ff6600;" id="dealerPreviewSite"></div>
+                                <div style="font-size:10px;color:#aaa;margin-top:8px;" id="dealerPreviewCVR"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- SUCCESS/ERROR -->
                 <div id="successMessage" class="success-message">
                     ✓ Annonce oprettet! Du bliver omdirigeret...
@@ -1035,6 +1098,54 @@
         }
 
         // SUBMIT FORM
+        // DEALER FUNKTIONER
+        let dealerLogoBase64 = null;
+
+        function toggleDealerSection() {
+            const show = document.getElementById('isDealer').checked;
+            document.getElementById('dealerSection').style.display = show ? 'block' : 'none';
+        }
+
+        function previewLogo(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { alert('Logo må maks være 2MB'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                dealerLogoBase64 = e.target.result;
+                document.getElementById('logoPlaceholder').style.display = 'none';
+                const img = document.getElementById('logoPreviewImg');
+                img.src = dealerLogoBase64;
+                img.style.display = 'block';
+                document.getElementById('dealerPreviewLogo').innerHTML =
+                    `<img src="${dealerLogoBase64}" style="max-height:70px;max-width:200px;object-fit:contain;">`;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateDealerPreview() {
+            const name = document.getElementById('dealerName')?.value || 'Firmanavn';
+            const addr = document.getElementById('dealerAddress')?.value || '';
+            const site = document.getElementById('dealerWebsite')?.value || '';
+            const cvr = document.getElementById('dealerCVR')?.value || '';
+            const nameEl = document.getElementById('dealerPreviewName');
+            if (nameEl) nameEl.textContent = name;
+            const addrEl = document.getElementById('dealerPreviewAddr');
+            if (addrEl) addrEl.textContent = addr ? '📍 ' + addr : '';
+            const siteEl = document.getElementById('dealerPreviewSite');
+            if (siteEl) siteEl.textContent = site ? '🔗 ' + site : '';
+            const cvrEl = document.getElementById('dealerPreviewCVR');
+            if (cvrEl) cvrEl.textContent = cvr ? 'CVR-nr.: ' + cvr : '';
+        }
+
+        // Tilknyt live preview events
+        setTimeout(() => {
+            ['dealerName','dealerAddress','dealerWebsite','dealerCVR'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', updateDealerPreview);
+            });
+        }, 500);
+
         async function submitListing(event) {
             event.preventDefault();
 
@@ -1082,9 +1193,12 @@
                 return;
             }
 
-            // Gem billeder i localStorage med ny Supabase ID
+            // Gem billeder + dealer logo i localStorage
             if (imageData.length > 0) {
                 localStorage.setItem('listingImages_' + data.id, JSON.stringify(imageData.map(d => ({data: d}))));
+            }
+            if (dealerLogoBase64) {
+                localStorage.setItem('dealerLogo_' + data.id, dealerLogoBase64);
             }
 
             // Gem også i localStorage for bagudkompatibilitet
