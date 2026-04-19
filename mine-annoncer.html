@@ -404,27 +404,42 @@
             render();
         }
 
-        function updateHeader() {
-            const rawName = localStorage.getItem('userName') || 'Profil';
+        async function updateHeader() {
+            const { data: { session } } = await sb.auth.getSession();
+            const loggedIn = session || localStorage.getItem('userLoggedIn') === 'true';
+            const rawName = localStorage.getItem('userName') || (session?.user?.email?.split('@')[0] || 'Profil');
             const name = rawName.split(' ')[0].charAt(0).toUpperCase() + rawName.split(' ')[0].slice(1).toLowerCase();
-            document.getElementById('headerAuth').innerHTML = `
-                <a class="header-link" href="favoritter.html">❤️ Favoritter</a>
-                <div class="user-dropdown" id="userDropdown">
-                    <button class="user-btn" onclick="toggleUserMenu(event)">
-                        <div class="user-avatar">${name.charAt(0)}</div>
-                        ${name}
-                    </button>
-                    <div class="user-menu" id="userMenu">
-                        <a href="mine-annoncer.html" style="color:#ff6600;">🏍️ Mine annoncer</a>
-                        <a href="mine-sogeagenter.html">🔔 Mine søgeagenter</a>
-                        <a href="min-profil.html">👤 Min profil</a>
-                        <div class="menu-divider"></div>
-                        <button class="logout-item" onclick="logoutUser()">Log ud</button>
-                    </div>
-                </div>`;
+            const el = document.getElementById('headerAuth');
+            if (!el) return;
+            if (loggedIn) {
+                el.innerHTML = `
+                    <a class="header-link" href="favoritter.html">❤️ Favoritter</a>
+                    <div class="user-dropdown" id="userDropdown">
+                        <button class="user-btn" onclick="toggleUserMenu(event)">
+                            <div class="user-avatar">${name.charAt(0)}</div>
+                            ${name}
+                        </button>
+                        <div class="user-menu" id="userMenu">
+                            <a href="mine-annoncer.html">🏍️ Mine annoncer</a>
+                            <a href="mine-sogeagenter.html">🔔 Mine søgeagenter</a>
+                            <a href="min-profil.html">👤 Min profil</a>
+                            <div class="menu-divider"></div>
+                            <button class="logout-item" onclick="logoutUser()">Log ud</button>
+                        </div>
+                    </div>`;
+            } else {
+                el.innerHTML = `<a class="header-link" href="login.html">Log ind</a>`;
+            }
         }
         function toggleUserMenu(e) { e.stopPropagation(); document.getElementById('userMenu').classList.toggle('open'); }
-        function logoutUser() { localStorage.clear(); window.location.href = 'index.html'; }
+        async function logoutUser() {
+            await sb.auth.signOut();
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userId');
+            window.location.href = 'index.html';
+        }
         document.addEventListener('click', () => { const m = document.getElementById('userMenu'); if (m) m.classList.remove('open'); });
 
         updateHeader();
