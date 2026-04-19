@@ -363,8 +363,11 @@
             const { data: sbListings, error } = await sb
                 .from('listings')
                 .select('*')
-                .eq('sold', false)
+                .or('sold.eq.false,sold.is.null')
                 .order('created_at', { ascending: false });
+            
+            if (error) console.error('Supabase fejl:', error);
+            console.log('Supabase annoncer:', sbListings?.length || 0);
 
             if (sbListings && sbListings.length > 0) {
                 sbListings.forEach(l => {
