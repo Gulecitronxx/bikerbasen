@@ -977,7 +977,7 @@
             }
             let favs = getFavorites();
             const btn = document.getElementById('favBtn');
-            if (favs.includes(listing.id)) {
+            if (favs.map(String).includes(String(listing.id))) {
                 favs = favs.filter(id => id !== listing.id);
                 if (btn) btn.textContent = '🤍';
             } else {
@@ -1104,9 +1104,10 @@
         }
     </script>
     <script>
-        function updateHeader() {
-            const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
-            const rawName = localStorage.getItem('userName') || 'Profil';
+        async function updateHeader() {
+            const { data: { session } } = await sb.auth.getSession();
+            const loggedIn = session || localStorage.getItem('userLoggedIn') === 'true';
+            const rawName = localStorage.getItem('userName') || (session?.user?.email?.split('@')[0] || 'Profil');
             const name = rawName.split(' ')[0].charAt(0).toUpperCase() + rawName.split(' ')[0].slice(1).toLowerCase();
             const el = document.getElementById('headerAuth');
             if (!el) return;
