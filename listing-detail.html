@@ -721,65 +721,85 @@
         // DISPLAY LISTING
         function displayListing() {
             const container = document.getElementById('mainContent');
-            const imageGallery = buildGallery();
             const isFav = getFavorites().includes(listing.id);
+            const imgs = listing.images || [];
+            const isDealer = listing.isDealer || listing.is_dealer;
 
             container.innerHTML = `
-                <div style="padding:1rem 0;font-size:13px;color:#999;display:flex;align-items:center;gap:6px;">
-                    <a href="listings.html" style="color:#ff6600;text-decoration:none;">Alle motorcykler</a>
-                    <span>›</span>
-                    <a href="listings.html?type=${listing.type}" style="color:#ff6600;text-decoration:none;">${listing.type}</a>
-                    <span>›</span>
-                    <span style="color:#333;">${listing.brand} ${listing.model}</span>
+                <!-- BREADCRUMB + TOOLBAR -->
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem 0;margin-bottom:0.5rem;">
+                    <div style="font-size:13px;color:#999;display:flex;align-items:center;gap:6px;">
+                        <a href="listings.html" style="color:#ff6600;text-decoration:none;">Alle motorcykler</a>
+                        <span>›</span>
+                        <a href="listings.html?type=${listing.type}" style="color:#ff6600;text-decoration:none;">${listing.type}</a>
+                        <span>›</span>
+                        <span style="color:#333;">${listing.brand} ${listing.model}</span>
+                    </div>
+                    <div style="display:flex;gap:1.5rem;font-size:13px;color:#666;">
+                        <span style="cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="window.print()">🖨️ Print</span>
+                        <span style="cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="openReportModal()">🚩 Anmeld</span>
+                    </div>
                 </div>
 
                 <div class="main-grid">
-                    <!-- LEFT SIDE -->
+                    <!-- LEFT -->
                     <div class="left-content">
 
-                        <!-- BILLEDE -->
-                        <div class="gallery-section">
-                            <div class="image-main" id="mainImage">
-                                ${listing.images && listing.images.length > 0
-                                    ? `<img src="${listing.images[0].data}" alt="${listing.brand} ${listing.model}">`
-                                    : `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:1rem;color:#ccc;"><span style="font-size:80px;">🏍️</span><span style="font-size:14px;font-weight:500;">Ingen billeder</span></div>`
+                        <!-- STORT BILLEDE -->
+                        <div class="gallery-section" style="position:relative;border-radius:8px;overflow:hidden;background:#1a1a1a;">
+                            <div id="mainImage" style="width:100%;height:520px;position:relative;cursor:pointer;" onclick="openLightbox(currentImageIndex)">
+                                ${imgs.length > 0
+                                    ? `<img src="${imgs[0].data}" style="width:100%;height:100%;object-fit:cover;" alt="${listing.brand} ${listing.model}">`
+                                    : `<div style="height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#555;gap:1rem;"><span style="font-size:80px;">🏍️</span><span style="font-size:15px;">Ingen billeder</span></div>`
                                 }
-                                <button class="favorite-btn" id="favBtn" onclick="toggleFavorite()">${isFav ? '❤️' : '🤍'}</button>
+                                ${imgs.length > 1 ? `<div style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,0.6);color:white;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:600;">+${imgs.length - 1} billeder</div>` : ''}
+                                <button id="favBtn" onclick="event.stopPropagation();toggleFavorite()" style="position:absolute;top:14px;right:14px;width:42px;height:42px;background:white;border:none;border-radius:50%;font-size:20px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;">${isFav ? '❤️' : '🤍'}</button>
                             </div>
-                            ${imageGallery}
+
+                            <!-- THUMBNAIL STRIP -->
+                            ${imgs.length > 1 ? `
+                            <div style="display:flex;gap:6px;padding:8px;background:#f5f5f5;overflow-x:auto;">
+                                ${imgs.map((img, i) => `
+                                    <div onclick="changeImage(${i})" id="thumb-${i}" style="width:100px;height:68px;flex-shrink:0;border-radius:4px;overflow:hidden;cursor:pointer;border:2px solid ${i===0?'#ff6600':'transparent'};transition:border-color 0.2s;">
+                                        <img src="${img.data}" style="width:100%;height:100%;object-fit:cover;" alt="Billede ${i+1}">
+                                    </div>
+                                `).join('')}
+                            </div>` : ''}
                         </div>
 
-                        <!-- TITEL OG SPECS -->
-                        <div class="moto-info">
+                        <!-- TITEL + SPECS -->
+                        <div class="moto-info" style="margin-top:1.25rem;">
                             <h1 class="moto-title">${listing.brand} ${listing.model}</h1>
-                            <div style="font-size:13px;color:#999;margin-bottom:1.25rem;">📍 ${listing.location}</div>
+                            <div style="font-size:13px;color:#999;margin-bottom:1.25rem;">📍 ${listing.location} · Oprettet ${listing.createdAt ? new Date(listing.createdAt).toLocaleDateString('da-DK') : '–'}</div>
                             <div class="moto-specs">
                                 <div class="spec"><div class="spec-label">Årgang</div><div class="spec-value">${listing.year}</div></div>
-                                <div class="spec"><div class="spec-label">Kilometer</div><div class="spec-value">${listing.km.toLocaleString('da-DK')}</div></div>
+                                <div class="spec"><div class="spec-label">Kilometer</div><div class="spec-value">${listing.km?.toLocaleString('da-DK')}</div></div>
                                 <div class="spec"><div class="spec-label">Type</div><div class="spec-value">${listing.type}</div></div>
                                 <div class="spec"><div class="spec-label">Stand</div><div class="spec-value">${listing.condition || '–'}</div></div>
-                                ${listing.cc ? `<div class="spec"><div class="spec-label">CC</div><div class="spec-value">${listing.cc} cc</div></div>` : ''}
-                                ${listing.hp ? `<div class="spec"><div class="spec-label">HK</div><div class="spec-value">${listing.hp} hk</div></div>` : ''}
+                                ${listing.cc ? `<div class="spec"><div class="spec-label">Motor</div><div class="spec-value">${listing.cc} cc</div></div>` : ''}
+                                ${listing.hp ? `<div class="spec"><div class="spec-label">Effekt</div><div class="spec-value">${listing.hp} hk</div></div>` : ''}
+                                ${listing.weight ? `<div class="spec"><div class="spec-label">Vægt</div><div class="spec-value">${listing.weight} kg</div></div>` : ''}
                             </div>
                         </div>
 
                         <!-- BESKRIVELSE -->
                         <div class="description-section">
                             <h2 class="section-title">Beskrivelse</h2>
-                            <p class="description-text">${listing.description || 'Ingen beskrivelse'}</p>
+                            <p class="description-text">${listing.description || 'Ingen beskrivelse tilføjet.'}</p>
                         </div>
 
-                        <!-- SPECIFIKATIONER -->
+                        <!-- SPECIFIKATIONER TABEL -->
                         <div class="detaljer-section">
                             <h2 class="section-title">Specifikationer</h2>
                             <div class="detail-row"><div class="detail-label">Mærke</div><div class="detail-value">${listing.brand}</div></div>
                             <div class="detail-row"><div class="detail-label">Model</div><div class="detail-value">${listing.model}</div></div>
                             <div class="detail-row"><div class="detail-label">Årgang</div><div class="detail-value">${listing.year}</div></div>
-                            <div class="detail-row"><div class="detail-label">Kilometer</div><div class="detail-value">${listing.km.toLocaleString('da-DK')} km</div></div>
+                            <div class="detail-row"><div class="detail-label">Kilometer</div><div class="detail-value">${listing.km?.toLocaleString('da-DK')} km</div></div>
                             <div class="detail-row"><div class="detail-label">Type</div><div class="detail-value">${listing.type}</div></div>
                             <div class="detail-row"><div class="detail-label">Stand</div><div class="detail-value">${listing.condition || '–'}</div></div>
                             <div class="detail-row"><div class="detail-label">Servicehistorik</div><div class="detail-value">${listing.service || '–'}</div></div>
-                            ${listing.cc ? `<div class="detail-row"><div class="detail-label">Motor</div><div class="detail-value">${listing.cc} cc${listing.hp ? ' / ' + listing.hp + ' hk' : ''}</div></div>` : ''}
+                            ${listing.cc ? `<div class="detail-row"><div class="detail-label">Motorstørrelse</div><div class="detail-value">${listing.cc} cc</div></div>` : ''}
+                            ${listing.hp ? `<div class="detail-row"><div class="detail-label">Effekt</div><div class="detail-value">${listing.hp} hk</div></div>` : ''}
                             ${listing.weight ? `<div class="detail-row"><div class="detail-label">Vægt</div><div class="detail-value">${listing.weight} kg</div></div>` : ''}
                             <div class="detail-row"><div class="detail-label">Lokation</div><div class="detail-value">📍 ${listing.location}</div></div>
                         </div>
@@ -788,95 +808,124 @@
                     <!-- RIGHT SIDEBAR -->
                     <div class="sidebar">
 
-                        <!-- PRIS + KNAPPER -->
+                        <!-- PRIS + ACTION KNAPPER (Bilbasen stil) -->
                         <div class="price-card">
-                            <div style="font-size:12px;color:#999;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Pris</div>
-                            <div class="price">${listing.price.toLocaleString('da-DK')} kr</div>
-                            <div style="font-size:12px;color:#aaa;margin-bottom:1.5rem;">inkl. leveringsomkostninger</div>
-                            <div class="action-buttons">
-                                <a href="tel:${listing.contactPhone}" class="btn btn-primary" style="font-size:15px;padding:15px;border-radius:6px;display:block;text-align:center;text-decoration:none;font-weight:700;">
-                                    📞 Ring til sælger
-                                </a>
-                                <a href="mailto:${listing.contactEmail}" class="btn btn-secondary" style="font-size:15px;padding:13px;border-radius:6px;display:block;text-align:center;text-decoration:none;font-weight:700;margin-top:0.75rem;">
-                                    ✉️ Skriv til sælger
-                                </a>
-                                <button onclick="openReportModal()" style="background:none;border:none;color:#aaa;font-size:12px;cursor:pointer;padding:10px 0;text-align:center;width:100%;display:block;margin-top:4px;">
-                                    ⚠️ Anmeld annonce
-                                </button>
-                            </div>
+                            <div style="font-size:28px;font-weight:700;color:#1a1a1a;margin-bottom:4px;">${listing.price?.toLocaleString('da-DK')} kr</div>
+                            <div style="font-size:12px;color:#aaa;margin-bottom:1.25rem;">inkl. leveringsomkostninger</div>
+
+                            <!-- Book prøvetur (forhandler) / Ring nu (privat) -->
+                            <a href="tel:${listing.contactPhone || listing.contact_phone}" style="display:block;padding:14px;background:#ff6600;color:white;border-radius:6px;text-align:center;text-decoration:none;font-size:15px;font-weight:700;margin-bottom:0.75rem;">
+                                ${isDealer ? '📅 Book en prøvetur' : '📞 Ring til sælger'}
+                            </a>
+                            <a href="mailto:${listing.contactEmail || listing.contact_email}" style="display:block;padding:13px;background:white;color:#ff6600;border:2px solid #ff6600;border-radius:6px;text-align:center;text-decoration:none;font-size:15px;font-weight:700;margin-bottom:0.75rem;">
+                                ✉️ Skriv til sælger
+                            </a>
+                            <a href="tel:${listing.contactPhone || listing.contact_phone}" style="display:block;padding:12px;background:white;color:#333;border:1px solid #ddd;border-radius:6px;text-align:center;text-decoration:none;font-size:14px;font-weight:600;">
+                                📱 Vis telefonnummer
+                            </a>
                         </div>
 
-                        <!-- SÆLGER KORT -->
-                        <div class="seller-card">
+                        <!-- FORHANDLER KORT (stor version med logo) -->
+                        ${isDealer ? `
+                        <div style="background:white;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.08);overflow:hidden;margin-top:1rem;">
+                            <div style="background:#1a1a1a;padding:1.5rem;text-align:center;min-height:100px;display:flex;align-items:center;justify-content:center;">
+                                ${listing.dealerLogo || listing.dealer_logo
+                                    ? `<img src="${listing.dealerLogo || listing.dealer_logo}" style="max-height:70px;max-width:200px;object-fit:contain;">`
+                                    : `<div style="font-size:20px;font-weight:700;color:white;">🏍️ ${listing.dealerName || listing.dealer_name}</div>`
+                                }
+                            </div>
+                            <div style="padding:1.25rem;">
+                                <div style="font-size:16px;font-weight:700;margin-bottom:1rem;">${listing.dealerName || listing.dealer_name}</div>
+                                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                                    <a href="listings.html" style="display:flex;align-items:center;gap:8px;color:#ff6600;text-decoration:none;font-size:13px;font-weight:500;">
+                                        <span>🏍️</span> Se forhandlerens annoncer
+                                    </a>
+                                    ${(listing.dealerAddress || listing.dealer_address) ? `
+                                    <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:#555;">
+                                        <span>📍</span><span>${listing.dealerAddress || listing.dealer_address}</span>
+                                    </div>` : ''}
+                                    ${(listing.dealerWebsite || listing.dealer_website) ? `
+                                    <a href="${listing.dealerWebsite || listing.dealer_website}" target="_blank" style="display:flex;align-items:center;gap:8px;color:#ff6600;text-decoration:none;font-size:13px;font-weight:500;">
+                                        <span>🔗</span> Besøg forhandlerens hjemmeside
+                                    </a>` : ''}
+                                </div>
+                                ${(listing.dealerCVR || listing.dealer_cvr) ? `<div style="font-size:11px;color:#aaa;margin-top:1rem;padding-top:1rem;border-top:1px solid #f0f0f0;">CVR-nr.: ${listing.dealerCVR || listing.dealer_cvr}</div>` : ''}
+                                <div style="font-size:11px;color:#aaa;margin-top:6px;">Forhandleren har accepteret, at de kun annoncerer i overensstemmelse med gældende lovgivning.</div>
+                            </div>
+                        </div>` : `
+
+                        <!-- PRIVAT SÆLGER KORT (simpel version) -->
+                        <div class="seller-card" style="margin-top:1rem;">
                             <div class="seller-header">
-                                <div class="seller-avatar">${listing.contactName.charAt(0).toUpperCase()}</div>
+                                <div class="seller-avatar">${(listing.contactName || listing.contact_name || '?').charAt(0).toUpperCase()}</div>
                                 <div class="seller-info">
-                                    <h3>${listing.contactName}</h3>
-                                    <p>📍 ${listing.location}</p>
+                                    <h3>${listing.contactName || listing.contact_name || '–'}</h3>
+                                    <p>👤 Privat sælger · 📍 ${listing.location}</p>
                                 </div>
                             </div>
                             <div class="seller-contact">
                                 <label>TELEFON</label>
-                                <p>${listing.contactPhone}</p>
+                                <p>${listing.contactPhone || listing.contact_phone || '–'}</p>
                                 <label>EMAIL</label>
-                                <p>${listing.contactEmail}</p>
+                                <p>${listing.contactEmail || listing.contact_email || '–'}</p>
                                 <label>OPRETTET</label>
                                 <p>${listing.createdAt ? new Date(listing.createdAt).toLocaleDateString('da-DK') : '–'}</p>
                             </div>
-                        </div>
-
-                        <!-- DEALER CARD -->
-                        ${listing.isDealer ? `
-                        <div class="dealer-card">
-                            <div class="dealer-logo-section">
-                                ${listing.dealerLogo ? `<img src="${listing.dealerLogo}" alt="${listing.dealerName}">` : `<div class="dealer-logo-placeholder">🏍️ ${listing.dealerName}</div>`}
-                            </div>
-                            <div class="dealer-body">
-                                <div class="dealer-badge">🏪 Forhandler</div>
-                                <div class="dealer-name">${listing.dealerName}</div>
-                                ${listing.dealerAddress ? `<div class="dealer-row"><span class="dealer-row-icon">📍</span><span>${listing.dealerAddress}</span></div>` : ''}
-                                ${listing.dealerWebsite ? `<div class="dealer-row"><span class="dealer-row-icon">🔗</span><a href="${listing.dealerWebsite}" target="_blank">Besøg hjemmeside</a></div>` : ''}
-                                ${listing.dealerCVR ? `<div class="dealer-cvr">CVR-nr.: ${listing.dealerCVR}</div>` : ''}
-                                <div style="font-size:11px;color:#aaa;margin-top:6px;">Forhandleren har accepteret, at de kun annoncerer i overensstemmelse med gældende lovgivning.</div>
-                            </div>
-                        </div>` : ''}
+                        </div>`}
 
                     </div>
                 </div>
-            `;
 
-            if (listing.images && listing.images.length > 0) {
-                setupImageNavigation();
-            }
-        }
-
-        // BUILD GALLERY
-        function buildGallery() {
-            if (!listing.images || listing.images.length === 0) {
-                return '';
-            }
-
-            return `
-                <div class="image-nav">
-                    ${listing.images.map((img, i) => `
-                        <div class="image-thumb ${i === 0 ? 'active' : ''}" onclick="changeImage(${i})">
-                            <img src="${img.data}" alt="Billede ${i + 1}">
-                        </div>
-                    `).join('')}
+                <!-- LIGHTBOX -->
+                <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;align-items:center;justify-content:center;" onclick="closeLightbox()">
+                    <img id="lightboxImg" style="max-width:90vw;max-height:90vh;object-fit:contain;" alt="">
+                    <button onclick="event.stopPropagation();changeLightbox(-1)" style="position:fixed;left:2rem;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;font-size:28px;width:50px;height:50px;border-radius:50%;cursor:pointer;">‹</button>
+                    <button onclick="event.stopPropagation();changeLightbox(1)" style="position:fixed;right:2rem;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;font-size:28px;width:50px;height:50px;border-radius:50%;cursor:pointer;">›</button>
+                    <button onclick="closeLightbox()" style="position:fixed;top:1.5rem;right:1.5rem;background:rgba(255,255,255,0.15);border:none;color:white;font-size:20px;width:40px;height:40px;border-radius:50%;cursor:pointer;">✕</button>
+                    <div style="position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);color:#aaa;font-size:13px;" id="lightboxCounter"></div>
                 </div>
             `;
+
+            // Sæt currentImageIndex
+            window.currentImageIndex = 0;
         }
+
+        // BUILD GALLERY (ikke brugt mere — inline i displayListing)
+        function buildGallery() { return ''; }
+
+        // LIGHTBOX
+        function openLightbox(index) {
+            const imgs = listing.images || [];
+            if (imgs.length === 0) return;
+            window.currentImageIndex = index;
+            document.getElementById('lightbox').style.display = 'flex';
+            document.getElementById('lightboxImg').src = imgs[index].data;
+            document.getElementById('lightboxCounter').textContent = (index + 1) + ' / ' + imgs.length;
+        }
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+        function changeLightbox(dir) {
+            const imgs = listing.images || [];
+            window.currentImageIndex = (window.currentImageIndex + dir + imgs.length) % imgs.length;
+            document.getElementById('lightboxImg').src = imgs[window.currentImageIndex].data;
+            document.getElementById('lightboxCounter').textContent = (window.currentImageIndex + 1) + ' / ' + imgs.length;
+        }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') changeLightbox(-1);
+            if (e.key === 'ArrowRight') changeLightbox(1);
+            if (e.key === 'Escape') closeLightbox();
+        });
 
         // CHANGE IMAGE
         function changeImage(index) {
-            const mainImage = document.getElementById('mainImage');
-            const isFav = getFavorites().includes(listing.id);
-            mainImage.innerHTML = `
-                <img src="${listing.images[index].data}" alt="Billede ${index + 1}" style="width:100%;height:100%;object-fit:cover;">
-                <button class="favorite-btn" id="favBtn" onclick="toggleFavorite()">${isFav ? '❤️' : '🤍'}</button>
-            `;
-            document.querySelectorAll('.image-thumb').forEach((thumb, i) => {
-                thumb.classList.toggle('active', i === index);
+            const imgs = listing.images || [];
+            if (!imgs[index]) return;
+            window.currentImageIndex = index;
+            const mainImg = document.querySelector('#mainImage img');
+            if (mainImg) mainImg.src = imgs[index].data;
+            // Opdater thumbnail borders
+            imgs.forEach((_, i) => {
+                const t = document.getElementById('thumb-' + i);
+                if (t) t.style.borderColor = i === index ? '#ff6600' : 'transparent';
             });
         }
 
