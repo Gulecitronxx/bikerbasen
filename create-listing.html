@@ -842,7 +842,7 @@
                 <!-- BUTTONS -->
                 <div class="button-group">
                     <button type="button" class="btn-secondary" onclick="window.location.href='index.html'">Annuller</button>
-                    <button type="submit" class="btn-primary">Opret annonce</button>
+                    <button type="submit" id="submitBtn" class="btn-primary">Opret annonce</button>
                 </div>
             </form>
         </div>
@@ -1159,7 +1159,7 @@
             if (isSubmitting) return;
             isSubmitting = true;
 
-            const submitBtn = document.querySelector('button[type="submit"]');
+            const submitBtn = document.getElementById('submitBtn');
             const errorEl = document.getElementById('errorMessage');
             if (errorEl) { errorEl.style.display = 'none'; errorEl.textContent = ''; }
 
