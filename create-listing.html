@@ -912,19 +912,25 @@
         }
 
         // CHECK LOGIN ON LOAD
-        window.addEventListener('load', function() {
-            const userName = localStorage.getItem('userName');
-            if (!userName) {
+        window.addEventListener('load', async function() {
+            // Tjek Supabase session
+            const { data: { session } } = await sb.auth.getSession();
+            const localLogin = localStorage.getItem('userLoggedIn') === 'true';
+
+            if (!session && !localLogin) {
                 alert('Du skal være logget ind for at oprette en annonce.');
                 window.location.href = 'login.html';
                 return;
             }
 
-            document.getElementById('contactName').value = userName;
-            const userEmail = localStorage.getItem('userEmail');
-            if (userEmail) {
-                document.getElementById('contactEmail').value = userEmail;
-            }
+            // Hent brugerinfo
+            const userName = localStorage.getItem('userName') || (session?.user?.email?.split('@')[0] || '');
+            const userEmail = localStorage.getItem('userEmail') || session?.user?.email || '';
+
+            if (userName) document.getElementById('contactName').value = userName;
+            if (userEmail) document.getElementById('contactEmail').value = userEmail;
+
+            updateHeader();
         });
 
         // LOOKUP MOTORCYCLE
@@ -1149,22 +1155,40 @@
         async function submitListing(event) {
             event.preventDefault();
 
-            // Tjek login via Supabase
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const errorEl = document.getElementById('errorMessage');
+            if (errorEl) errorEl.style.display = 'none';
+
+            // Tjek login
             const { data: { session } } = await sb.auth.getSession();
-            if (!session) {
+            const localLogin = localStorage.getItem('userLoggedIn') === 'true';
+
+            if (!session && !localLogin) {
                 alert('Du skal være logget ind for at oprette en annonce');
                 window.location.href = 'login.html';
                 return;
             }
 
-            const submitBtn = document.querySelector('button[type="submit"]');
+            // Validering
+            if (!selectedMoto.brand) { 
+                alert('Vælg venligst en motorcykel først (Trin 1)'); 
+                return; 
+            }
+            if (!document.getElementById('price').value) { 
+                alert('Udfyld venligst prisen'); 
+                return; 
+            }
+            if (!document.getElementById('location').value) { 
+                alert('Udfyld venligst by/lokation'); 
+                return; 
+            }
+
             if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Gemmer...'; }
 
-            // Konverter billeder til base64 strings til Supabase
             const imageData = uploadedImages.map(img => img.data || img);
 
             const listing = {
-                user_id: session.user.id,
+                user_id: session?.user?.id || localStorage.getItem('userId'),
                 brand: selectedMoto.brand,
                 model: selectedMoto.model,
                 year: selectedMoto.year,
@@ -1185,25 +1209,28 @@
                 dealer_cvr: document.getElementById('dealerCVR')?.value || null,
             };
 
-            const { data, error } = await sb.from('listings').insert([listing]).select().single();
-
-            if (error) {
-                alert('Fejl ved oprettelse: ' + error.message);
-                if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Opret annonce'; }
-                return;
+            // Forsøg Supabase insert hvis session
+            let savedId = null;
+            if (session) {
+                const { data, error } = await sb.from('listings').insert([listing]).select().single();
+                if (error) {
+                    console.error('Supabase fejl:', error);
+                    // Fortsæt med localStorage som fallback
+                } else {
+                    savedId = data.id;
+                    if (imageData.length > 0) {
+                        localStorage.setItem('listingImages_' + savedId, JSON.stringify(imageData.map(d => ({data: d}))));
+                    }
+                    if (dealerLogoBase64) {
+                        localStorage.setItem('dealerLogo_' + savedId, dealerLogoBase64);
+                    }
+                }
             }
 
-            // Gem billeder + dealer logo i localStorage
-            if (imageData.length > 0) {
-                localStorage.setItem('listingImages_' + data.id, JSON.stringify(imageData.map(d => ({data: d}))));
-            }
-            if (dealerLogoBase64) {
-                localStorage.setItem('dealerLogo_' + data.id, dealerLogoBase64);
-            }
-
-            // Gem også i localStorage for bagudkompatibilitet
+            // Gem altid i localStorage
+            const localId = savedId || Date.now();
             const localListing = {
-                id: data.id,
+                id: localId,
                 brand: listing.brand, model: listing.model,
                 year: listing.year, km: listing.km, type: listing.type,
                 price: listing.price, location: listing.location,
@@ -1212,9 +1239,26 @@
                 contactName: listing.contact_name,
                 contactEmail: listing.contact_email,
                 contactPhone: listing.contact_phone,
+                isDealer: listing.is_dealer,
+                dealerName: listing.dealer_name,
+                dealerAddress: listing.dealer_address,
+                dealerWebsite: listing.dealer_website,
+                dealerCVR: listing.dealer_cvr,
+                dealerLogo: dealerLogoBase64,
                 images: uploadedImages,
                 createdAt: new Date().toISOString()
             };
+
+            if (!savedId) {
+                // Gem billeder med lokal ID
+                if (imageData.length > 0) {
+                    localStorage.setItem('listingImages_' + localId, JSON.stringify(imageData.map(d => ({data: d}))));
+                }
+                if (dealerLogoBase64) {
+                    localStorage.setItem('dealerLogo_' + localId, dealerLogoBase64);
+                }
+            }
+
             let userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
             userListings.push(localListing);
             localStorage.setItem('userListings', JSON.stringify(userListings));
