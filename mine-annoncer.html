@@ -83,6 +83,8 @@
 
         footer { background: white; color: #666; padding: 2rem; text-align: center; margin-top: 2rem; font-size: 13px; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>const sb=window.supabase.createClient('https://dxefcvlerxugymjfjgoe.supabase.co','sb_publishable_05IjuXC5ZJO912AGP-qZ4Q_IujZju7U');</script>
 </head>
 <body>
     <header>
@@ -186,19 +188,55 @@
     <footer>© 2026 BikerBasen — Danmarks måske største motorcykelmarkedsplads</footer>
 
     <script>
-        // Redirect hvis ikke logget ind
-        if (localStorage.getItem('userLoggedIn') !== 'true') {
-            window.location.href = 'login.html';
-        }
+        // Tjek login via Supabase
+        sb.auth.getSession().then(({data:{session}})=>{
+            if (!session && localStorage.getItem('userLoggedIn') !== 'true') {
+                window.location.href = 'login.html';
+            } else {
+                render();
+            }
+        });
 
-        let editingId = null;
-
-        function render() {
-            const userListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+        async function render() {
             const container = document.getElementById('listingsContainer');
-            document.getElementById('countText').textContent = userListings.length + ' aktive annonce' + (userListings.length !== 1 ? 'r' : '');
 
-            if (userListings.length === 0) {
+            // Prøv Supabase først
+            const { data: { session } } = await sb.auth.getSession();
+            let allListings = [];
+
+            if (session) {
+                const { data: sbListings } = await sb.from('listings')
+                    .select('*')
+                    .eq('user_id', session.user.id)
+                    .order('created_at', { ascending: false });
+
+                if (sbListings && sbListings.length > 0) {
+                    // Konverter Supabase format til lokalt format
+                    allListings = sbListings.map(l => ({
+                        id: l.id,
+                        brand: l.brand, model: l.model,
+                        year: l.year, km: l.km, type: l.type,
+                        price: l.price, location: l.location,
+                        condition: l.condition, service: l.service,
+                        description: l.description,
+                        contactName: l.contact_name,
+                        contactEmail: l.contact_email,
+                        contactPhone: l.contact_phone,
+                        sold: l.sold,
+                        images: JSON.parse(localStorage.getItem('listingImages_' + l.id) || '[]'),
+                        createdAt: l.created_at
+                    }));
+                }
+            }
+
+            // Fallback til localStorage
+            if (allListings.length === 0) {
+                allListings = JSON.parse(localStorage.getItem('userListings') || '[]');
+            }
+
+            document.getElementById('countText').textContent = allListings.length + ' annonce' + (allListings.length !== 1 ? 'r' : '');
+
+            if (allListings.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">🏍️</div>
@@ -209,7 +247,7 @@
                 return;
             }
 
-            container.innerHTML = userListings.map(m => `
+            container.innerHTML = allListings.map(m => `
                 <div class="listing-card ${m.sold ? 'sold' : ''}">
                     <div class="listing-thumb">
                         ${m.images && m.images.length > 0
@@ -290,26 +328,32 @@
             render();
         }
 
-        function markSold(id) {
+        async function markSold(id) {
             if (!confirm('Marker denne annonce som solgt?')) return;
+            // Opdater i Supabase
+            await sb.from('listings').update({ sold: true }).eq('id', id);
+            // Opdater også localStorage
             let listings = JSON.parse(localStorage.getItem('userListings') || '[]');
             listings = listings.map(l => l.id === id ? {...l, sold: true} : l);
             localStorage.setItem('userListings', JSON.stringify(listings));
             render();
         }
 
-        function markUnsold(id) {
+        async function markUnsold(id) {
+            await sb.from('listings').update({ sold: false }).eq('id', id);
             let listings = JSON.parse(localStorage.getItem('userListings') || '[]');
             listings = listings.map(l => l.id === id ? {...l, sold: false} : l);
             localStorage.setItem('userListings', JSON.stringify(listings));
             render();
         }
 
-        function deleteListing(id) {
+        async function deleteListing(id) {
             if (!confirm('Er du sikker på at du vil slette denne annonce?')) return;
+            await sb.from('listings').delete().eq('id', id);
             let listings = JSON.parse(localStorage.getItem('userListings') || '[]');
             listings = listings.filter(l => l.id !== id);
             localStorage.setItem('userListings', JSON.stringify(listings));
+            localStorage.removeItem('listingImages_' + id);
             render();
         }
 
