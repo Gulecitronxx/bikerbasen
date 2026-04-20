@@ -22,8 +22,8 @@
             border-bottom: 1px solid #f0f0f0;
         }
         .header-container { 
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 100%;
+            margin: 0;
             padding: 0 2rem;
             display: flex;
             justify-content: space-between;
@@ -31,80 +31,104 @@
         }
         .logo { font-size: 24px; font-weight: 700; color: #ff6600; text-decoration: none; }
         
-        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
-        .nav-links a { text-decoration: none; color: #333; font-weight: 500; font-size: 0.95rem; }
-        .btn-sell { background: #ff6600; color: white !important; padding: 0.6rem 1.2rem; border-radius: 4px; }
+        .nav-links { display: flex; gap: 1rem; align-items: center; }
+        .nav-links a { text-decoration: none; color: #333; font-weight: 500; font-size: 0.9rem; }
+        .btn-sell { background: #ff6600; color: white !important; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 600; }
+        .user-avatar { width: 32px; height: 32px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #666; cursor: pointer; }
 
-        /* NY STIL TIL POPULÆRE SØGNINGER (CIRKLER) */
-        .section { padding: 3rem 0; background: white; margin-top: 1rem; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-        .section-title { font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 700; }
-
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-            gap: 2rem;
-            padding: 1rem 0;
-        }
-
-        .category-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            transition: transform 0.2s ease;
-        }
-
-        .category-card:hover { transform: translateY(-5px); }
-
-        .category-image {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 0.75rem;
-            border: 2px solid #eee;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .category-card span {
-            color: #333;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-
-        /* HERO & ANDRE ELEMENTER */
         .hero { 
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80&w=1500');
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80&w=1500');
             background-size: cover;
             background-position: center;
-            height: 400px;
+            height: 300px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             text-align: center;
         }
-        .hero-content h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero-content h1 { font-size: 2.5rem; margin-bottom: 1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
-        /* Listing Cards */
-        .listing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        .listing-card {
+        .search-container {
+            max-width: 900px;
+            margin: -40px auto 0;
             background: white;
+            padding: 1.5rem;
             border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 10;
         }
+        .search-tabs { display: flex; gap: 1rem; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+        .search-tab { cursor: pointer; padding: 0.5rem 1rem; font-weight: 600; color: #666; }
+        .search-tab.active { color: #ff6600; border-bottom: 2px solid #ff6600; }
+
+        .search-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+        .search-field { position: relative; }
+        .search-field label { display: block; font-size: 0.75rem; color: #666; margin-bottom: 0.25rem; font-weight: 600; }
+        .search-input { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem; cursor: pointer; background: white; text-align: left; }
+        .btn-search { background: #ff6600; color: white; border: none; padding: 0.75rem; border-radius: 4px; font-weight: 700; cursor: pointer; width: 100%; align-self: flex-end; }
+
+        .dropdown-menu { position: absolute; top: 100%; left: 0; width: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: none; z-index: 100; max-height: 250px; overflow-y: auto; }
+        .dropdown-menu.active { display: block; }
+        .dropdown-item { padding: 0.75rem; cursor: pointer; font-size: 0.9rem; }
+        .dropdown-item:hover { background: #f5f5f5; color: #ff6600; }
+
+        .section { padding: 3rem 0; background: white; margin-top: 1rem; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .section-title { font-size: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+
+        /* NYT DESIGN: POPULÆRE SØGNINGER (TEKST I BILLEDE + AFROUNDEDE HJØRNER) */
+        .category-grid {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            padding: 1rem 0;
+            flex-wrap: wrap;
+        }
+        .category-card {
+            position: relative;
+            width: 150px;
+            height: 90px;
+            text-decoration: none;
+            border-radius: 10px; /* Her styres afrundingen af hjørnerne */
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+        .category-card:hover { transform: scale(1.05); }
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.65); /* Gør billedet mørkere så teksten er tydelig */
+        }
+        .category-card span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+            text-align: center;
+            width: 100%;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .listing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .listing-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s; }
+        .listing-card:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .listing-img { width: 100%; height: 180px; object-fit: cover; }
         .listing-details { padding: 1rem; }
         .listing-price { font-size: 1.25rem; font-weight: 700; color: #ff6600; }
+        
+        /* User menu */
+        .user-dropdown { position: relative; }
+        .user-btn { background: none; border: none; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: 500; }
+        .user-menu { position: absolute; top: 100%; right: 0; background: white; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 200px; display: none; z-index: 1000; padding: 0.5rem 0; margin-top: 0.5rem; }
+        .user-menu.open { display: block; }
+        .user-menu a, .user-menu button { display: block; width: 100%; padding: 0.75rem 1rem; text-decoration: none; color: #333; text-align: left; background: none; border: none; font-size: 0.9rem; cursor: pointer; }
+        .user-menu a:hover, .user-menu button:hover { background: #f5f5f5; color: #ff6600; }
     </style>
 </head>
 <body>
@@ -116,7 +140,7 @@
                 <a href="listings.html">Søg MC</a>
                 <a href="prisvurdering.html">Prisvurdering</a>
                 <a href="signup.html" class="btn-sell">Opret annonce</a>
-                <a href="login.html">Log ind</a>
+                <div id="headerAuth"></div>
             </nav>
         </div>
     </header>
@@ -124,33 +148,60 @@
     <section class="hero">
         <div class="hero-content">
             <h1>Find din næste drømme-MC</h1>
-            <p>Danmarks hurtigste markedsplads for motorcykler</p>
         </div>
     </section>
 
+    <div class="search-container">
+        <div class="search-tabs">
+            <div class="search-tab active">Brugt MC</div>
+        </div>
+        <div class="search-grid">
+            <div class="search-field">
+                <label>Mærke</label>
+                <button class="search-input" onclick="toggleDropdown('brandMenu')">Vælg mærke</button>
+                <div id="brandMenu" class="dropdown-menu"></div>
+            </div>
+            <div class="search-field">
+                <label>Model</label>
+                <button class="search-input" onclick="toggleDropdown('modelMenu')">Vælg model</button>
+                <div id="modelMenu" class="dropdown-menu">
+                    <div class="dropdown-item">Vælg mærke først</div>
+                </div>
+            </div>
+            <div class="search-field">
+                <label>Pris (maks)</label>
+                <button class="search-input" id="priceBtn" onclick="toggleDropdown('priceMenu')">Ingen maks</button>
+                <div id="priceMenu" class="dropdown-menu">
+                    <div class="dropdown-item" onclick="setPrice(0, 'Ingen maks')">Ingen maks</div>
+                    <div class="dropdown-item" onclick="setPrice(25000, '25.000 kr.')">25.000 kr.</div>
+                    <div class="dropdown-item" onclick="setPrice(50000, '50.000 kr.')">50.000 kr.</div>
+                    <div class="dropdown-item" onclick="setPrice(75000, '75.000 kr.')">75.000 kr.</div>
+                    <div class="dropdown-item" onclick="setPrice(100000, '100.000 kr.')">100.000 kr.</div>
+                </div>
+            </div>
+            <button class="btn-search" onclick="doSearch()">Søg</button>
+        </div>
+    </div>
+
     <section class="section">
         <div class="container">
-            <h2 class="section-title">Populære kategorier</h2>
+            <h2 class="section-title">Populære søgninger</h2>
             <div class="category-grid">
                 <a href="listings.html?type=Sport" class="category-card">
-                    <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80&w=200" alt="Sport" class="category-image">
+                    <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80&w=400" alt="Sport">
                     <span>Sport</span>
                 </a>
                 <a href="listings.html?type=Cruiser" class="category-card">
-                    <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80&w=200" alt="Cruiser" class="category-image">
+                    <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&q=80&w=400" alt="Cruiser">
                     <span>Cruiser</span>
                 </a>
                 <a href="listings.html?type=Touring" class="category-card">
-                    <img src="https://images.unsplash.com/photo-1547623641-82fbb83476e9?auto=format&fit=crop&q=80&w=200" alt="Touring" class="category-image">
+                    <img src="https://images.unsplash.com/photo-1547623641-82fbb83476e9?auto=format&fit=crop&q=80&w=400" alt="Touring">
                     <span>Touring</span>
                 </a>
                 <a href="listings.html?type=Cross" class="category-card">
-                    <img src="https://images.unsplash.com/photo-1531327374167-0334f59439fd?auto=format&fit=crop&q=80&w=200" alt="Cross" class="category-image">
+                    <img src="https://images.unsplash.com/photo-1531327374167-0334f59439fd?auto=format&fit=crop&q=80&w=400" alt="Cross">
                     <span>Cross</span>
-                </a>
-                <a href="listings.html?type=Scooter" class="category-card">
-                    <img src="https://images.unsplash.com/photo-1590892019183-42174898160a?auto=format&fit=crop&q=80&w=200" alt="Scooter" class="category-image">
-                    <span>Scooter</span>
                 </a>
             </div>
         </div>
@@ -158,16 +209,18 @@
 
     <section class="section" style="background: #f9f9f9;">
         <div class="container">
-            <h2 class="section-title">Nyeste annoncer</h2>
+            <h2 class="section-title">
+                Nyeste annoncer
+                <a href="listings.html" style="font-size: 0.9rem; color: #ff6600; text-decoration: none;">Se alle →</a>
+            </h2>
             <div id="latest-listings" class="listing-grid">
-                <p>Henter de nyeste motorcykler...</p>
+                <p>Henter annoncer...</p>
             </div>
         </div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Supabase configuration (Brug dine egne keys herfra din eksisterende kode)
         const sb_url = 'https://dxefcvlerxugymjfjgoe.supabase.co';
         const sb_key = 'sb_publishable_05IjuXC5ZJO912AGP-qZ4Q_IujZju7U';
         const sb = window.supabase.createClient(sb_url, sb_key);
@@ -189,7 +242,39 @@
             `).join('');
         }
 
+        function updateHeader() {
+            const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
+            const name = localStorage.getItem('userName') || 'Profil';
+            const el = document.getElementById('headerAuth');
+            if (loggedIn) {
+                el.innerHTML = `
+                    <div class="user-dropdown" id="userDropdown">
+                        <button class="user-btn" onclick="toggleUserMenu(event)">
+                            <div class="user-avatar">${name.charAt(0)}</div>
+                            ${name}
+                        </button>
+                        <div class="user-menu" id="userMenu">
+                            <a href="mine-annoncer.html">🏍️ Mine annoncer</a>
+                            <a href="mine-sogeagenter.html">🔔 Mine søgeagenter</a>
+                            <a href="min-profil.html">👤 Min profil</a>
+                            <button onclick="logout()">Log ud</button>
+                        </div>
+                    </div>`;
+            } else {
+                el.innerHTML = '<a href="login.html">Log ind</a>';
+            }
+        }
+
+        function toggleUserMenu(e) { e.stopPropagation(); document.getElementById('userMenu').classList.toggle('open'); }
+        function logout() { localStorage.clear(); window.location.reload(); }
+
+        document.addEventListener('click', () => {
+            const m = document.getElementById('userMenu');
+            if (m) m.classList.remove('open');
+        });
+
         loadSupabaseListings();
+        updateHeader();
     </script>
 </body>
 </html>
