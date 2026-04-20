@@ -34,7 +34,7 @@
         .logo { 
             font-size: 22px; 
             font-weight: 700; 
-            color: #ff6600; 
+            color: #1a6b3a; 
             cursor: pointer; 
             text-decoration: none;
             white-space: nowrap;
@@ -54,7 +54,7 @@
             transition: color 0.2s;
         }
         .header-link:hover { 
-            color: #ff6600;
+            color: #1a6b3a;
         }
         
         .container { max-width: 900px; margin: 0 auto; padding: 2rem 2rem 2rem 2rem; background: white; }
@@ -69,26 +69,26 @@
             font-size: 14px; color: #333;
             transition: border-color 0.2s;
         }
-        .search-input-wrap input:focus { outline: none; border-color: #ff6600; }
+        .search-input-wrap input:focus { outline: none; border-color: #1a6b3a; }
         .search-input-wrap::before {
             content: '🔍'; position: absolute; left: 14px; top: 50%;
             transform: translateY(-50%); font-size: 15px; pointer-events: none;
         }
         .btn-agent {
-            padding: 11px 18px; background: white; color: #ff6600;
-            border: 2px solid #ff6600; border-radius: 8px;
+            padding: 11px 18px; background: white; color: #1a6b3a;
+            border: 2px solid #1a6b3a; border-radius: 8px;
             font-size: 13px; font-weight: 600; cursor: pointer;
             white-space: nowrap; display: flex; align-items: center; gap: 6px;
             transition: all 0.2s;
         }
         .btn-agent:hover { background: #fff5ee; }
         .btn-filters {
-            padding: 11px 18px; background: #ff6600; color: white;
+            padding: 11px 18px; background: #1a6b3a; color: white;
             border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
             cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 8px;
             transition: background 0.2s;
         }
-        .btn-filters:hover { background: #e55a00; }
+        .btn-filters:hover { background: #145530; }
         .filter-count {
             background: #1a1a1a; color: white; border-radius: 50%;
             width: 20px; height: 20px; font-size: 11px; font-weight: 700;
@@ -103,7 +103,7 @@
             font-size: 13px; font-weight: 500; cursor: pointer;
             border: 1px solid #ddd; transition: all 0.2s;
         }
-        .filter-pill:hover { background: #ffe5d6; border-color: #ff6600; color: #ff6600; }
+        .filter-pill:hover { background: #ffe5d6; border-color: #1a6b3a; color: #1a6b3a; }
         .filter-pill .pill-x { font-size: 14px; color: #999; margin-left: 2px; }
         .btn-nulstil {
             padding: 5px 14px; background: white; color: #333;
@@ -111,7 +111,7 @@
             font-size: 13px; font-weight: 600; cursor: pointer;
             transition: all 0.2s;
         }
-        .btn-nulstil:hover { border-color: #ff6600; color: #ff6600; }
+        .btn-nulstil:hover { border-color: #1a6b3a; color: #1a6b3a; }
 
         /* RESULTAT ROW */
         .results-row {
@@ -125,7 +125,7 @@
         .sort-label { font-size: 13px; color: #666; }
         .sort-select-custom {
             padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px;
-            font-size: 13px; color: #ff6600; font-weight: 600;
+            font-size: 13px; color: #1a6b3a; font-weight: 600;
             background: white; cursor: pointer;
         }
 
@@ -138,7 +138,7 @@
         .filter-panel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
         .filter-group label { display: block; font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; margin-bottom: 5px; }
         .filter-group select { width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; }
-        .filter-apply { margin-top: 1rem; padding: 10px 24px; background: #ff6600; color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; }
+        .filter-apply { margin-top: 1rem; padding: 10px 24px; background: #1a6b3a; color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; }
 
         .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
         .listing-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s; }
@@ -157,14 +157,14 @@
         .user-dropdown { position: relative; display: inline-block; }
         .user-btn { display: flex; align-items: center; gap: 7px; background: none; border: none; cursor: pointer; font-size: 13px; font-weight: 600; color: #333; padding: 4px 8px; border-radius: 6px; transition: background 0.2s; }
         .user-btn:hover { background: #f5f5f5; }
-        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: #ff6600; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+        .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: #1a6b3a; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
         .user-menu { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: white; border-radius: 8px; min-width: 180px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 999; border: 1px solid #f0f0f0; overflow: hidden; }
         .user-menu.open { display: block; animation: fadeDown 0.15s ease; }
         @keyframes fadeDown { from { opacity:0; transform: translateY(-6px); } to { opacity:1; transform: translateY(0); } }
         .user-menu a, .user-menu button { display: block; width: 100%; text-align: left; padding: 11px 16px; font-size: 13px; font-weight: 500; color: #333; text-decoration: none; background: none; border: none; cursor: pointer; transition: background 0.15s; }
         .user-menu a:hover, .user-menu button:hover { background: #f8f8f8; }
         .user-menu .menu-divider { height: 1px; background: #f0f0f0; margin: 4px 0; }
-        .user-menu .logout-item { color: #ff6600; font-weight: 600; }
+        .user-menu .logout-item { color: #1a6b3a; font-weight: 600; }
         
         .listing-info { padding: 1.8rem; }
         .listing-title { font-weight: 700; font-size: 16px; margin-bottom: 0.3rem; color: #333333; }
@@ -189,7 +189,7 @@
         .user-btn:hover { background: #f5f5f5; }
         .user-btn .user-avatar {
             width: 28px; height: 28px; border-radius: 50%;
-            background: #ff6600; color: white;
+            background: #1a6b3a; color: white;
             display: flex; align-items: center; justify-content: center;
             font-size: 13px; font-weight: 700; flex-shrink: 0;
         }
@@ -209,7 +209,7 @@
         }
         .user-menu a:hover, .user-menu button:hover { background: #f8f8f8; }
         .user-menu .menu-divider { height: 1px; background: #f0f0f0; margin: 4px 0; }
-        .user-menu .logout-item { color: #ff6600; font-weight: 600; }
+        .user-menu .logout-item { color: #1a6b3a; font-weight: 600; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>const sb=window.supabase.createClient('https://dxefcvlerxugymjfjgoe.supabase.co','sb_publishable_05IjuXC5ZJO912AGP-qZ4Q_IujZju7U');</script>
@@ -366,7 +366,7 @@
                 .or('sold.eq.false,sold.is.null')
                 .order('created_at', { ascending: false });
             
-            if (error) console.error('Supabase fejl:', error);
+            if (error) console.error('Supabase fejl:', JSON.stringify(error));
             console.log('Supabase annoncer:', sbListings?.length || 0);
 
             if (sbListings && sbListings.length > 0) {
