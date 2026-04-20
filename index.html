@@ -33,7 +33,7 @@
         .logo { 
             font-size: 22px; 
             font-weight: 700; 
-            color: #ff6600; 
+            color: #1a6b3a; 
             cursor: pointer; 
             text-decoration: none;
             white-space: nowrap;
@@ -53,7 +53,7 @@
             transition: color 0.2s;
         }
         .header-link:hover { 
-            color: #ff6600;
+            color: #1a6b3a;
         }
         
         .hero { background: #e5e5e5; padding: 7rem 2rem 3rem 2rem; }
@@ -66,7 +66,7 @@
         .search-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
         .search-field { position: relative; }
         .search-field input, .search-field select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; color: #333333; }
-        .search-field input:focus, .search-field select:focus { outline: none; border-color: #ff6600; }
+        .search-field input:focus, .search-field select:focus { outline: none; border-color: #1a6b3a; }
 
         /* CUSTOM YEAR DROPDOWN - altid nedad */
         .custom-select-wrapper { position: relative; }
@@ -76,7 +76,7 @@
             cursor: pointer; display: flex; align-items: center; justify-content: space-between;
             user-select: none; transition: border-color 0.2s;
         }
-        .custom-select-trigger:hover, .custom-select-trigger.open { border-color: #ff6600; }
+        .custom-select-trigger:hover, .custom-select-trigger.open { border-color: #1a6b3a; }
         .custom-select-trigger::after { content: '▾'; font-size: 11px; color: #999; margin-left: 4px; flex-shrink: 0; }
         .custom-select-trigger.open::after { content: '▴'; }
         .custom-select-dropdown {
@@ -90,12 +90,12 @@
             padding: 8px 12px; font-size: 13px; cursor: pointer; color: #333;
             transition: background 0.15s;
         }
-        .custom-select-option:hover { background: #fff5ee; color: #ff6600; }
-        .custom-select-option.selected { background: #fff5ee; color: #ff6600; font-weight: 600; }
+        .custom-select-option:hover { background: #fff5ee; color: #1a6b3a; }
+        .custom-select-option.selected { background: #fff5ee; color: #1a6b3a; font-weight: 600; }
         
         .search-buttons { display: flex; gap: 1rem; justify-content: flex-end; }
-        .btn { padding: 8px 20px; background: #ff6600; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
-        .btn:hover { background: #e55a00; }
+        .btn { padding: 8px 20px; background: #1a6b3a; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        .btn:hover { background: #145530; }
         .btn-secondary { background: #eee; color: #333333; }
         .btn-secondary:hover { background: #ddd; }
         
@@ -124,7 +124,7 @@
         .listing-info { padding: 1rem; }
         .listing-title { font-weight: 700; font-size: 13px; margin-bottom: 0.5rem; color: #333333; }
         .listing-details { font-size: 13px; color: #666; margin-bottom: 0.5rem; }
-        .listing-price { font-weight: 700; color: #ff6600; font-size: 16px; }
+        .listing-price { font-weight: 700; color: #1a6b3a; font-size: 16px; }
         
         footer { background: white; color: #333333; padding: 2rem; text-align: center; margin: 0; width: 100%; box-shadow: 0 -1px 3px rgba(0,0,0,0.05); }
         
@@ -155,7 +155,7 @@
         .user-btn:hover { background: #f5f5f5; }
         .user-btn .user-avatar {
             width: 28px; height: 28px; border-radius: 50%;
-            background: #ff6600; color: white;
+            background: #1a6b3a; color: white;
             display: flex; align-items: center; justify-content: center;
             font-size: 13px; font-weight: 700; flex-shrink: 0;
         }
@@ -175,7 +175,7 @@
         }
         .user-menu a:hover, .user-menu button:hover { background: #f8f8f8; }
         .user-menu .menu-divider { height: 1px; background: #f0f0f0; margin: 4px 0; }
-        .user-menu .logout-item { color: #ff6600; font-weight: 600; }
+        .user-menu .logout-item { color: #1a6b3a; font-weight: 600; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>const sb=window.supabase.createClient('https://dxefcvlerxugymjfjgoe.supabase.co','sb_publishable_05IjuXC5ZJO912AGP-qZ4Q_IujZju7U');</script>
@@ -493,7 +493,7 @@
                 .or('sold.eq.false,sold.is.null')
                 .order('created_at', { ascending: false });
             
-            if (sbError) console.error('Supabase fejl:', sbError);
+            if (sbError) console.error('Supabase fejl:', JSON.stringify(sbError));
             console.log('Supabase annoncer:', sbListings?.length || 0);
 
             if (sbListings && sbListings.length > 0) {
