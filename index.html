@@ -487,15 +487,20 @@
         let selectedModels = [];
         let currentListings = [...motorcycles];
 
-        // HENT ANNONCER FRA SUPABASE
+        // HENT ANNONCER FRA SUPABASE (med timeout, så siden ikke hænger hvis Supabase er nede)
         async function loadSupabaseListings() {
-            const { data: sbListings, error: sbError } = await sb
-                .from('listings')
-                .select('*')
-                .or('sold.eq.false,sold.is.null')
-                .order('created_at', { ascending: false });
-            
-            if (sbError) console.error('Supabase fejl:', JSON.stringify(sbError));
+            let sbListings = null;
+            try {
+                const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 4000));
+                const { data, error: sbError } = await Promise.race([
+                    sb.from('listings').select('*').or('sold.eq.false,sold.is.null').order('created_at', { ascending: false }),
+                    timeout
+                ]);
+                if (sbError) console.error('Supabase fejl:', JSON.stringify(sbError));
+                sbListings = data;
+            } catch (e) {
+                console.error('Supabase ikke tilgængelig:', e);
+            }
             console.log('Supabase annoncer:', sbListings?.length || 0);
 
             if (sbListings && sbListings.length > 0) {

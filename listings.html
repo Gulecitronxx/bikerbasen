@@ -360,13 +360,18 @@
         // HENT ANNONCER FRA SUPABASE + hardkodede
         async function loadAllListings() {
             // Hent fra Supabase
-            const { data: sbListings, error } = await sb
-                .from('listings')
-                .select('*')
-                .or('sold.eq.false,sold.is.null')
-                .order('created_at', { ascending: false });
-            
-            if (error) console.error('Supabase fejl:', JSON.stringify(error));
+            let sbListings = null;
+            try {
+                const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 4000));
+                const { data, error } = await Promise.race([
+                    sb.from('listings').select('*').or('sold.eq.false,sold.is.null').order('created_at', { ascending: false }),
+                    timeout
+                ]);
+                if (error) console.error('Supabase fejl:', JSON.stringify(error));
+                sbListings = data;
+            } catch (e) {
+                console.error('Supabase ikke tilgængelig:', e);
+            }
             console.log('Supabase annoncer:', sbListings?.length || 0);
 
             if (sbListings && sbListings.length > 0) {

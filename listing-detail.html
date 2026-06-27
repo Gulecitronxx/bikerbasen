@@ -674,9 +674,19 @@
                 return;
             }
 
-            // 1. PRØV SUPABASE FØRST
-            const { data: sbListing } = await sb.from('listings').select('*').eq('id', listingId).single();
-            
+            // 1. PRØV SUPABASE FØRST (med timeout, så siden ikke hænger hvis Supabase er nede)
+            let sbListing = null;
+            try {
+                const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout')), 4000));
+                const { data } = await Promise.race([
+                    sb.from('listings').select('*').eq('id', listingId).single(),
+                    timeout
+                ]);
+                sbListing = data;
+            } catch (e) {
+                console.error('Supabase ikke tilgængelig:', e);
+            }
+
             if (sbListing) {
                 listing = {
                     id: sbListing.id,
