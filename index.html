@@ -131,6 +131,7 @@
         .listing-title { font-weight: 700; font-size: 13px; margin-bottom: 0.5rem; color: #333333; }
         .listing-details { font-size: 13px; color: #666; margin-bottom: 0.5rem; }
         .listing-price { font-weight: 700; color: #1B4332; font-size: 16px; }
+        .popular-categories .listing-card { flex: 0 0 220px; scroll-snap-align: start; }
         
         footer { background: white; color: #333333; padding: 2rem; text-align: center; margin: 0; width: 100%; box-shadow: 0 -1px 3px rgba(0,0,0,0.05); }
         
@@ -376,6 +377,14 @@
                     </div>
     </section>
 
+    <section class="homepage-row">
+        <div class="homepage-row-header">
+            <h2 class="homepage-row-title">Nyeste annoncer</h2>
+            <a href="listings.html" class="homepage-row-link">Se alle →</a>
+        </div>
+        <div class="popular-categories" id="latestListingsRow"></div>
+    </section>
+
     <div class="cta-section">
         <h2 class="cta-title">Vil du sælge din motorcykel?</h2>
         <p style="color: #666; margin-bottom: 1.5rem; font-size: 13px;">Opret en gratis annonce og nå ud til 100.000+ motorcyklister</p>
@@ -552,6 +561,13 @@
         function init() {
             renderBrands();
             displayListings(motorcycles);
+            renderLatestRow();
+        }
+
+        function renderLatestRow() {
+            const favs = getFavorites();
+            const latest = [...motorcycles].sort((a, b) => b.id - a.id).slice(0, 10);
+            document.getElementById('latestListingsRow').innerHTML = latest.map(m => cardHTML(m, favs)).join('');
         }
 
         function renderBrands() {
