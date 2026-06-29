@@ -104,11 +104,21 @@
         
         .scroll-row { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 0.5rem; margin-bottom: 0; }
         .scroll-row > * { flex: 0 0 220px; scroll-snap-align: start; }
-        .category-card { background: white; padding: 0; overflow: hidden; border-radius: 10px; text-align: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.12); transition: all 0.3s; position: relative; }
+        .category-card { background: #1a1d24; padding: 0; overflow: hidden; border-radius: 12px; text-align: left; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.12); transition: all 0.3s; position: relative; }
         .category-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.2); transform: translateY(-3px); }
-        .category-card:hover img { transform: scale(1.05); }
-        .category-card img { width: 100%; height: 160px; object-fit: cover; display: block; transition: transform 0.4s ease; }
-        .category-card-title { position: absolute; bottom: 0; left: 0; right: 0; color: white; font-weight: 700; font-size: 16px; padding: 28px 16px 16px; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%); letter-spacing: 0.5px; }
+        .category-card:hover .category-card-img { transform: scale(1.05); }
+        .category-card-img { width: 100%; height: 120px; object-fit: cover; display: block; transition: transform 0.4s ease; filter: brightness(0.7); }
+        .category-card-body { padding: 0.9rem 1rem; }
+        .category-card-name { color: white; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+        .category-card-count { color: #9a9ea7; font-size: 12px; margin-bottom: 0.75rem; }
+        .category-card-divider { border-top: 1px solid #2c2f38; margin-bottom: 0.75rem; }
+        .category-card-stats { display: flex; justify-content: space-between; }
+        .category-stat-label { color: #9a9ea7; font-size: 10px; text-transform: uppercase; margin-bottom: 3px; letter-spacing: 0.5px; }
+        .category-stat-value { color: white; font-weight: 700; font-size: 13px; }
+        .category-stat-value.accent { color: #4ade80; }
+        .row-arrows { display: flex; gap: 0.5rem; }
+        .arrow-btn { width: 32px; height: 32px; border-radius: 50%; background: white; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; color: #666; transition: background 0.2s; }
+        .arrow-btn:hover { background: #f0f0f0; }
         
         .homepage-row { max-width: 800px; margin: 0 auto 1.5rem auto; padding: 1.5rem 2rem; background: white; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
         .homepage-row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
