@@ -62,11 +62,16 @@ Touring (0 listings — confirmed by the user to still show, with
 
 ### Card content (per category)
 
-- Photo (existing embedded base64 image, unchanged), with a dark overlay
-  gradient added so the white title text stays readable against it
-  (similar to the existing `.category-card-title` gradient treatment, just
-  extended to cover more of the image since the whole card is now dark).
-- Category name (white, bold) + "{count} annoncer" subtitle (light gray).
+- Photo (existing embedded base64 image, unchanged) fills a fixed-height
+  area at the top of the card, slightly darkened (a `brightness` filter,
+  not a text overlay) for visual consistency with the dark card body below
+  it. Unlike today's design, the category name is no longer overlaid on
+  top of the photo — it moves into a separate dark body section underneath
+  the image, matching both the approved visual mockup and the screenshot
+  reference (image on top, title/count/stats in a separate area below,
+  not text-on-photo).
+- Category name (white, bold) + "{count} annoncer" subtitle (light gray),
+  in that body section below the photo.
 - A divider line.
 - A two-column stat row: left column "Annoncer" (white count), right
   column "Gns. pris" (average price, green accent color — reusing the
